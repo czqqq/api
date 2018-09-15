@@ -1,8 +1,9 @@
 package com.api.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class OrderDetail {
+public class OrderDetail implements Serializable {
     private Long id;
 
     private Long orderId;

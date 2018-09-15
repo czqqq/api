@@ -2,15 +2,15 @@
 Navicat MySQL Data Transfer
 
 Source Server         : localhost
-Source Server Version : 80011
+Source Server Version : 50620
 Source Host           : localhost:3306
 Source Database       : app
 
 Target Server Type    : MYSQL
-Target Server Version : 80011
+Target Server Version : 50620
 File Encoding         : 65001
 
-Date: 2018-09-14 17:08:45
+Date: 2018-09-15 13:06:34
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -58,6 +58,8 @@ CREATE TABLE `order` (
   `status` tinyint(4) NOT NULL COMMENT '\n0:待支付;1:已支付',
   `ct` datetime DEFAULT NULL COMMENT '\n创建时间',
   `mt` datetime DEFAULT NULL COMMENT '修改时间',
+  `code` varchar(255) DEFAULT NULL COMMENT '编码',
+  `trade_number` varchar(255) DEFAULT NULL COMMENT '交易号',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单表';
 
@@ -158,11 +160,12 @@ CREATE TABLE `user` (
   `name` varchar(20) DEFAULT NULL COMMENT '姓名/昵称',
   `ct` datetime DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户表';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='用户表';
 
 -- ----------------------------
 -- Records of user
 -- ----------------------------
+INSERT INTO `user` VALUES ('1', '13333333333', '123', '菜头', '2018-09-15 13:05:42');
 
 -- ----------------------------
 -- Table structure for user_address
@@ -174,7 +177,7 @@ CREATE TABLE `user_address` (
   `rec_mobile` varchar(20) NOT NULL COMMENT '\n收货手机号码',
   `rec_address` varchar(255) NOT NULL COMMENT '\n收货地址',
   `rec_name` varchar(20) NOT NULL COMMENT '\n收货人',
-  `default` tinyint(4) NOT NULL COMMENT '0:默认地址；1:其他',
+  `isDefault` tinyint(4) NOT NULL COMMENT '0:默认地址；1:其他',
   `ct` datetime DEFAULT NULL COMMENT '创建时间',
   `mt` datetime DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`id`)

@@ -1,6 +1,8 @@
 package com.api.model;
 
-public class Withdraw {
+import java.io.Serializable;
+
+public class Withdraw implements Serializable {
     private Long id;
 
     private Long userId;

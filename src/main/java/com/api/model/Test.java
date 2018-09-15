@@ -1,6 +1,8 @@
 package com.api.model;
 
-public class Test {
+import java.io.Serializable;
+
+public class Test implements Serializable {
     private String a;
 
     public String getA() {

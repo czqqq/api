@@ -1,8 +1,9 @@
 package com.api.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class UserAddress {
+public class UserAddress implements Serializable {
     private Long id;
 
     private Long userId;
@@ -13,7 +14,7 @@ public class UserAddress {
 
     private String recName;
 
-    private Byte default;
+    private Byte isdefault;
 
     private Date ct;
 
@@ -59,12 +60,12 @@ public class UserAddress {
         this.recName = recName;
     }
 
-    public Byte getDefault() {
-        return default;
+    public Byte getIsdefault() {
+        return isdefault;
     }
 
-    public void setDefault(Byte default) {
-        this.default = default;
+    public void setIsdefault(Byte isdefault) {
+        this.isdefault = isdefault;
     }
 
     public Date getCt() {

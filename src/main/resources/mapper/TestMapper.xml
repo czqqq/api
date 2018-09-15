@@ -2,64 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.api.dao.TestDao">
   
-  <resultMap id="BaseResultMap" type="com.api.model.Test">
-    <result column="a" jdbcType="VARCHAR" property="a" />
-  </resultMap>
-  
-  <sql id="BaseColumnList">
-    a
-  </sql>
-  
-  <insert id="insert" parameterType="com.api.model.Test">
-    INSERT INTO test (a)
-    VALUES (#{a,jdbcType=VARCHAR})
-  </insert>
-  
-  <insert id="insertBatch" parameterType="java.util.List">
-    INSERT INTO test (a
-      )
-    VALUES <foreach collection="list" index="index" item="item" separator=","> (#{item.a,jdbcType=VARCHAR}
-      ) </foreach>
-  </insert>
-  
-  <insert id="insertSelective" parameterType="com.api.model.Test">
-    INSERT INTO test
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="a != null">
-        a,
-      </if>
-    </trim>
-    <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
-      <if test="a != null">
-        #{a,jdbcType=VARCHAR},
-      </if>
-    </trim>
-  </insert>
-  
-  <select id="selectByEntity" parameterType="com.api.model.Test" resultMap="BaseResultMap">
-    SELECT 
-    <include refid="BaseColumnList" />
-    FROM test
-    <where>
-      <if test="a != null">
-         AND a = #{a,jdbcType=VARCHAR}
-      </if>
-    </where>
-    <if test="orderBy != null">
-      ORDER BY ${orderBy}
-    </if>
-  </select>
-  
-  <select id="countByEntity" parameterType="com.api.model.Test" resultType="java.lang.Integer">
-    SELECT COUNT(1) FROM test
-    <where>
-      <if test="a != null">
-         AND a = #{a,jdbcType=VARCHAR}
-      </if>
-    </where>
-  </select>
-  
-  <!-- 以下部分人工添加或修改 -->
+
   
   <resultMap id="BaseResultMap" type="com.api.model.Test">
     <result column="a" jdbcType="VARCHAR" property="a" />

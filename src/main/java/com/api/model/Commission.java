@@ -1,6 +1,8 @@
 package com.api.model;
 
-public class Commission {
+import java.io.Serializable;
+
+public class Commission implements Serializable {
     private Long userId;
 
     private Double commission;

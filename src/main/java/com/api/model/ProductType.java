@@ -1,8 +1,9 @@
 package com.api.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class ProductType {
+public class ProductType implements Serializable {
     private Long id;
 
     private String name;

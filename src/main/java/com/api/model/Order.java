@@ -1,8 +1,9 @@
 package com.api.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Order {
+public class Order implements Serializable {
     private Long id;
 
     private Long userId;
@@ -16,6 +17,8 @@ public class Order {
     private Date mt;
 
     private String code;
+
+    private String tradeNumber;
 
     public Long getId() {
         return id;
@@ -71,5 +74,13 @@ public class Order {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public String getTradeNumber() {
+        return tradeNumber;
+    }
+
+    public void setTradeNumber(String tradeNumber) {
+        this.tradeNumber = tradeNumber;
     }
 }
