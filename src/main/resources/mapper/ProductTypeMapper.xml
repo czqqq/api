@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.api.dao.ProductTypeDao" >
+  
+  <resultMap id="BaseResultMap" type="com.api.model.ProductType" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="ct" property="ct" jdbcType="TIMESTAMP" />
+    <result column="mt" property="mt" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <sql id="BaseColumnList" >
+    id, name, ct, mt
+  </sql>
+  
+  <insert id="insert" parameterType="com.api.model.ProductType" >
+    INSERT INTO product_type (id, name, ct, 
+      mt)
+    VALUES (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{ct,jdbcType=TIMESTAMP}, 
+      #{mt,jdbcType=TIMESTAMP})
+  </insert>
+  
+  <insert id="insertBatch" parameterType="java.util.List" >
+    INSERT INTO product_type (id, 
+      name, ct, mt
+      )
+    VALUES <foreach collection="list" item="item" index="index" separator=","> (#{item.id,jdbcType=BIGINT}, 
+      #{item.name,jdbcType=VARCHAR}, #{item.ct,jdbcType=TIMESTAMP}, #{item.mt,jdbcType=TIMESTAMP}
+      ) </foreach>
+  </insert>
+  
+  <insert id="insertSelective" parameterType="com.api.model.ProductType" >
+    INSERT INTO product_type
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="ct != null" >
+        ct,
+      </if>
+      <if test="mt != null" >
+        mt,
+      </if>
+    </trim>
+    <trim prefix="VALUES (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="ct != null" >
+        #{ct,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mt != null" >
+        #{mt,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  
+  <delete id="deleteById" parameterType="java.lang.Long" >
+    DELETE FROM product_type
+    WHERE id = #{id,jdbcType=BIGINT}
+  </delete>
+  
+  <update id="update" parameterType="com.api.model.ProductType" >
+    UPDATE product_type
+    SET name = #{name,jdbcType=VARCHAR},
+      ct = #{ct,jdbcType=TIMESTAMP},
+      mt = #{mt,jdbcType=TIMESTAMP}
+    WHERE id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <update id="updateSelective" parameterType="com.api.model.ProductType" >
+    UPDATE product_type
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="ct != null" >
+        ct = #{ct,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mt != null" >
+        mt = #{mt,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    SELECT 
+    <include refid="BaseColumnList" />
+    FROM product_type
+    WHERE id = #{id,jdbcType=BIGINT}
+  </select>
+  
+  <select id="selectByIds" resultMap="BaseResultMap" >
+    SELECT 
+    <include refid="BaseColumnList" />
+    FROM product_type
+    WHERE id IN <foreach collection="list" item="item" open="(" separator="," close=")"> #{item}  </foreach> 
+  </select>
+  
+  <select id="selectByEntity" parameterType="com.api.model.ProductType" resultMap="BaseResultMap" >
+    SELECT 
+    <include refid="BaseColumnList" />
+    FROM product_type
+    <where >
+      <if test="name != null" >
+         AND name = #{name,jdbcType=VARCHAR}
+      </if>
+      <if test="ct != null" >
+         AND ct = #{ct,jdbcType=TIMESTAMP}
+      </if>
+      <if test="mt != null" >
+         AND mt = #{mt,jdbcType=TIMESTAMP}
+      </if>
+    </where>
+    <if test="orderBy != null" >
+      ORDER BY ${orderBy}
+    </if>
+  </select>
+  
+  <select id="countByEntity" parameterType="com.api.model.ProductType" resultType="java.lang.Integer" >
+    SELECT COUNT(1) FROM product_type
+    <where >
+      <if test="name != null" >
+         AND name = #{name,jdbcType=VARCHAR}
+      </if>
+      <if test="ct != null" >
+         AND ct = #{ct,jdbcType=TIMESTAMP}
+      </if>
+      <if test="mt != null" >
+         AND mt = #{mt,jdbcType=TIMESTAMP}
+      </if>
+    </where>
+  </select>
+  
+  <!-- 以下部分人工添加或修改 -->
+  
+</mapper>

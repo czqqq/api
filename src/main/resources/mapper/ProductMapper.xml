@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.api.dao.ProductDao" >
+  
+  <resultMap id="BaseResultMap" type="com.api.model.Product" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="BIGINT" />
+    <result column="price" property="price" jdbcType="DOUBLE" />
+    <result column="pic" property="pic" jdbcType="VARCHAR" />
+    <result column="ct" property="ct" jdbcType="TIMESTAMP" />
+    <result column="mt" property="mt" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <sql id="BaseColumnList" >
+    id, name, type, price, pic, ct, mt
+  </sql>
+  
+  <insert id="insert" parameterType="com.api.model.Product" >
+    INSERT INTO product (id, name, type, 
+      price, pic, ct, mt
+      )
+    VALUES (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{type,jdbcType=BIGINT}, 
+      #{price,jdbcType=DOUBLE}, #{pic,jdbcType=VARCHAR}, #{ct,jdbcType=TIMESTAMP}, #{mt,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  
+  <insert id="insertBatch" parameterType="java.util.List" >
+    INSERT INTO product (id, 
+      name, type, price, 
+      pic, ct, mt
+      )
+    VALUES <foreach collection="list" item="item" index="index" separator=","> (#{item.id,jdbcType=BIGINT}, 
+      #{item.name,jdbcType=VARCHAR}, #{item.type,jdbcType=BIGINT}, #{item.price,jdbcType=DOUBLE}, 
+      #{item.pic,jdbcType=VARCHAR}, #{item.ct,jdbcType=TIMESTAMP}, #{item.mt,jdbcType=TIMESTAMP}
+      ) </foreach>
+  </insert>
+  
+  <insert id="insertSelective" parameterType="com.api.model.Product" >
+    INSERT INTO product
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="price != null" >
+        price,
+      </if>
+      <if test="pic != null" >
+        pic,
+      </if>
+      <if test="ct != null" >
+        ct,
+      </if>
+      <if test="mt != null" >
+        mt,
+      </if>
+    </trim>
+    <trim prefix="VALUES (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=BIGINT},
+      </if>
+      <if test="price != null" >
+        #{price,jdbcType=DOUBLE},
+      </if>
+      <if test="pic != null" >
+        #{pic,jdbcType=VARCHAR},
+      </if>
+      <if test="ct != null" >
+        #{ct,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mt != null" >
+        #{mt,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  
+  <delete id="deleteById" parameterType="java.lang.Long" >
+    DELETE FROM product
+    WHERE id = #{id,jdbcType=BIGINT}
+  </delete>
+  
+  <update id="update" parameterType="com.api.model.Product" >
+    UPDATE product
+    SET name = #{name,jdbcType=VARCHAR},
+      type = #{type,jdbcType=BIGINT},
+      price = #{price,jdbcType=DOUBLE},
+      pic = #{pic,jdbcType=VARCHAR},
+      ct = #{ct,jdbcType=TIMESTAMP},
+      mt = #{mt,jdbcType=TIMESTAMP}
+    WHERE id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <update id="updateSelective" parameterType="com.api.model.Product" >
+    UPDATE product
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=BIGINT},
+      </if>
+      <if test="price != null" >
+        price = #{price,jdbcType=DOUBLE},
+      </if>
+      <if test="pic != null" >
+        pic = #{pic,jdbcType=VARCHAR},
+      </if>
+      <if test="ct != null" >
+        ct = #{ct,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mt != null" >
+        mt = #{mt,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    SELECT 
+    <include refid="BaseColumnList" />
+    FROM product
+    WHERE id = #{id,jdbcType=BIGINT}
+  </select>
+  
+  <select id="selectByIds" resultMap="BaseResultMap" >
+    SELECT 
+    <include refid="BaseColumnList" />
+    FROM product
+    WHERE id IN <foreach collection="list" item="item" open="(" separator="," close=")"> #{item}  </foreach> 
+  </select>
+  
+  <select id="selectByEntity" parameterType="com.api.model.Product" resultMap="BaseResultMap" >
+    SELECT 
+    <include refid="BaseColumnList" />
+    FROM product
+    <where >
+      <if test="name != null" >
+         AND name = #{name,jdbcType=VARCHAR}
+      </if>
+      <if test="type != null" >
+         AND type = #{type,jdbcType=BIGINT}
+      </if>
+      <if test="price != null" >
+         AND price = #{price,jdbcType=DOUBLE}
+      </if>
+      <if test="pic != null" >
+         AND pic = #{pic,jdbcType=VARCHAR}
+      </if>
+      <if test="ct != null" >
+         AND ct = #{ct,jdbcType=TIMESTAMP}
+      </if>
+      <if test="mt != null" >
+         AND mt = #{mt,jdbcType=TIMESTAMP}
+      </if>
+    </where>
+    <if test="orderBy != null" >
+      ORDER BY ${orderBy}
+    </if>
+  </select>
+  
+  <select id="countByEntity" parameterType="com.api.model.Product" resultType="java.lang.Integer" >
+    SELECT COUNT(1) FROM product
+    <where >
+      <if test="name != null" >
+         AND name = #{name,jdbcType=VARCHAR}
+      </if>
+      <if test="type != null" >
+         AND type = #{type,jdbcType=BIGINT}
+      </if>
+      <if test="price != null" >
+         AND price = #{price,jdbcType=DOUBLE}
+      </if>
+      <if test="pic != null" >
+         AND pic = #{pic,jdbcType=VARCHAR}
+      </if>
+      <if test="ct != null" >
+         AND ct = #{ct,jdbcType=TIMESTAMP}
+      </if>
+      <if test="mt != null" >
+         AND mt = #{mt,jdbcType=TIMESTAMP}
+      </if>
+    </where>
+  </select>
+  
+  <!-- 以下部分人工添加或修改 -->
+  
+</mapper>

@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.api.dao.UserAddressDao" >
+  
+  <resultMap id="BaseResultMap" type="com.api.model.UserAddress" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="rec_mobile" property="recMobile" jdbcType="VARCHAR" />
+    <result column="rec_address" property="recAddress" jdbcType="VARCHAR" />
+    <result column="rec_name" property="recName" jdbcType="VARCHAR" />
+    <result column="default" property="default" jdbcType="TINYINT" />
+    <result column="ct" property="ct" jdbcType="TIMESTAMP" />
+    <result column="mt" property="mt" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <sql id="BaseColumnList" >
+    id, user_id, rec_mobile, rec_address, rec_name, default, ct, mt
+  </sql>
+  
+  <insert id="insert" parameterType="com.api.model.UserAddress" >
+    INSERT INTO user_address (id, user_id, rec_mobile, 
+      rec_address, rec_name, default, 
+      ct, mt)
+    VALUES (#{id,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{recMobile,jdbcType=VARCHAR}, 
+      #{recAddress,jdbcType=VARCHAR}, #{recName,jdbcType=VARCHAR}, #{default,jdbcType=TINYINT}, 
+      #{ct,jdbcType=TIMESTAMP}, #{mt,jdbcType=TIMESTAMP})
+  </insert>
+  
+  <insert id="insertBatch" parameterType="java.util.List" >
+    INSERT INTO user_address (id, 
+      user_id, rec_mobile, rec_address, 
+      rec_name, default, ct, 
+      mt)
+    VALUES <foreach collection="list" item="item" index="index" separator=","> (#{item.id,jdbcType=BIGINT}, 
+      #{item.userId,jdbcType=BIGINT}, #{item.recMobile,jdbcType=VARCHAR}, #{item.recAddress,jdbcType=VARCHAR}, 
+      #{item.recName,jdbcType=VARCHAR}, #{item.default,jdbcType=TINYINT}, #{item.ct,jdbcType=TIMESTAMP}, 
+      #{item.mt,jdbcType=TIMESTAMP}) </foreach>
+  </insert>
+  
+  <insert id="insertSelective" parameterType="com.api.model.UserAddress" >
+    INSERT INTO user_address
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="recMobile != null" >
+        rec_mobile,
+      </if>
+      <if test="recAddress != null" >
+        rec_address,
+      </if>
+      <if test="recName != null" >
+        rec_name,
+      </if>
+      <if test="default != null" >
+        default,
+      </if>
+      <if test="ct != null" >
+        ct,
+      </if>
+      <if test="mt != null" >
+        mt,
+      </if>
+    </trim>
+    <trim prefix="VALUES (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="recMobile != null" >
+        #{recMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="recAddress != null" >
+        #{recAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="recName != null" >
+        #{recName,jdbcType=VARCHAR},
+      </if>
+      <if test="default != null" >
+        #{default,jdbcType=TINYINT},
+      </if>
+      <if test="ct != null" >
+        #{ct,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mt != null" >
+        #{mt,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  
+  <delete id="deleteById" parameterType="java.lang.Long" >
+    DELETE FROM user_address
+    WHERE id = #{id,jdbcType=BIGINT}
+  </delete>
+  
+  <update id="update" parameterType="com.api.model.UserAddress" >
+    UPDATE user_address
+    SET user_id = #{userId,jdbcType=BIGINT},
+      rec_mobile = #{recMobile,jdbcType=VARCHAR},
+      rec_address = #{recAddress,jdbcType=VARCHAR},
+      rec_name = #{recName,jdbcType=VARCHAR},
+      default = #{default,jdbcType=TINYINT},
+      ct = #{ct,jdbcType=TIMESTAMP},
+      mt = #{mt,jdbcType=TIMESTAMP}
+    WHERE id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <update id="updateSelective" parameterType="com.api.model.UserAddress" >
+    UPDATE user_address
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="recMobile != null" >
+        rec_mobile = #{recMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="recAddress != null" >
+        rec_address = #{recAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="recName != null" >
+        rec_name = #{recName,jdbcType=VARCHAR},
+      </if>
+      <if test="default != null" >
+        default = #{default,jdbcType=TINYINT},
+      </if>
+      <if test="ct != null" >
+        ct = #{ct,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mt != null" >
+        mt = #{mt,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    SELECT 
+    <include refid="BaseColumnList" />
+    FROM user_address
+    WHERE id = #{id,jdbcType=BIGINT}
+  </select>
+  
+  <select id="selectByIds" resultMap="BaseResultMap" >
+    SELECT 
+    <include refid="BaseColumnList" />
+    FROM user_address
+    WHERE id IN <foreach collection="list" item="item" open="(" separator="," close=")"> #{item}  </foreach> 
+  </select>
+  
+  <select id="selectByEntity" parameterType="com.api.model.UserAddress" resultMap="BaseResultMap" >
+    SELECT 
+    <include refid="BaseColumnList" />
+    FROM user_address
+    <where >
+      <if test="userId != null" >
+         AND user_id = #{userId,jdbcType=BIGINT}
+      </if>
+      <if test="recMobile != null" >
+         AND rec_mobile = #{recMobile,jdbcType=VARCHAR}
+      </if>
+      <if test="recAddress != null" >
+         AND rec_address = #{recAddress,jdbcType=VARCHAR}
+      </if>
+      <if test="recName != null" >
+         AND rec_name = #{recName,jdbcType=VARCHAR}
+      </if>
+      <if test="default != null" >
+         AND default = #{default,jdbcType=TINYINT}
+      </if>
+      <if test="ct != null" >
+         AND ct = #{ct,jdbcType=TIMESTAMP}
+      </if>
+      <if test="mt != null" >
+         AND mt = #{mt,jdbcType=TIMESTAMP}
+      </if>
+    </where>
+    <if test="orderBy != null" >
+      ORDER BY ${orderBy}
+    </if>
+  </select>
+  
+  <select id="countByEntity" parameterType="com.api.model.UserAddress" resultType="java.lang.Integer" >
+    SELECT COUNT(1) FROM user_address
+    <where >
+      <if test="userId != null" >
+         AND user_id = #{userId,jdbcType=BIGINT}
+      </if>
+      <if test="recMobile != null" >
+         AND rec_mobile = #{recMobile,jdbcType=VARCHAR}
+      </if>
+      <if test="recAddress != null" >
+         AND rec_address = #{recAddress,jdbcType=VARCHAR}
+      </if>
+      <if test="recName != null" >
+         AND rec_name = #{recName,jdbcType=VARCHAR}
+      </if>
+      <if test="default != null" >
+         AND default = #{default,jdbcType=TINYINT}
+      </if>
+      <if test="ct != null" >
+         AND ct = #{ct,jdbcType=TIMESTAMP}
+      </if>
+      <if test="mt != null" >
+         AND mt = #{mt,jdbcType=TIMESTAMP}
+      </if>
+    </where>
+  </select>
+  
+  <!-- 以下部分人工添加或修改 -->
+  
+</mapper>

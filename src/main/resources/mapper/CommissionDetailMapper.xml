@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.api.dao.CommissionDetailDao" >
+  
+  <resultMap id="BaseResultMap" type="com.api.model.CommissionDetail" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="comeby" property="comeby" jdbcType="BIGINT" />
+    <result column="commission" property="commission" jdbcType="DOUBLE" />
+    <result column="ct" property="ct" jdbcType="TIMESTAMP" />
+    <result column="mt" property="mt" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <sql id="BaseColumnList" >
+    id, user_id, comeby, commission, ct, mt
+  </sql>
+  
+  <insert id="insert" parameterType="com.api.model.CommissionDetail" >
+    INSERT INTO commission_detail (id, user_id, comeby, 
+      commission, ct, mt
+      )
+    VALUES (#{id,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{comeby,jdbcType=BIGINT}, 
+      #{commission,jdbcType=DOUBLE}, #{ct,jdbcType=TIMESTAMP}, #{mt,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  
+  <insert id="insertBatch" parameterType="java.util.List" >
+    INSERT INTO commission_detail (id, 
+      user_id, comeby, commission, 
+      ct, mt)
+    VALUES <foreach collection="list" item="item" index="index" separator=","> (#{item.id,jdbcType=BIGINT}, 
+      #{item.userId,jdbcType=BIGINT}, #{item.comeby,jdbcType=BIGINT}, #{item.commission,jdbcType=DOUBLE}, 
+      #{item.ct,jdbcType=TIMESTAMP}, #{item.mt,jdbcType=TIMESTAMP}) </foreach>
+  </insert>
+  
+  <insert id="insertSelective" parameterType="com.api.model.CommissionDetail" >
+    INSERT INTO commission_detail
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="comeby != null" >
+        comeby,
+      </if>
+      <if test="commission != null" >
+        commission,
+      </if>
+      <if test="ct != null" >
+        ct,
+      </if>
+      <if test="mt != null" >
+        mt,
+      </if>
+    </trim>
+    <trim prefix="VALUES (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="comeby != null" >
+        #{comeby,jdbcType=BIGINT},
+      </if>
+      <if test="commission != null" >
+        #{commission,jdbcType=DOUBLE},
+      </if>
+      <if test="ct != null" >
+        #{ct,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mt != null" >
+        #{mt,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  
+  <delete id="deleteById" parameterType="java.lang.Long" >
+    DELETE FROM commission_detail
+    WHERE id = #{id,jdbcType=BIGINT}
+  </delete>
+  
+  <update id="update" parameterType="com.api.model.CommissionDetail" >
+    UPDATE commission_detail
+    SET user_id = #{userId,jdbcType=BIGINT},
+      comeby = #{comeby,jdbcType=BIGINT},
+      commission = #{commission,jdbcType=DOUBLE},
+      ct = #{ct,jdbcType=TIMESTAMP},
+      mt = #{mt,jdbcType=TIMESTAMP}
+    WHERE id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <update id="updateSelective" parameterType="com.api.model.CommissionDetail" >
+    UPDATE commission_detail
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="comeby != null" >
+        comeby = #{comeby,jdbcType=BIGINT},
+      </if>
+      <if test="commission != null" >
+        commission = #{commission,jdbcType=DOUBLE},
+      </if>
+      <if test="ct != null" >
+        ct = #{ct,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mt != null" >
+        mt = #{mt,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    SELECT 
+    <include refid="BaseColumnList" />
+    FROM commission_detail
+    WHERE id = #{id,jdbcType=BIGINT}
+  </select>
+  
+  <select id="selectByIds" resultMap="BaseResultMap" >
+    SELECT 
+    <include refid="BaseColumnList" />
+    FROM commission_detail
+    WHERE id IN <foreach collection="list" item="item" open="(" separator="," close=")"> #{item}  </foreach> 
+  </select>
+  
+  <select id="selectByEntity" parameterType="com.api.model.CommissionDetail" resultMap="BaseResultMap" >
+    SELECT 
+    <include refid="BaseColumnList" />
+    FROM commission_detail
+    <where >
+      <if test="userId != null" >
+         AND user_id = #{userId,jdbcType=BIGINT}
+      </if>
+      <if test="comeby != null" >
+         AND comeby = #{comeby,jdbcType=BIGINT}
+      </if>
+      <if test="commission != null" >
+         AND commission = #{commission,jdbcType=DOUBLE}
+      </if>
+      <if test="ct != null" >
+         AND ct = #{ct,jdbcType=TIMESTAMP}
+      </if>
+      <if test="mt != null" >
+         AND mt = #{mt,jdbcType=TIMESTAMP}
+      </if>
+    </where>
+    <if test="orderBy != null" >
+      ORDER BY ${orderBy}
+    </if>
+  </select>
+  
+  <select id="countByEntity" parameterType="com.api.model.CommissionDetail" resultType="java.lang.Integer" >
+    SELECT COUNT(1) FROM commission_detail
+    <where >
+      <if test="userId != null" >
+         AND user_id = #{userId,jdbcType=BIGINT}
+      </if>
+      <if test="comeby != null" >
+         AND comeby = #{comeby,jdbcType=BIGINT}
+      </if>
+      <if test="commission != null" >
+         AND commission = #{commission,jdbcType=DOUBLE}
+      </if>
+      <if test="ct != null" >
+         AND ct = #{ct,jdbcType=TIMESTAMP}
+      </if>
+      <if test="mt != null" >
+         AND mt = #{mt,jdbcType=TIMESTAMP}
+      </if>
+    </where>
+  </select>
+  
+  <!-- 以下部分人工添加或修改 -->
+  
+</mapper>

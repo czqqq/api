@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.api.dao.StockDao" >
+  
+  <resultMap id="BaseResultMap" type="com.api.model.Stock" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="product_id" property="productId" jdbcType="BIGINT" />
+    <result column="number" property="number" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="ct" property="ct" jdbcType="TIMESTAMP" />
+    <result column="mt" property="mt" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <sql id="BaseColumnList" >
+    id, product_id, number, status, ct, mt
+  </sql>
+  
+  <insert id="insert" parameterType="com.api.model.Stock" >
+    INSERT INTO stock (id, product_id, number, 
+      status, ct, mt)
+    VALUES (#{id,jdbcType=BIGINT}, #{productId,jdbcType=BIGINT}, #{number,jdbcType=INTEGER}, 
+      #{status,jdbcType=TINYINT}, #{ct,jdbcType=TIMESTAMP}, #{mt,jdbcType=TIMESTAMP})
+  </insert>
+  
+  <insert id="insertBatch" parameterType="java.util.List" >
+    INSERT INTO stock (id, 
+      product_id, number, status, 
+      ct, mt)
+    VALUES <foreach collection="list" item="item" index="index" separator=","> (#{item.id,jdbcType=BIGINT}, 
+      #{item.productId,jdbcType=BIGINT}, #{item.number,jdbcType=INTEGER}, #{item.status,jdbcType=TINYINT}, 
+      #{item.ct,jdbcType=TIMESTAMP}, #{item.mt,jdbcType=TIMESTAMP}) </foreach>
+  </insert>
+  
+  <insert id="insertSelective" parameterType="com.api.model.Stock" >
+    INSERT INTO stock
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="productId != null" >
+        product_id,
+      </if>
+      <if test="number != null" >
+        number,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="ct != null" >
+        ct,
+      </if>
+      <if test="mt != null" >
+        mt,
+      </if>
+    </trim>
+    <trim prefix="VALUES (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="productId != null" >
+        #{productId,jdbcType=BIGINT},
+      </if>
+      <if test="number != null" >
+        #{number,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="ct != null" >
+        #{ct,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mt != null" >
+        #{mt,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  
+  <delete id="deleteById" parameterType="java.lang.Long" >
+    DELETE FROM stock
+    WHERE id = #{id,jdbcType=BIGINT}
+  </delete>
+  
+  <update id="update" parameterType="com.api.model.Stock" >
+    UPDATE stock
+    SET product_id = #{productId,jdbcType=BIGINT},
+      number = #{number,jdbcType=INTEGER},
+      status = #{status,jdbcType=TINYINT},
+      ct = #{ct,jdbcType=TIMESTAMP},
+      mt = #{mt,jdbcType=TIMESTAMP}
+    WHERE id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <update id="updateSelective" parameterType="com.api.model.Stock" >
+    UPDATE stock
+    <set >
+      <if test="productId != null" >
+        product_id = #{productId,jdbcType=BIGINT},
+      </if>
+      <if test="number != null" >
+        number = #{number,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="ct != null" >
+        ct = #{ct,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mt != null" >
+        mt = #{mt,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    WHERE id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    SELECT 
+    <include refid="BaseColumnList" />
+    FROM stock
+    WHERE id = #{id,jdbcType=BIGINT}
+  </select>
+  
+  <select id="selectByIds" resultMap="BaseResultMap" >
+    SELECT 
+    <include refid="BaseColumnList" />
+    FROM stock
+    WHERE id IN <foreach collection="list" item="item" open="(" separator="," close=")"> #{item}  </foreach> 
+  </select>
+  
+  <select id="selectByEntity" parameterType="com.api.model.Stock" resultMap="BaseResultMap" >
+    SELECT 
+    <include refid="BaseColumnList" />
+    FROM stock
+    <where >
+      <if test="productId != null" >
+         AND product_id = #{productId,jdbcType=BIGINT}
+      </if>
+      <if test="number != null" >
+         AND number = #{number,jdbcType=INTEGER}
+      </if>
+      <if test="status != null" >
+         AND status = #{status,jdbcType=TINYINT}
+      </if>
+      <if test="ct != null" >
+         AND ct = #{ct,jdbcType=TIMESTAMP}
+      </if>
+      <if test="mt != null" >
+         AND mt = #{mt,jdbcType=TIMESTAMP}
+      </if>
+    </where>
+    <if test="orderBy != null" >
+      ORDER BY ${orderBy}
+    </if>
+  </select>
+  
+  <select id="countByEntity" parameterType="com.api.model.Stock" resultType="java.lang.Integer" >
+    SELECT COUNT(1) FROM stock
+    <where >
+      <if test="productId != null" >
+         AND product_id = #{productId,jdbcType=BIGINT}
+      </if>
+      <if test="number != null" >
+         AND number = #{number,jdbcType=INTEGER}
+      </if>
+      <if test="status != null" >
+         AND status = #{status,jdbcType=TINYINT}
+      </if>
+      <if test="ct != null" >
+         AND ct = #{ct,jdbcType=TIMESTAMP}
+      </if>
+      <if test="mt != null" >
+         AND mt = #{mt,jdbcType=TIMESTAMP}
+      </if>
+    </where>
+  </select>
+  
+  <!-- 以下部分人工添加或修改 -->
+  
+</mapper>
