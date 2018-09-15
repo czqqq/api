@@ -157,5 +157,10 @@
   </select>
   
   <!-- 以下部分人工添加或修改 -->
+
+  <delete id="deleteByOrderId" parameterType="java.lang.Long" >
+    DELETE FROM order_detail
+    WHERE oroder_id = #{orderId,jdbcType=BIGINT}
+  </delete>
   
 </mapper>
