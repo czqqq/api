@@ -15,6 +15,8 @@ public class Order {
 
     private Date mt;
 
+    private String code;
+
     public Long getId() {
         return id;
     }
@@ -61,5 +63,13 @@ public class Order {
 
     public void setMt(Date mt) {
         this.mt = mt;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 }
