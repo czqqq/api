@@ -6,6 +6,8 @@ import com.api.model.vo.OrderVo;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 
+import java.util.List;
+
 public interface OrderService {
 
     /**
@@ -14,7 +16,7 @@ public interface OrderService {
      * @param details
      * @return
      */
-    public Long modifyOrder(OrderVo order, OrderDetailVo details);
+    public Long modifyOrder(OrderVo order, List<OrderDetailVo> details);
 
     /**
      * 删除

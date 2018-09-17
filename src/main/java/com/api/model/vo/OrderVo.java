@@ -3,6 +3,7 @@ package com.api.model.vo;
 import com.api.model.OrderDetail;
 
 import java.util.Date;
+import java.util.List;
 
 public class OrderVo {
     private Long id;
@@ -29,7 +30,7 @@ public class OrderVo {
 
     private String recAddress;
 
-    private OrderDetailVo orderDetailVo;
+    private List<OrderDetailVo> orderDetails;
 
     public Long getId() {
         return id;
@@ -103,12 +104,12 @@ public class OrderVo {
         this.userName = userName;
     }
 
-    public OrderDetailVo getOrderDetailVo() {
-        return orderDetailVo;
+    public List<OrderDetailVo> getOrderDetails() {
+        return orderDetails;
     }
 
-    public void setOrderDetailVo(OrderDetailVo orderDetailVo) {
-        this.orderDetailVo = orderDetailVo;
+    public void setOrderDetails(List<OrderDetailVo> orderDetails) {
+        this.orderDetails = orderDetails;
     }
 
     public String getRecName() {

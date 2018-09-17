@@ -14,7 +14,9 @@ import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -29,41 +31,45 @@ public class OrderServiceImpl implements OrderService {
     private ProductDao productDao;
 
     @Autowired
-    private ProductTypeDao productTypeDao;
-
-    @Autowired
     private UserDao userDao;
 
     @Override
-    public Long modifyOrder(OrderVo order, OrderDetailVo detail) {
+    public Long modifyOrder(OrderVo order, List<OrderDetailVo> details) {
         Order orderPo;
-        OrderDetail detailPo ;
+        List<OrderDetail> detailPos ;
         if (order.getId()!=null){
             //编辑
             orderPo = orderDao.selectById(order.getId());
-            detailPo  = new OrderDetail();
+            detailPos  = new ArrayList<OrderDetail>();
             if(orderPo!=null){
-                covertOrderVoToPo(order,detail,orderPo,detailPo);
+                covertOrderVoToPo(order,details,orderPo,detailPos);
             }
             orderPo.setMt(new Date());
             orderDao.update(orderPo);
-            detailPo.setOrderId(orderPo.getId());
-            orderDetailDao.updateSelective(detailPo);
+            if(details!=null&&details.size()!=0){
+                for(OrderDetail detailPo : detailPos){
+                    detailPo.setOrderId(orderPo.getId());
+                    orderDetailDao.updateSelective(detailPo);
+                }
+
+            }
         }else{
             //新增
             orderPo = new Order();
-            detailPo  = new OrderDetail();
-            covertOrderVoToPo(order,detail,orderPo,detailPo);
+            detailPos  =new ArrayList<OrderDetail>();
+            covertOrderVoToPo(order,details,orderPo,detailPos);
             orderPo.setMt(new Date());
             Long id = orderDao.insert(orderPo);
-            detailPo.setOrderId(id);
-            detailPo.setCt(new Date());
-            orderDetailDao.insert(detailPo);
+            for(OrderDetail detailPo : detailPos){
+                detailPo.setOrderId(id);
+                detailPo.setCt(new Date());
+                orderDetailDao.insert(detailPo);
+            }
         }
         return order.getId();
     }
 
-    private void covertOrderVoToPo(OrderVo order, OrderDetailVo detail, Order orderPo, OrderDetail detailPo) {
+    private void covertOrderVoToPo(OrderVo order, List<OrderDetailVo> details, Order orderPo, List<OrderDetail> detailPos) {
         orderPo.setRecAddress(order.getRecAddress());
         orderPo.setRecMobile(order.getRecMobile());
         orderPo.setRecName(order.getRecName());
@@ -71,11 +77,17 @@ public class OrderServiceImpl implements OrderService {
         orderPo.setTotalPrice(order.getTotalPrice());
         orderPo.setUserId(order.getUserId());
         orderPo.setId(order.getId());
-        detailPo.setColor(detail.getColor());
-        detailPo.setCount(detail.getCount());
-        detailPo.setProductId(detail.getProductId());
-        detailPo.setSize(detail.getSize());
-        detailPo.setId(detail.getId());
+        if(details!=null&&details.size()>0){
+            for(OrderDetailVo detail : details){
+                OrderDetail detailPo = new OrderDetail();
+                detailPo.setColor(detail.getColor());
+                detailPo.setCount(detail.getCount());
+                detailPo.setProductId(detail.getProductId());
+                detailPo.setSize(detail.getSize());
+                detailPo.setId(detail.getId());
+                detailPos.add(detailPo);
+            }
+        }
     }
 
     @Override
@@ -90,10 +102,11 @@ public class OrderServiceImpl implements OrderService {
         OrderVo vo ;
         if(po != null){
             vo = new OrderVo();
+            List<OrderDetail> detailPos = new ArrayList<OrderDetail>();
             OrderDetail detailPo = new OrderDetail();
             detailPo.setOrderId(po.getId());
-            detailPo = orderDetailDao.selectByEntity(detailPo);
-            convertPoToVo(vo,po,detailPo);
+            detailPos = orderDetailDao.selectByEntity(detailPo);
+            convertPoToVo(vo,po,detailPos);
             return vo ;
         }else{
             return null;
@@ -101,17 +114,20 @@ public class OrderServiceImpl implements OrderService {
 
     }
 
-    private void convertPoToVo(OrderVo vo, Order po, OrderDetail detailPo) {
-        OrderDetailVo detailVo = new OrderDetailVo();
-        Product product = productDao.selectById(detailPo.getProductId());
-        detailVo.setId(detailPo.getId());
-        detailVo.setSize(detailPo.getSize());
-        detailVo.setProductId(detailPo.getProductId());
-        detailVo.setCount(detailPo.getCount());
-        detailVo.setColor(detailPo.getColor());
-        detailVo.setProductName(product.getName());
-
-        vo.setOrderDetailVo(detailVo);
+    private void convertPoToVo(OrderVo vo, Order po, List<OrderDetail> detailPos) {
+        List<OrderDetailVo> details = new ArrayList<OrderDetailVo>();
+        for(OrderDetail detailPo: detailPos){
+            OrderDetailVo detailVo = new OrderDetailVo();
+            Product product = productDao.selectById(detailPo.getProductId());
+            detailVo.setId(detailPo.getId());
+            detailVo.setSize(detailPo.getSize());
+            detailVo.setProductId(detailPo.getProductId());
+            detailVo.setCount(detailPo.getCount());
+            detailVo.setColor(detailPo.getColor());
+            detailVo.setProductName(product.getName());
+            details.add(detailVo);
+        }
+        vo.setOrderDetails(details);
         vo.setCode(po.getCode());
         vo.setId(po.getId());
         vo.setRecAddress(po.getRecAddress());
