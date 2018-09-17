@@ -23,6 +23,12 @@ public class OrderVo {
 
     private String userName;
 
+    private String recName;
+
+    private String recMobile;
+
+    private String recAddress;
+
     private OrderDetailVo orderDetailVo;
 
     public Long getId() {
@@ -103,5 +109,29 @@ public class OrderVo {
 
     public void setOrderDetailVo(OrderDetailVo orderDetailVo) {
         this.orderDetailVo = orderDetailVo;
+    }
+
+    public String getRecName() {
+        return recName;
+    }
+
+    public void setRecName(String recName) {
+        this.recName = recName;
+    }
+
+    public String getRecMobile() {
+        return recMobile;
+    }
+
+    public void setRecMobile(String recMobile) {
+        this.recMobile = recMobile;
+    }
+
+    public String getRecAddress() {
+        return recAddress;
+    }
+
+    public void setRecAddress(String recAddress) {
+        this.recAddress = recAddress;
     }
 }

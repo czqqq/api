@@ -12,7 +12,9 @@ public class OrderDetailVo implements Serializable {
 
     private String productName;
 
+    private String  color;
 
+    private  String size;
 
     private Integer count;
 
@@ -48,5 +50,27 @@ public class OrderDetailVo implements Serializable {
         this.count = count;
     }
 
+    public String getProductName() {
+        return productName;
+    }
 
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
+    }
 }

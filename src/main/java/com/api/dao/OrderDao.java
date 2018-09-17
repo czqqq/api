@@ -13,4 +13,5 @@ public interface OrderDao {
     public List<Order> selectByIds(List<Long> ids);
     public void update(Order order);
     public void updateSelective(Order order);
+    public Long insert(Order order);
 }

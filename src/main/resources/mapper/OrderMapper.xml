@@ -21,10 +21,9 @@
     trade_number
   </sql>
   
-  <insert id="insert" parameterType="com.api.model.Order" >
+  <insert id="insert" parameterType="com.api.model.Order"  keyProperty="id" useGeneratedKeys="true">
     INSERT INTO order (id, user_id, total_price, 
-      status, ct, mt, 
-      rec_name, rec_address, rec_mobile, 
+      status, ct, mt, rec_name, rec_address, rec_mobile,
       code, trade_number)
     VALUES (#{id,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{totalPrice,jdbcType=DOUBLE}, 
       #{status,jdbcType=TINYINT}, #{ct,jdbcType=TIMESTAMP}, #{mt,jdbcType=TIMESTAMP}, 
