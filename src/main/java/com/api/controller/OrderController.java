@@ -38,4 +38,45 @@ public class OrderController {
         result.setDatas(resultMap);
         return result;
     }
+
+    @ResponseBody
+    @RequestMapping("fetchOrderDetail")
+    public BaseResult fetchOrderDetail(@RequestParam(name = "orderId",value = "orderId")Long orderId) {
+        BaseResult result = new BaseResult();
+        OrderVo order = orderService.getOrder(orderId);
+        if(order == null){
+            result.setMessage("当前订单不存在，请联系管理员");
+        }else{
+            Map<String,Object> resultMap = new HashMap<String, Object>();
+            resultMap.put("order",order);
+            result.setDatas(resultMap);
+        }
+        return result;
+    }
+
+    @ResponseBody
+    @RequestMapping("modifyOrderAddress")
+    public BaseResult fetchOrderDetail(@RequestParam(name = "orderId",value = "orderId")Long orderId,@RequestParam(name = "addressId",value = "addressId") Long addressId) {
+        BaseResult result = new BaseResult();
+        //获取地址信息
+
+        OrderVo order = orderService.getOrder(orderId);
+        if(order == null){
+            result.setMessage("当前订单不存在，请联系管理员");
+        }else{
+            //修改订单地址
+        }
+        return result;
+    }
+
+    @ResponseBody
+    @RequestMapping("fetchOrder")
+    public BaseResult fetchOrder() {
+        OrderVo order = new OrderVo();
+        BaseResult result = new BaseResult();
+        //获取userId
+        //获取默认地址信息
+        return result;
+    }
+
 }
