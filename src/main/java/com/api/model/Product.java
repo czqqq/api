@@ -10,6 +10,10 @@ public class Product implements Serializable {
 
     private Long type;
 
+    private String color;
+
+    private String size;
+
     private Double price;
 
     private String pic;
@@ -40,6 +44,22 @@ public class Product implements Serializable {
 
     public void setType(Long type) {
         this.type = type;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
     }
 
     public Double getPrice() {

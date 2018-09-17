@@ -16,6 +16,12 @@ public class Order implements Serializable {
 
     private Date mt;
 
+    private String recName;
+
+    private String recAddress;
+
+    private String recMobile;
+
     private String code;
 
     private String tradeNumber;
@@ -66,6 +72,30 @@ public class Order implements Serializable {
 
     public void setMt(Date mt) {
         this.mt = mt;
+    }
+
+    public String getRecName() {
+        return recName;
+    }
+
+    public void setRecName(String recName) {
+        this.recName = recName;
+    }
+
+    public String getRecAddress() {
+        return recAddress;
+    }
+
+    public void setRecAddress(String recAddress) {
+        this.recAddress = recAddress;
+    }
+
+    public String getRecMobile() {
+        return recMobile;
+    }
+
+    public void setRecMobile(String recMobile) {
+        this.recMobile = recMobile;
     }
 
     public String getCode() {
