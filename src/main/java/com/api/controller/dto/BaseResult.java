@@ -1,11 +1,12 @@
 package com.api.controller.dto;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class BaseResult {
-    private String code;
-    private String message;
-    private HashMap<String,Object> datas;
+    private String code ="200";
+    private String message ="成功";
+    private Map<String,Object> datas;
 
     public String getCode() {
         return code;
@@ -23,11 +24,11 @@ public class BaseResult {
         this.message = message;
     }
 
-    public HashMap<String, Object> getDatas() {
+    public Map<String, Object> getDatas() {
         return datas;
     }
 
-    public void setDatas(HashMap<String, Object> datas) {
+    public void setDatas(Map<String, Object> datas) {
         this.datas = datas;
     }
 }
