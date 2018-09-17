@@ -52,12 +52,15 @@ CREATE TABLE `commission_detail` (
 -- ----------------------------
 DROP TABLE IF EXISTS `order`;
 CREATE TABLE `order` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '\n自增ID',
-  `user_id` bigint(20) NOT NULL COMMENT '\n用户ID',
-  `total_price` double NOT NULL COMMENT '\n订单金额',
-  `status` tinyint(4) NOT NULL COMMENT '\n0:待支付;1:已支付',
-  `ct` datetime DEFAULT NULL COMMENT '\n创建时间',
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '自增ID',
+  `user_id` bigint(20) NOT NULL COMMENT '用户ID',
+  `total_price` double NOT NULL COMMENT '订单金额',
+  `status` tinyint(4) NOT NULL COMMENT '0:待支付;1:已支付',
+  `ct` datetime DEFAULT NULL COMMENT '创建时间',
   `mt` datetime DEFAULT NULL COMMENT '修改时间',
+  `rec_name` varchar(20) DEFAULT NULL COMMENT '收货人',
+  `rec_address` varchar(255) DEFAULT NULL COMMENT '收货地址',
+  `rec_mobile` varchar(15) DEFAULT NULL COMMENT '联系方式',
   `code` varchar(255) DEFAULT NULL COMMENT '编码',
   `trade_number` varchar(255) DEFAULT NULL COMMENT '交易号',
   PRIMARY KEY (`id`)
@@ -72,9 +75,11 @@ CREATE TABLE `order` (
 -- ----------------------------
 DROP TABLE IF EXISTS `order_detail`;
 CREATE TABLE `order_detail` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '\n自增ID',
-  `order_id` bigint(20) NOT NULL COMMENT '\n订单ID',
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '自增ID',
+  `order_id` bigint(20) NOT NULL COMMENT '订单ID',
   `product_id` bigint(20) NOT NULL COMMENT '产品ID',
+  `color` varchar(20) DEFAULT NULL COMMENT '颜色',
+  `size` varchar(10) DEFAULT NULL COMMENT '大小',
   `count` int(10) NOT NULL COMMENT '产品数量',
   `ct` datetime DEFAULT NULL COMMENT '\n创建时间',
   PRIMARY KEY (`id`)
@@ -89,9 +94,11 @@ CREATE TABLE `order_detail` (
 -- ----------------------------
 DROP TABLE IF EXISTS `product`;
 CREATE TABLE `product` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '自增ID\n\n\n',
-  `name` varchar(255) NOT NULL COMMENT '产品名称\n\n\n',
-  `type` bigint(20) DEFAULT NULL COMMENT '产品种类ID\n\n\n',
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '自增ID',
+  `name` varchar(255) NOT NULL COMMENT '产品名称',
+  `type` bigint(20) DEFAULT NULL COMMENT '产品种类ID',
+  `color` varchar (255) DEFAULT NULL COMMENT '颜色',
+  `size` varchar(255) DEFAULT NULL COMMENT '号码',
   `price` double NOT NULL COMMENT '单价',
   `pic` varchar(255) NOT NULL COMMENT '图片路径',
   `ct` datetime DEFAULT NULL COMMENT '创建时间',
