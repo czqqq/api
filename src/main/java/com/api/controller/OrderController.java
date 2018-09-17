@@ -25,7 +25,7 @@ public class OrderController {
     private OrderService orderService;
 
     @ResponseBody
-    @RequestMapping("test")
+    @RequestMapping("addOrder")
     public BaseResult addOrder(@RequestParam(name = "totalPrice",value = "totalPrice")Double totalPrice, @RequestBody List<OrderDetailVo> detailVos) {
         OrderVo order = new OrderVo();
         BaseResult result = new BaseResult();
