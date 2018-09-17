@@ -6,25 +6,25 @@ import com.api.model.vo.OrderDetailVo;
 import com.api.model.vo.OrderVo;
 import com.api.service.OrderService;
 import com.api.service.TestService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Controller
+@RestController
 public class OrderController {
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private OrderService orderService;
 
-    @ResponseBody
+
     @RequestMapping("addOrder")
     public BaseResult addOrder(@RequestParam(name = "totalPrice",value = "totalPrice")Double totalPrice, @RequestBody List<OrderDetailVo> detailVos) {
         OrderVo order = new OrderVo();
@@ -35,7 +35,7 @@ public class OrderController {
         Long id = orderService.modifyOrder(order,detailVos);
         Map<String,Object> resultMap = new HashMap<String, Object>();
         resultMap.put("id",id);
-        result.setDatas(resultMap);
+        result.setData(resultMap);
         return result;
     }
 
@@ -49,7 +49,7 @@ public class OrderController {
         }else{
             Map<String,Object> resultMap = new HashMap<String, Object>();
             resultMap.put("order",order);
-            result.setDatas(resultMap);
+            result.setData(resultMap);
         }
         return result;
     }

@@ -1,18 +1,24 @@
 package com.api.controller.dto;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class BaseResult {
-    private String code ="200";
+    private Integer code =200;
     private String message ="成功";
-    private Map<String,Object> datas;
+    private Object data;
 
-    public String getCode() {
+    public BaseResult() {
+    }
+
+    public BaseResult(Integer code, String message, Object data) {
+        this.code = code;
+        this.message = message;
+        this.data = data;
+    }
+
+    public Integer getCode() {
         return code;
     }
 
-    public void setCode(String code) {
+    public void setCode(Integer code) {
         this.code = code;
     }
 
@@ -24,11 +30,11 @@ public class BaseResult {
         this.message = message;
     }
 
-    public Map<String, Object> getDatas() {
-        return datas;
+    public Object getData() {
+        return data;
     }
 
-    public void setDatas(Map<String, Object> datas) {
-        this.datas = datas;
+    public void setData(Object data) {
+        this.data = data;
     }
 }
