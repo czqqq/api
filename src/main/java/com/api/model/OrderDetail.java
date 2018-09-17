@@ -10,6 +10,10 @@ public class OrderDetail implements Serializable {
 
     private Long productId;
 
+    private String color;
+
+    private String size;
+
     private Integer count;
 
     private Date ct;
@@ -36,6 +40,22 @@ public class OrderDetail implements Serializable {
 
     public void setProductId(Long productId) {
         this.productId = productId;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
     }
 
     public Integer getCount() {

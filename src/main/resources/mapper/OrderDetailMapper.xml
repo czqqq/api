@@ -1,79 +1,80 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.api.dao.OrderDetailDao" >
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.api.dao.OrderDetailDao">
+
   
-  <resultMap id="BaseResultMap" type="com.api.model.OrderDetail" >
-    <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="order_id" property="orderId" jdbcType="BIGINT" />
-    <result column="product_id" property="productId" jdbcType="BIGINT" />
-    <result column="count" property="count" jdbcType="INTEGER" />
-    <result column="ct" property="ct" jdbcType="TIMESTAMP" />
+  <resultMap id="BaseResultMap" type="com.api.model.OrderDetail">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="order_id" jdbcType="BIGINT" property="orderId" />
+    <result column="product_id" jdbcType="BIGINT" property="productId" />
+    <result column="count" jdbcType="INTEGER" property="count" />
+    <result column="ct" jdbcType="TIMESTAMP" property="ct" />
   </resultMap>
   
-  <sql id="BaseColumnList" >
+  <sql id="BaseColumnList">
     id, order_id, product_id, count, ct
   </sql>
   
-  <insert id="insert" parameterType="com.api.model.OrderDetail" >
+  <insert id="insert" parameterType="com.api.model.OrderDetail">
     INSERT INTO order_detail (id, order_id, product_id, 
       count, ct)
     VALUES (#{id,jdbcType=BIGINT}, #{orderId,jdbcType=BIGINT}, #{productId,jdbcType=BIGINT}, 
       #{count,jdbcType=INTEGER}, #{ct,jdbcType=TIMESTAMP})
   </insert>
   
-  <insert id="insertBatch" parameterType="java.util.List" >
+  <insert id="insertBatch" parameterType="java.util.List">
     INSERT INTO order_detail (id, 
       order_id, product_id, count, 
       ct)
-    VALUES <foreach collection="list" item="item" index="index" separator=","> (#{item.id,jdbcType=BIGINT}, 
+    VALUES <foreach collection="list" index="index" item="item" separator=","> (#{item.id,jdbcType=BIGINT}, 
       #{item.orderId,jdbcType=BIGINT}, #{item.productId,jdbcType=BIGINT}, #{item.count,jdbcType=INTEGER}, 
       #{item.ct,jdbcType=TIMESTAMP}) </foreach>
   </insert>
   
-  <insert id="insertSelective" parameterType="com.api.model.OrderDetail" >
+  <insert id="insertSelective" parameterType="com.api.model.OrderDetail">
     INSERT INTO order_detail
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
         id,
       </if>
-      <if test="orderId != null" >
+      <if test="orderId != null">
         order_id,
       </if>
-      <if test="productId != null" >
+      <if test="productId != null">
         product_id,
       </if>
-      <if test="count != null" >
+      <if test="count != null">
         count,
       </if>
-      <if test="ct != null" >
+      <if test="ct != null">
         ct,
       </if>
     </trim>
-    <trim prefix="VALUES (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
+    <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
         #{id,jdbcType=BIGINT},
       </if>
-      <if test="orderId != null" >
+      <if test="orderId != null">
         #{orderId,jdbcType=BIGINT},
       </if>
-      <if test="productId != null" >
+      <if test="productId != null">
         #{productId,jdbcType=BIGINT},
       </if>
-      <if test="count != null" >
+      <if test="count != null">
         #{count,jdbcType=INTEGER},
       </if>
-      <if test="ct != null" >
+      <if test="ct != null">
         #{ct,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
   
-  <delete id="deleteById" parameterType="java.lang.Long" >
+  <delete id="deleteById" parameterType="java.lang.Long">
     DELETE FROM order_detail
     WHERE id = #{id,jdbcType=BIGINT}
   </delete>
   
-  <update id="update" parameterType="com.api.model.OrderDetail" >
+  <update id="update" parameterType="com.api.model.OrderDetail">
     UPDATE order_detail
     SET order_id = #{orderId,jdbcType=BIGINT},
       product_id = #{productId,jdbcType=BIGINT},
@@ -82,75 +83,75 @@
     WHERE id = #{id,jdbcType=BIGINT}
   </update>
   
-  <update id="updateSelective" parameterType="com.api.model.OrderDetail" >
+  <update id="updateSelective" parameterType="com.api.model.OrderDetail">
     UPDATE order_detail
-    <set >
-      <if test="orderId != null" >
+    <set>
+      <if test="orderId != null">
         order_id = #{orderId,jdbcType=BIGINT},
       </if>
-      <if test="productId != null" >
+      <if test="productId != null">
         product_id = #{productId,jdbcType=BIGINT},
       </if>
-      <if test="count != null" >
+      <if test="count != null">
         count = #{count,jdbcType=INTEGER},
       </if>
-      <if test="ct != null" >
+      <if test="ct != null">
         ct = #{ct,jdbcType=TIMESTAMP},
       </if>
     </set>
     WHERE id = #{id,jdbcType=BIGINT}
   </update>
   
-  <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+  <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
     SELECT 
     <include refid="BaseColumnList" />
     FROM order_detail
     WHERE id = #{id,jdbcType=BIGINT}
   </select>
   
-  <select id="selectByIds" resultMap="BaseResultMap" >
+  <select id="selectByIds" resultMap="BaseResultMap">
     SELECT 
     <include refid="BaseColumnList" />
     FROM order_detail
-    WHERE id IN <foreach collection="list" item="item" open="(" separator="," close=")"> #{item}  </foreach> 
+    WHERE id IN <foreach close=")" collection="list" item="item" open="(" separator=","> #{item}  </foreach> 
   </select>
   
-  <select id="selectByEntity" parameterType="com.api.model.OrderDetail" resultMap="BaseResultMap" >
+  <select id="selectByEntity" parameterType="com.api.model.OrderDetail" resultMap="BaseResultMap">
     SELECT 
     <include refid="BaseColumnList" />
     FROM order_detail
-    <where >
-      <if test="orderId != null" >
+    <where>
+      <if test="orderId != null">
          AND order_id = #{orderId,jdbcType=BIGINT}
       </if>
-      <if test="productId != null" >
+      <if test="productId != null">
          AND product_id = #{productId,jdbcType=BIGINT}
       </if>
-      <if test="count != null" >
+      <if test="count != null">
          AND count = #{count,jdbcType=INTEGER}
       </if>
-      <if test="ct != null" >
+      <if test="ct != null">
          AND ct = #{ct,jdbcType=TIMESTAMP}
       </if>
     </where>
-    <if test="orderBy != null" >
+    <if test="orderBy != null">
       ORDER BY ${orderBy}
     </if>
   </select>
   
-  <select id="countByEntity" parameterType="com.api.model.OrderDetail" resultType="java.lang.Integer" >
+  <select id="countByEntity" parameterType="com.api.model.OrderDetail" resultType="java.lang.Integer">
     SELECT COUNT(1) FROM order_detail
-    <where >
-      <if test="orderId != null" >
+    <where>
+      <if test="orderId != null">
          AND order_id = #{orderId,jdbcType=BIGINT}
       </if>
-      <if test="productId != null" >
+      <if test="productId != null">
          AND product_id = #{productId,jdbcType=BIGINT}
       </if>
-      <if test="count != null" >
+      <if test="count != null">
          AND count = #{count,jdbcType=INTEGER}
       </if>
-      <if test="ct != null" >
+      <if test="ct != null">
          AND ct = #{ct,jdbcType=TIMESTAMP}
       </if>
     </where>
@@ -158,7 +159,7 @@
   
   <!-- 以下部分人工添加或修改 -->
 
-  <delete id="deleteByOrderId" parameterType="java.lang.Long" >
+  <delete id="deleteByOrderId" parameterType="java.lang.Long">
     DELETE FROM order_detail
     WHERE oroder_id = #{orderId,jdbcType=BIGINT}
   </delete>
