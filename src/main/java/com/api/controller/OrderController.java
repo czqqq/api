@@ -1,5 +1,6 @@
 package com.api.controller;
 
+import com.api.controller.dto.BaseResult;
 import com.api.model.User;
 import com.api.service.OrderService;
 import com.api.service.TestService;
@@ -15,10 +16,10 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
-
     @ResponseBody
     @RequestMapping("test")
-    public String addOrder() {
-        return "this is a test string";
+    public BaseResult addOrder() {
+
+        return null;
     }
 }
