@@ -1,176 +1,268 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.api.dao.OrderDao">
-
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.api.dao.OrderDao" >
   
-
-  <resultMap id="BaseResultMap" type="com.api.model.Order">
-    <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="user_id" jdbcType="BIGINT" property="userId" />
-    <result column="total_price" jdbcType="DOUBLE" property="totalPrice" />
-    <result column="status" jdbcType="TINYINT" property="status" />
-    <result column="ct" jdbcType="TIMESTAMP" property="ct" />
-    <result column="mt" jdbcType="TIMESTAMP" property="mt" />
+  <resultMap id="BaseResultMap" type="com.api.model.Order" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="total_price" property="totalPrice" jdbcType="DOUBLE" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="ct" property="ct" jdbcType="TIMESTAMP" />
+    <result column="mt" property="mt" jdbcType="TIMESTAMP" />
+    <result column="rec_name" property="recName" jdbcType="VARCHAR" />
+    <result column="rec_address" property="recAddress" jdbcType="VARCHAR" />
+    <result column="rec_mobile" property="recMobile" jdbcType="VARCHAR" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="trade_number" property="tradeNumber" jdbcType="VARCHAR" />
   </resultMap>
   
-  <sql id="BaseColumnList">
-    id, user_id, total_price, status, ct, mt
+  <sql id="BaseColumnList" >
+    id, user_id, total_price, status, ct, mt, rec_name, rec_address, rec_mobile, code, 
+    trade_number
   </sql>
   
-  <insert id="insert" parameterType="com.api.model.Order">
+  <insert id="insert" parameterType="com.api.model.Order" >
     INSERT INTO order (id, user_id, total_price, 
-      status, ct, mt)
+      status, ct, mt, 
+      rec_name, rec_address, rec_mobile, 
+      code, trade_number)
     VALUES (#{id,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{totalPrice,jdbcType=DOUBLE}, 
-      #{status,jdbcType=TINYINT}, #{ct,jdbcType=TIMESTAMP}, #{mt,jdbcType=TIMESTAMP})
+      #{status,jdbcType=TINYINT}, #{ct,jdbcType=TIMESTAMP}, #{mt,jdbcType=TIMESTAMP}, 
+      #{recName,jdbcType=VARCHAR}, #{recAddress,jdbcType=VARCHAR}, #{recMobile,jdbcType=VARCHAR}, 
+      #{code,jdbcType=VARCHAR}, #{tradeNumber,jdbcType=VARCHAR})
   </insert>
   
-  <insert id="insertBatch" parameterType="java.util.List">
+  <insert id="insertBatch" parameterType="java.util.List" >
     INSERT INTO order (id, 
       user_id, total_price, status, 
-      ct, mt)
-    VALUES <foreach collection="list" index="index" item="item" separator=","> (#{item.id,jdbcType=BIGINT}, 
+      ct, mt, rec_name, 
+      rec_address, rec_mobile, code, 
+      trade_number)
+    VALUES <foreach collection="list" item="item" index="index" separator=","> (#{item.id,jdbcType=BIGINT}, 
       #{item.userId,jdbcType=BIGINT}, #{item.totalPrice,jdbcType=DOUBLE}, #{item.status,jdbcType=TINYINT}, 
-      #{item.ct,jdbcType=TIMESTAMP}, #{item.mt,jdbcType=TIMESTAMP}) </foreach>
+      #{item.ct,jdbcType=TIMESTAMP}, #{item.mt,jdbcType=TIMESTAMP}, #{item.recName,jdbcType=VARCHAR}, 
+      #{item.recAddress,jdbcType=VARCHAR}, #{item.recMobile,jdbcType=VARCHAR}, #{item.code,jdbcType=VARCHAR}, 
+      #{item.tradeNumber,jdbcType=VARCHAR}) </foreach>
   </insert>
   
-  <insert id="insertSelective" parameterType="com.api.model.Order">
+  <insert id="insertSelective" parameterType="com.api.model.Order" >
     INSERT INTO order
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
         id,
       </if>
-      <if test="userId != null">
+      <if test="userId != null" >
         user_id,
       </if>
-      <if test="totalPrice != null">
+      <if test="totalPrice != null" >
         total_price,
       </if>
-      <if test="status != null">
+      <if test="status != null" >
         status,
       </if>
-      <if test="ct != null">
+      <if test="ct != null" >
         ct,
       </if>
-      <if test="mt != null">
+      <if test="mt != null" >
         mt,
       </if>
+      <if test="recName != null" >
+        rec_name,
+      </if>
+      <if test="recAddress != null" >
+        rec_address,
+      </if>
+      <if test="recMobile != null" >
+        rec_mobile,
+      </if>
+      <if test="code != null" >
+        code,
+      </if>
+      <if test="tradeNumber != null" >
+        trade_number,
+      </if>
     </trim>
-    <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
+    <trim prefix="VALUES (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
         #{id,jdbcType=BIGINT},
       </if>
-      <if test="userId != null">
+      <if test="userId != null" >
         #{userId,jdbcType=BIGINT},
       </if>
-      <if test="totalPrice != null">
+      <if test="totalPrice != null" >
         #{totalPrice,jdbcType=DOUBLE},
       </if>
-      <if test="status != null">
+      <if test="status != null" >
         #{status,jdbcType=TINYINT},
       </if>
-      <if test="ct != null">
+      <if test="ct != null" >
         #{ct,jdbcType=TIMESTAMP},
       </if>
-      <if test="mt != null">
+      <if test="mt != null" >
         #{mt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="recName != null" >
+        #{recName,jdbcType=VARCHAR},
+      </if>
+      <if test="recAddress != null" >
+        #{recAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="recMobile != null" >
+        #{recMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="tradeNumber != null" >
+        #{tradeNumber,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
   
-  <delete id="deleteById" parameterType="java.lang.Long">
+  <delete id="deleteById" parameterType="java.lang.Long" >
     DELETE FROM order
     WHERE id = #{id,jdbcType=BIGINT}
   </delete>
   
-  <update id="update" parameterType="com.api.model.Order">
+  <update id="update" parameterType="com.api.model.Order" >
     UPDATE order
     SET user_id = #{userId,jdbcType=BIGINT},
       total_price = #{totalPrice,jdbcType=DOUBLE},
       status = #{status,jdbcType=TINYINT},
       ct = #{ct,jdbcType=TIMESTAMP},
-      mt = #{mt,jdbcType=TIMESTAMP}
+      mt = #{mt,jdbcType=TIMESTAMP},
+      rec_name = #{recName,jdbcType=VARCHAR},
+      rec_address = #{recAddress,jdbcType=VARCHAR},
+      rec_mobile = #{recMobile,jdbcType=VARCHAR},
+      code = #{code,jdbcType=VARCHAR},
+      trade_number = #{tradeNumber,jdbcType=VARCHAR}
     WHERE id = #{id,jdbcType=BIGINT}
   </update>
   
-  <update id="updateSelective" parameterType="com.api.model.Order">
+  <update id="updateSelective" parameterType="com.api.model.Order" >
     UPDATE order
-    <set>
-      <if test="userId != null">
+    <set >
+      <if test="userId != null" >
         user_id = #{userId,jdbcType=BIGINT},
       </if>
-      <if test="totalPrice != null">
+      <if test="totalPrice != null" >
         total_price = #{totalPrice,jdbcType=DOUBLE},
       </if>
-      <if test="status != null">
+      <if test="status != null" >
         status = #{status,jdbcType=TINYINT},
       </if>
-      <if test="ct != null">
+      <if test="ct != null" >
         ct = #{ct,jdbcType=TIMESTAMP},
       </if>
-      <if test="mt != null">
+      <if test="mt != null" >
         mt = #{mt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="recName != null" >
+        rec_name = #{recName,jdbcType=VARCHAR},
+      </if>
+      <if test="recAddress != null" >
+        rec_address = #{recAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="recMobile != null" >
+        rec_mobile = #{recMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null" >
+        code = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="tradeNumber != null" >
+        trade_number = #{tradeNumber,jdbcType=VARCHAR},
       </if>
     </set>
     WHERE id = #{id,jdbcType=BIGINT}
   </update>
   
-  <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     SELECT 
     <include refid="BaseColumnList" />
     FROM order
     WHERE id = #{id,jdbcType=BIGINT}
   </select>
   
-  <select id="selectByIds" resultMap="BaseResultMap">
+  <select id="selectByIds" resultMap="BaseResultMap" >
     SELECT 
     <include refid="BaseColumnList" />
     FROM order
-    WHERE id IN <foreach close=")" collection="list" item="item" open="(" separator=","> #{item}  </foreach> 
+    WHERE id IN <foreach collection="list" item="item" open="(" separator="," close=")"> #{item}  </foreach> 
   </select>
   
-  <select id="selectByEntity" parameterType="com.api.model.Order" resultMap="BaseResultMap">
+  <select id="selectByEntity" parameterType="com.api.model.Order" resultMap="BaseResultMap" >
     SELECT 
     <include refid="BaseColumnList" />
     FROM order
-    <where>
-      <if test="userId != null">
+    <where >
+      <if test="userId != null" >
          AND user_id = #{userId,jdbcType=BIGINT}
       </if>
-      <if test="totalPrice != null">
+      <if test="totalPrice != null" >
          AND total_price = #{totalPrice,jdbcType=DOUBLE}
       </if>
-      <if test="status != null">
+      <if test="status != null" >
          AND status = #{status,jdbcType=TINYINT}
       </if>
-      <if test="ct != null">
+      <if test="ct != null" >
          AND ct = #{ct,jdbcType=TIMESTAMP}
       </if>
-      <if test="mt != null">
+      <if test="mt != null" >
          AND mt = #{mt,jdbcType=TIMESTAMP}
       </if>
+      <if test="recName != null" >
+         AND rec_name = #{recName,jdbcType=VARCHAR}
+      </if>
+      <if test="recAddress != null" >
+         AND rec_address = #{recAddress,jdbcType=VARCHAR}
+      </if>
+      <if test="recMobile != null" >
+         AND rec_mobile = #{recMobile,jdbcType=VARCHAR}
+      </if>
+      <if test="code != null" >
+         AND code = #{code,jdbcType=VARCHAR}
+      </if>
+      <if test="tradeNumber != null" >
+         AND trade_number = #{tradeNumber,jdbcType=VARCHAR}
+      </if>
     </where>
-    <if test="orderBy != null">
+    <if test="orderBy != null" >
       ORDER BY ${orderBy}
     </if>
   </select>
   
-  <select id="countByEntity" parameterType="com.api.model.Order" resultType="java.lang.Integer">
+  <select id="countByEntity" parameterType="com.api.model.Order" resultType="java.lang.Integer" >
     SELECT COUNT(1) FROM order
-    <where>
-      <if test="userId != null">
+    <where >
+      <if test="userId != null" >
          AND user_id = #{userId,jdbcType=BIGINT}
       </if>
-      <if test="totalPrice != null">
+      <if test="totalPrice != null" >
          AND total_price = #{totalPrice,jdbcType=DOUBLE}
       </if>
-      <if test="status != null">
+      <if test="status != null" >
          AND status = #{status,jdbcType=TINYINT}
       </if>
-      <if test="ct != null">
+      <if test="ct != null" >
          AND ct = #{ct,jdbcType=TIMESTAMP}
       </if>
-      <if test="mt != null">
+      <if test="mt != null" >
          AND mt = #{mt,jdbcType=TIMESTAMP}
+      </if>
+      <if test="recName != null" >
+         AND rec_name = #{recName,jdbcType=VARCHAR}
+      </if>
+      <if test="recAddress != null" >
+         AND rec_address = #{recAddress,jdbcType=VARCHAR}
+      </if>
+      <if test="recMobile != null" >
+         AND rec_mobile = #{recMobile,jdbcType=VARCHAR}
+      </if>
+      <if test="code != null" >
+         AND code = #{code,jdbcType=VARCHAR}
+      </if>
+      <if test="tradeNumber != null" >
+         AND trade_number = #{tradeNumber,jdbcType=VARCHAR}
       </if>
     </where>
   </select>
