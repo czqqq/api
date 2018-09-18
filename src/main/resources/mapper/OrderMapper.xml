@@ -22,7 +22,7 @@
   </sql>
   
   <insert id="insert" parameterType="com.api.model.Order"  keyProperty="id" useGeneratedKeys="true">
-    INSERT INTO order (id, user_id, total_price, 
+    INSERT INTO `order` (id, user_id, total_price,
       status, ct, mt, rec_name, rec_address, rec_mobile,
       code, trade_number)
     VALUES (#{id,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{totalPrice,jdbcType=DOUBLE}, 
@@ -32,7 +32,7 @@
   </insert>
   
   <insert id="insertBatch" parameterType="java.util.List" >
-    INSERT INTO order (id, 
+    INSERT INTO `order` (id,
       user_id, total_price, status, 
       ct, mt, rec_name, 
       rec_address, rec_mobile, code, 
@@ -45,7 +45,7 @@
   </insert>
   
   <insert id="insertSelective" parameterType="com.api.model.Order" >
-    INSERT INTO order
+    INSERT INTO `order`
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         id,
@@ -119,12 +119,12 @@
   </insert>
   
   <delete id="deleteById" parameterType="java.lang.Long" >
-    DELETE FROM order
+    DELETE FROM  `order`
     WHERE id = #{id,jdbcType=BIGINT}
   </delete>
   
   <update id="update" parameterType="com.api.model.Order" >
-    UPDATE order
+    UPDATE `order`
     SET user_id = #{userId,jdbcType=BIGINT},
       total_price = #{totalPrice,jdbcType=DOUBLE},
       status = #{status,jdbcType=TINYINT},
@@ -139,7 +139,7 @@
   </update>
   
   <update id="updateSelective" parameterType="com.api.model.Order" >
-    UPDATE order
+    UPDATE `order`
     <set >
       <if test="userId != null" >
         user_id = #{userId,jdbcType=BIGINT},
@@ -178,21 +178,21 @@
   <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     SELECT 
     <include refid="BaseColumnList" />
-    FROM order
+    FROM `order`
     WHERE id = #{id,jdbcType=BIGINT}
   </select>
   
   <select id="selectByIds" resultMap="BaseResultMap" >
     SELECT 
     <include refid="BaseColumnList" />
-    FROM order
+    FROM `order`
     WHERE id IN <foreach collection="list" item="item" open="(" separator="," close=")"> #{item}  </foreach> 
   </select>
   
   <select id="selectByEntity" parameterType="com.api.model.Order" resultMap="BaseResultMap" >
     SELECT 
     <include refid="BaseColumnList" />
-    FROM order
+    FROM `order`
     <where >
       <if test="userId != null" >
          AND user_id = #{userId,jdbcType=BIGINT}
@@ -231,7 +231,7 @@
   </select>
   
   <select id="countByEntity" parameterType="com.api.model.Order" resultType="java.lang.Integer" >
-    SELECT COUNT(1) FROM order
+    SELECT COUNT(1) FROM `order`
     <where >
       <if test="userId != null" >
          AND user_id = #{userId,jdbcType=BIGINT}

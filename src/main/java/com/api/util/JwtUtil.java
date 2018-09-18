@@ -1,10 +1,12 @@
 package com.api.util;
 
+import com.api.model.User;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import org.apache.shiro.subject.Subject;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
@@ -64,6 +66,11 @@ public class JwtUtil {
         } catch (UnsupportedEncodingException e) {
             return null;
         }
+    }
+
+    public static String getMobileBySubject(Subject subject) {
+        String token = subject.getPrincipal().toString();
+        return getUsername(token);
     }
 
 }

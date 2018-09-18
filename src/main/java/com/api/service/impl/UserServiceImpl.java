@@ -6,6 +6,8 @@ import com.api.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -17,5 +19,15 @@ public class UserServiceImpl implements UserService {
         User u = new User();
         u.setMobile(loginName);
         return userDao.selectByEntity(u);
+    }
+
+    @Override
+    public int addUser(String mobile, String name, String pwd) {
+        User user = new User();
+        user.setMobile(mobile);
+        user.setName(name);
+        user.setPwd(pwd);
+        user.setCt(new Date());
+        return  userDao.insertSelective(user);
     }
 }

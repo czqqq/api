@@ -1,7 +1,7 @@
 package com.api.controller.dto;
 
 public class BaseResult {
-    private Integer code =200;
+    private Integer code = ResultCode.SUCCESS;
     private String message ="成功";
     private Object data;
 

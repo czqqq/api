@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserDao {
+    int insertSelective(User user);
     User selectById(Long id);
     User selectByEntity(User user);
 }
