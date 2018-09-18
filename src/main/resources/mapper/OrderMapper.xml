@@ -15,10 +15,31 @@
     <result column="code" property="code" jdbcType="VARCHAR" />
     <result column="trade_number" property="tradeNumber" jdbcType="VARCHAR" />
   </resultMap>
+
+  <resultMap id="BaseResultVoMap" type="com.api.model.vo.OrderVo" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="total_price" property="totalPrice" jdbcType="DOUBLE" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="ct" property="ct" jdbcType="TIMESTAMP" />
+    <result column="mt" property="mt" jdbcType="TIMESTAMP" />
+    <result column="rec_name" property="recName" jdbcType="VARCHAR" />
+    <result column="rec_address" property="recAddress" jdbcType="VARCHAR" />
+    <result column="rec_mobile" property="recMobile" jdbcType="VARCHAR" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="trade_number" property="tradeNumber" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+  </resultMap>
   
   <sql id="BaseColumnList" >
     id, user_id, total_price, status, ct, mt, rec_name, rec_address, rec_mobile, code, 
     trade_number
+  </sql>
+
+  <sql id="BaseJoinColumnList" >
+    a.id, a.user_id, a.total_price, a.status, a.ct, a.mt, a.rec_name, a.rec_address, a.rec_mobile, a.code,
+    a.trade_number,b.name,b.mobile
   </sql>
   
   <insert id="insert" parameterType="com.api.model.Order"  keyProperty="id" useGeneratedKeys="true">
@@ -267,5 +288,45 @@
   </select>
   
   <!-- 以下部分人工添加或修改 -->
-  
+  <select id="selectJoinByEntity" parameterType="com.api.model.Order" resultMap="BaseResultVoMap" >
+    SELECT
+    <include refid="BaseJoinColumnList" />
+    FROM `order` a
+    INNER JOIN `USER` b on b.id = a.user_id
+    <where >
+      <if test="userId != null" >
+        AND a.user_id = #{userId,jdbcType=BIGINT}
+      </if>
+      <if test="totalPrice != null" >
+        AND a.total_price = #{totalPrice,jdbcType=DOUBLE}
+      </if>
+      <if test="status != null" >
+        AND a.status = #{status,jdbcType=TINYINT}
+      </if>
+      <if test="ct != null" >
+        AND a.ct = #{ct,jdbcType=TIMESTAMP}
+      </if>
+      <if test="mt != null" >
+        AND a.mt = #{mt,jdbcType=TIMESTAMP}
+      </if>
+      <if test="recName != null" >
+        AND a.rec_name = #{recName,jdbcType=VARCHAR}
+      </if>
+      <if test="recAddress != null" >
+        AND a.rec_address = #{recAddress,jdbcType=VARCHAR}
+      </if>
+      <if test="recMobile != null" >
+        AND a.rec_mobile = #{recMobile,jdbcType=VARCHAR}
+      </if>
+      <if test="code != null" >
+        AND a.code = #{code,jdbcType=VARCHAR}
+      </if>
+      <if test="tradeNumber != null" >
+        AND a.trade_number = #{tradeNumber,jdbcType=VARCHAR}
+      </if>
+    </where>
+    <if test="orderBy != null" >
+      ORDER BY ${orderBy}
+    </if>
+  </select>
 </mapper>

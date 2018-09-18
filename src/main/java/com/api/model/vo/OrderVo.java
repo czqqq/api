@@ -24,6 +24,8 @@ public class OrderVo {
 
     private String userName;
 
+    private String mobile;
+
     private String recName;
 
     private String recMobile;
@@ -134,5 +136,13 @@ public class OrderVo {
 
     public void setRecAddress(String recAddress) {
         this.recAddress = recAddress;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
     }
 }

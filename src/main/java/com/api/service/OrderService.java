@@ -3,8 +3,7 @@ package com.api.service;
 import com.api.model.Order;
 import com.api.model.vo.OrderDetailVo;
 import com.api.model.vo.OrderVo;
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 
 import java.util.List;
 
@@ -13,10 +12,9 @@ public interface OrderService {
     /**
      * 修改订单
      * @param order
-     * @param details
      * @return
      */
-    public Long modifyOrder(OrderVo order, List<OrderDetailVo> details);
+    public Long addOrder(OrderVo order);
 
     /**
      * 删除
@@ -30,17 +28,16 @@ public interface OrderService {
      * @param orderId
      * @return
      */
-    public OrderVo  getOrder(Long orderId);
+    public OrderVo  getOrder(Long orderId,Long userId);
 
     /**
      * 分页查询
      * @param order
-     * @param nextPage
+     * @param pageIndex
      * @param pageSize
      * @return
      */
-    public Page<OrderVo> inquireOrders(OrderVo order,int nextPage,int pageSize );
-
+    public PageInfo<OrderVo> inquireOrders(Order order, Integer pageIndex, Integer pageSize);
 
 
 }

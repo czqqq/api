@@ -1,6 +1,5 @@
 package com.api.service.impl;
 
-import com.alibaba.druid.support.json.JSONUtils;
 import com.api.dao.*;
 import com.api.model.Order;
 import com.api.model.OrderDetail;
@@ -9,11 +8,13 @@ import com.api.model.User;
 import com.api.model.vo.OrderDetailVo;
 import com.api.model.vo.OrderVo;
 import com.api.service.OrderService;
-import com.github.pagehelper.Page;
-import org.springframework.beans.factory.ObjectFactory;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.beans.Transient;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -34,39 +35,25 @@ public class OrderServiceImpl implements OrderService {
     private UserDao userDao;
 
     @Override
-    public Long modifyOrder(OrderVo order, List<OrderDetailVo> details) {
+    @Transactional
+    public Long addOrder(OrderVo order) {
         Order orderPo;
         List<OrderDetail> detailPos ;
-        if (order.getId()!=null){
-            //编辑
-            orderPo = orderDao.selectById(order.getId());
-            detailPos  = new ArrayList<OrderDetail>();
-            if(orderPo!=null){
-                covertOrderVoToPo(order,details,orderPo,detailPos);
+        //新增
+        orderPo = new Order();
+        detailPos  =new ArrayList<OrderDetail>();
+        covertOrderVoToPo(order,order.getOrderDetails(),orderPo,detailPos);
+        orderPo.setMt(new Date());
+        Long id = orderDao.insert(orderPo);
+        for(OrderDetail detailPo : detailPos){
+            detailPo.setOrderId(id);
+            if(detailPo.getCount()==null){
+                detailPo.setCount(1);
             }
-            orderPo.setMt(new Date());
-            orderDao.update(orderPo);
-            if(details!=null&&details.size()!=0){
-                for(OrderDetail detailPo : detailPos){
-                    detailPo.setOrderId(orderPo.getId());
-                    orderDetailDao.updateSelective(detailPo);
-                }
-
-            }
-        }else{
-            //新增
-            orderPo = new Order();
-            detailPos  =new ArrayList<OrderDetail>();
-            covertOrderVoToPo(order,details,orderPo,detailPos);
-            orderPo.setMt(new Date());
-            Long id = orderDao.insert(orderPo);
-            for(OrderDetail detailPo : detailPos){
-                detailPo.setOrderId(id);
-                detailPo.setCt(new Date());
-                orderDetailDao.insert(detailPo);
-            }
+            detailPo.setCt(new Date());
+            orderDetailDao.insert(detailPo);
         }
-        return order.getId();
+        return orderPo.getId();
     }
 
     private void covertOrderVoToPo(OrderVo order, List<OrderDetailVo> details, Order orderPo, List<OrderDetail> detailPos) {
@@ -91,13 +78,21 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public void deleteOrder(OrderVo order) {
         orderDetailDao.deleteByOrderId(order.getId());
         orderDao.deleteById(order.getId());
     }
 
     @Override
-    public OrderVo getOrder(Long orderId) {
+    public OrderVo getOrder(Long orderId,Long userId) {
+        Order condition = new Order();
+        condition.setId(orderId);
+        condition.setUserId(userId);
+        Integer count = orderDao.countByEntity(condition);
+        if(count!=null&&count.equals(0)){
+            return null;
+        }
         Order po = orderDao.selectById(orderId);
         OrderVo vo ;
         if(po != null){
@@ -142,7 +137,10 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Page<OrderVo> inquireOrders(OrderVo order, int nextPage, int pageSize) {
-        return null;
+    public PageInfo<OrderVo> inquireOrders(Order order, Integer pageIndex, Integer pageSize) {
+        PageHelper.startPage(pageIndex,pageSize);
+        List<OrderVo> orderList = orderDao.selectJoinByEntity(order);
+        PageInfo<OrderVo> pageOrder = new PageInfo<OrderVo>(orderList);
+        return pageOrder;
     }
 }
