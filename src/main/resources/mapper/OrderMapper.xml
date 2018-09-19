@@ -329,4 +329,40 @@
       ORDER BY ${orderBy}
     </if>
   </select>
+  <update id="updateSelectiveByOrderId" parameterType="com.api.model.Order" >
+    UPDATE `order`
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="totalPrice != null" >
+        total_price = #{totalPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="ct != null" >
+        ct = #{ct,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mt != null" >
+        mt = #{mt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="recName != null" >
+        rec_name = #{recName,jdbcType=VARCHAR},
+      </if>
+      <if test="recAddress != null" >
+        rec_address = #{recAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="recMobile != null" >
+        rec_mobile = #{recMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null" >
+        code = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="tradeNumber != null" >
+        trade_number = #{tradeNumber,jdbcType=VARCHAR},
+      </if>
+    </set>
+    WHERE order_id = #{orderId,jdbcType=BIGINT}
+  </update>
 </mapper>

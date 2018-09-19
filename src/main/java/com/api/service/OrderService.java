@@ -16,6 +16,8 @@ public interface OrderService {
      */
     public Long addOrder(OrderVo order);
 
+    Long modifyOrder(OrderVo order);
+
     /**
      * 删除
      * @param order

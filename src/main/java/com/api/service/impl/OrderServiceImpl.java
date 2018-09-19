@@ -43,7 +43,7 @@ public class OrderServiceImpl implements OrderService {
         orderPo = new Order();
         detailPos  =new ArrayList<OrderDetail>();
         covertOrderVoToPo(order,order.getOrderDetails(),orderPo,detailPos);
-        orderPo.setMt(new Date());
+        orderPo.setCt(new Date());
         Long id = orderDao.insert(orderPo);
         for(OrderDetail detailPo : detailPos){
             detailPo.setOrderId(id);
@@ -52,6 +52,27 @@ public class OrderServiceImpl implements OrderService {
             }
             detailPo.setCt(new Date());
             orderDetailDao.insert(detailPo);
+        }
+        return orderPo.getId();
+    }
+
+    @Override
+    public Long modifyOrder(OrderVo order) {
+        Order orderPo;
+        List<OrderDetail> detailPos ;
+        //新增
+        orderPo = new Order();
+        detailPos  =new ArrayList<OrderDetail>();
+        covertOrderVoToPo(order,order.getOrderDetails(),orderPo,detailPos);
+        orderPo.setMt(new Date());
+        orderDao.update(orderPo);
+        for(OrderDetail detailPo : detailPos){
+            detailPo.setOrderId(order.getId());
+            if(detailPo.getCount()==null){
+                detailPo.setCount(1);
+            }
+            detailPo.setCt(new Date());
+            orderDetailDao.updateSelective(detailPo);
         }
         return orderPo.getId();
     }
@@ -129,6 +150,19 @@ public class OrderServiceImpl implements OrderService {
         vo.setRecMobile(po.getRecMobile());
         vo.setRecName(po.getRecName());
         vo.setStatus(po.getStatus());
+        switch (vo.getStatus()){
+            case 0:{
+                vo.setStatusDesc("待支付");
+                break;
+            }
+            case 1:{
+                vo.setStatusDesc("支付成功");
+                break;
+            }
+            default:{
+                vo.setStatusDesc("未知");
+            }
+        }
         vo.setTotalPrice(po.getTotalPrice());
         vo.setTradeNumber(po.getTradeNumber());
         vo.setUserId(po.getUserId());

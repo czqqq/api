@@ -1,6 +1,7 @@
 package com.api.controller;
 
 import com.api.controller.dto.BaseResult;
+import com.api.controller.dto.ResultCode;
 import com.api.model.Order;
 import com.api.model.User;
 import com.api.model.vo.OrderDetailVo;
@@ -39,7 +40,7 @@ public class OrderController {
         //获取userId
         Subject subject = SecurityUtils.getSubject();
         if (!subject.isAuthenticated()) {
-            return new BaseResult(200, "验证不通过", null);
+            return new BaseResult(ResultCode.SUCCESS, "验证不通过", null);
         }
         String mobile = JwtUtil.getMobileBySubject(subject);
         User user = userService.getUserByLoginName(mobile);
@@ -60,7 +61,7 @@ public class OrderController {
     public BaseResult fetchOrderDetail(@RequestParam(name = "orderId",value = "orderId")Long orderId) {
         Subject subject = SecurityUtils.getSubject();
         if (!subject.isAuthenticated()) {
-            return new BaseResult(200, "验证不通过", null);
+            return new BaseResult(ResultCode.SUCCESS, "验证不通过", null);
         }
         BaseResult result = new BaseResult();
         String mobile = JwtUtil.getMobileBySubject(subject);
@@ -81,20 +82,46 @@ public class OrderController {
     public BaseResult fetchOrderDetail(@RequestParam(name = "orderId",value = "orderId")Long orderId,@RequestParam(name = "addressId",value = "addressId") Long addressId) {
         Subject subject = SecurityUtils.getSubject();
         if (!subject.isAuthenticated()) {
-            return new BaseResult(200, "验证不通过", null);
+            return new BaseResult(ResultCode.SUCCESS, "验证不通过", null);
         }
-        BaseResult result = new BaseResult();
         //获取地址信息
 
         String mobile = JwtUtil.getMobileBySubject(subject);
         User user = userService.getUserByLoginName(mobile);
         OrderVo order = orderService.getOrder(orderId,user.getId());
         if(order == null){
-            result.setMessage("当前订单不存在，请联系管理员");
+            return  new BaseResult(ResultCode.SUCCESS,"当前订单不存在，请联系管理员",null);
         }else{
             //修改订单地址
+            orderService.modifyOrder(order);
+            return  new BaseResult(ResultCode.SUCCESS,"修改成功",null);
         }
-        return result;
+    }
+
+    @ResponseBody
+    @RequestMapping("verifyPay")
+    public BaseResult verifyPay(@RequestParam(name = "orderId",value = "orderId")Long orderId,
+                                @RequestParam(name = "code",value = "code") String code,
+                                @RequestParam(name = "tradeNum",value = "tradeNum") String tradeNum
+                                ) {
+        Subject subject = SecurityUtils.getSubject();
+        if (!subject.isAuthenticated()) {
+            return new BaseResult(ResultCode.SUCCESS, "验证不通过", null);
+        }
+        //获取地址信息
+
+        String mobile = JwtUtil.getMobileBySubject(subject);
+        User user = userService.getUserByLoginName(mobile);
+        OrderVo order = orderService.getOrder(orderId,user.getId());
+        if(order == null){
+            return  new BaseResult(ResultCode.SUCCESS,"当前订单不存在，请联系管理员",null);
+        }else{
+            //验证支付信息
+            order.setTradeNumber(tradeNum);
+            order.setStatus(Byte.valueOf("1"));
+            orderService.modifyOrder(order);
+            return  new BaseResult(ResultCode.SUCCESS,"支付成功",null);
+        }
     }
 
     @ResponseBody
@@ -105,7 +132,7 @@ public class OrderController {
             @RequestParam(name = "pageIndex",value = "pageIndex")Integer pageIndex) {
         Subject subject = SecurityUtils.getSubject();
         if (!subject.isAuthenticated()) {
-            return new BaseResult(200, "验证不通过", null);
+            return new BaseResult(ResultCode.SUCCESS, "验证不通过", null);
         }
         String mobile = JwtUtil.getMobileBySubject(subject);
         User user = userService.getUserByLoginName(mobile);
