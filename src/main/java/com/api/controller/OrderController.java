@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.xml.transform.Result;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -75,6 +76,21 @@ public class OrderController {
             result.setData(resultMap);
         }
         return result;
+    }
+
+    @ResponseBody
+    @RequestMapping("fetchOrderDetailWeb")
+    public BaseResult fetchOrderDetailWeb(@RequestParam(name = "orderId",value = "orderId")Long orderId) {
+        OrderVo order = orderService.getOrder(orderId,null);
+        if(order == null){
+            return new BaseResult(ResultCode.SUCCESS,"当前订单不存在，请联系管理员",null);
+        }else{
+            BaseResult result = new BaseResult();
+            Map<String,Object> resultMap = new HashMap<String, Object>();
+            resultMap.put("order",order);
+            result.setData(resultMap);
+            return result;
+        }
     }
 
     @ResponseBody

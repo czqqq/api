@@ -10,9 +10,9 @@ public interface ProductService {
      * @param product
      * @return
      */
-    public Long addProduct(Product product);
+    public void addProduct(Product product);
 
-    Long modifyProduct(Product product);
+    void modifyProduct(Product product);
 
     /**
      * 删除产品
@@ -26,7 +26,7 @@ public interface ProductService {
      * @param productId
      * @return
      */
-    public Product  getProduct(Long productId, Long userId);
+    public Product  getProduct(Long productId);
 
     /**
      * 查询列表

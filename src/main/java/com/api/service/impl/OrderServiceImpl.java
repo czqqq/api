@@ -109,20 +109,17 @@ public class OrderServiceImpl implements OrderService {
     public OrderVo getOrder(Long orderId,Long userId) {
         Order condition = new Order();
         condition.setId(orderId);
-        condition.setUserId(userId);
-        Integer count = orderDao.countByEntity(condition);
-        if(count!=null&&count.equals(0)){
-            return null;
+        if (userId != null) {
+            condition.setUserId(userId);
         }
-        Order po = orderDao.selectById(orderId);
-        OrderVo vo ;
-        if(po != null){
-            vo = new OrderVo();
+        List<Order> orders = orderDao.selectByEntity(condition);
+        if(orders != null && orders.size() > 0){
+            OrderVo vo = new OrderVo();
             List<OrderDetail> detailPos = new ArrayList<OrderDetail>();
             OrderDetail detailPo = new OrderDetail();
-            detailPo.setOrderId(po.getId());
+            detailPo.setOrderId(orders.get(0).getId());
             detailPos = orderDetailDao.selectByEntity(detailPo);
-            convertPoToVo(vo,po,detailPos);
+            convertPoToVo(vo,orders.get(0),detailPos);
             return vo ;
         }else{
             return null;
