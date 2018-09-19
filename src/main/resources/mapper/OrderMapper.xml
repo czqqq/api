@@ -246,9 +246,7 @@
          AND trade_number = #{tradeNumber,jdbcType=VARCHAR}
       </if>
     </where>
-    <if test="orderBy != null" >
-      ORDER BY ${orderBy}
-    </if>
+
   </select>
   
   <select id="countByEntity" parameterType="com.api.model.Order" resultType="java.lang.Integer" >
@@ -325,9 +323,7 @@
         AND a.trade_number = #{tradeNumber,jdbcType=VARCHAR}
       </if>
     </where>
-    <if test="orderBy != null" >
-      ORDER BY ${orderBy}
-    </if>
+
   </select>
   <update id="updateSelectiveByOrderId" parameterType="com.api.model.Order" >
     UPDATE `order`

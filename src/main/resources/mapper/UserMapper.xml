@@ -1,154 +1,171 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.api.dao.UserDao" >
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.api.dao.UserDao">
   
-  <resultMap id="BaseResultMap" type="com.api.model.User" >
-    <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
-    <result column="pwd" property="pwd" jdbcType="VARCHAR" />
-    <result column="name" property="name" jdbcType="VARCHAR" />
-    <result column="ct" property="ct" jdbcType="TIMESTAMP" />
+  <resultMap id="BaseResultMap" type="com.api.model.User">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="pwd" jdbcType="VARCHAR" property="pwd" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="ct" jdbcType="TIMESTAMP" property="ct" />
+    <result column="pid" jdbcType="BIGINT" property="pid" />
   </resultMap>
   
-  <sql id="BaseColumnList" >
-    id, mobile, pwd, name, ct
+  <sql id="BaseColumnList">
+    id, mobile, pwd, name, ct, pid
   </sql>
   
-  <insert id="insert" parameterType="com.api.model.User" >
+  <insert id="insert" parameterType="com.api.model.User">
     INSERT INTO user (id, mobile, pwd, 
-      name, ct)
+      name, ct, pid)
     VALUES (#{id,jdbcType=BIGINT}, #{mobile,jdbcType=VARCHAR}, #{pwd,jdbcType=VARCHAR}, 
-      #{name,jdbcType=VARCHAR}, #{ct,jdbcType=TIMESTAMP})
+      #{name,jdbcType=VARCHAR}, #{ct,jdbcType=TIMESTAMP}, #{pid,jdbcType=BIGINT})
   </insert>
   
-  <insert id="insertBatch" parameterType="java.util.List" >
+  <insert id="insertBatch" parameterType="java.util.List">
     INSERT INTO user (id, 
       mobile, pwd, name, 
-      ct)
-    VALUES <foreach collection="list" item="item" index="index" separator=","> (#{item.id,jdbcType=BIGINT}, 
+      ct, pid)
+    VALUES <foreach collection="list" index="index" item="item" separator=","> (#{item.id,jdbcType=BIGINT}, 
       #{item.mobile,jdbcType=VARCHAR}, #{item.pwd,jdbcType=VARCHAR}, #{item.name,jdbcType=VARCHAR}, 
-      #{item.ct,jdbcType=TIMESTAMP}) </foreach>
+      #{item.ct,jdbcType=TIMESTAMP}, #{item.pid,jdbcType=BIGINT}) </foreach>
   </insert>
   
-  <insert id="insertSelective" parameterType="com.api.model.User" >
+  <insert id="insertSelective" parameterType="com.api.model.User">
     INSERT INTO user
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
         id,
       </if>
-      <if test="mobile != null" >
+      <if test="mobile != null">
         mobile,
       </if>
-      <if test="pwd != null" >
+      <if test="pwd != null">
         pwd,
       </if>
-      <if test="name != null" >
+      <if test="name != null">
         name,
       </if>
-      <if test="ct != null" >
+      <if test="ct != null">
         ct,
       </if>
+      <if test="pid != null">
+        pid,
+      </if>
     </trim>
-    <trim prefix="VALUES (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
+    <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
         #{id,jdbcType=BIGINT},
       </if>
-      <if test="mobile != null" >
+      <if test="mobile != null">
         #{mobile,jdbcType=VARCHAR},
       </if>
-      <if test="pwd != null" >
+      <if test="pwd != null">
         #{pwd,jdbcType=VARCHAR},
       </if>
-      <if test="name != null" >
+      <if test="name != null">
         #{name,jdbcType=VARCHAR},
       </if>
-      <if test="ct != null" >
+      <if test="ct != null">
         #{ct,jdbcType=TIMESTAMP},
+      </if>
+      <if test="pid != null">
+        #{pid,jdbcType=BIGINT},
       </if>
     </trim>
   </insert>
   
-  <delete id="deleteById" parameterType="java.lang.Long" >
+  <delete id="deleteById" parameterType="java.lang.Long">
     DELETE FROM user
     WHERE id = #{id,jdbcType=BIGINT}
   </delete>
   
-  <update id="update" parameterType="com.api.model.User" >
+  <update id="update" parameterType="com.api.model.User">
     UPDATE user
     SET mobile = #{mobile,jdbcType=VARCHAR},
       pwd = #{pwd,jdbcType=VARCHAR},
       name = #{name,jdbcType=VARCHAR},
-      ct = #{ct,jdbcType=TIMESTAMP}
+      ct = #{ct,jdbcType=TIMESTAMP},
+      pid = #{pid,jdbcType=BIGINT}
     WHERE id = #{id,jdbcType=BIGINT}
   </update>
   
-  <update id="updateSelective" parameterType="com.api.model.User" >
+  <update id="updateSelective" parameterType="com.api.model.User">
     UPDATE user
-    <set >
-      <if test="mobile != null" >
+    <set>
+      <if test="mobile != null">
         mobile = #{mobile,jdbcType=VARCHAR},
       </if>
-      <if test="pwd != null" >
+      <if test="pwd != null">
         pwd = #{pwd,jdbcType=VARCHAR},
       </if>
-      <if test="name != null" >
+      <if test="name != null">
         name = #{name,jdbcType=VARCHAR},
       </if>
-      <if test="ct != null" >
+      <if test="ct != null">
         ct = #{ct,jdbcType=TIMESTAMP},
+      </if>
+      <if test="pid != null">
+        pid = #{pid,jdbcType=BIGINT},
       </if>
     </set>
     WHERE id = #{id,jdbcType=BIGINT}
   </update>
   
-  <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+  <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
     SELECT 
     <include refid="BaseColumnList" />
     FROM user
     WHERE id = #{id,jdbcType=BIGINT}
   </select>
   
-  <select id="selectByIds" resultMap="BaseResultMap" >
+  <select id="selectByIds" resultMap="BaseResultMap">
     SELECT 
     <include refid="BaseColumnList" />
     FROM user
-    WHERE id IN <foreach collection="list" item="item" open="(" separator="," close=")"> #{item}  </foreach> 
+    WHERE id IN <foreach close=")" collection="list" item="item" open="(" separator=","> #{item}  </foreach> 
   </select>
   
-  <select id="selectByEntity" parameterType="com.api.model.User" resultMap="BaseResultMap" >
+  <select id="selectByEntity" parameterType="com.api.model.User" resultMap="BaseResultMap">
     SELECT 
     <include refid="BaseColumnList" />
     FROM user
-    <where >
-      <if test="mobile != null" >
+    <where>
+      <if test="mobile != null">
          AND mobile = #{mobile,jdbcType=VARCHAR}
       </if>
-      <if test="pwd != null" >
+      <if test="pwd != null">
          AND pwd = #{pwd,jdbcType=VARCHAR}
       </if>
-      <if test="name != null" >
+      <if test="name != null">
          AND name = #{name,jdbcType=VARCHAR}
       </if>
-      <if test="ct != null" >
+      <if test="ct != null">
          AND ct = #{ct,jdbcType=TIMESTAMP}
+      </if>
+      <if test="pid != null">
+         AND pid = #{pid,jdbcType=BIGINT}
       </if>
     </where>
   </select>
   
-  <select id="countByEntity" parameterType="com.api.model.User" resultType="java.lang.Integer" >
+  <select id="countByEntity" parameterType="com.api.model.User" resultType="java.lang.Integer">
     SELECT COUNT(1) FROM user
-    <where >
-      <if test="mobile != null" >
+    <where>
+      <if test="mobile != null">
          AND mobile = #{mobile,jdbcType=VARCHAR}
       </if>
-      <if test="pwd != null" >
+      <if test="pwd != null">
          AND pwd = #{pwd,jdbcType=VARCHAR}
       </if>
-      <if test="name != null" >
+      <if test="name != null">
          AND name = #{name,jdbcType=VARCHAR}
       </if>
-      <if test="ct != null" >
+      <if test="ct != null">
          AND ct = #{ct,jdbcType=TIMESTAMP}
+      </if>
+      <if test="pid != null">
+         AND pid = #{pid,jdbcType=BIGINT}
       </if>
     </where>
   </select>

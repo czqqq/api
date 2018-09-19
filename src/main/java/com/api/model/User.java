@@ -3,7 +3,7 @@ package com.api.model;
 import java.io.Serializable;
 import java.util.Date;
 
-public class User implements Serializable {
+public class User  implements Serializable {
     private Long id;
 
     private String mobile;
@@ -13,6 +13,8 @@ public class User implements Serializable {
     private String name;
 
     private Date ct;
+
+    private Long pid;
 
     public Long getId() {
         return id;
@@ -52,5 +54,13 @@ public class User implements Serializable {
 
     public void setCt(Date ct) {
         this.ct = ct;
+    }
+
+    public Long getPid() {
+        return pid;
+    }
+
+    public void setPid(Long pid) {
+        this.pid = pid;
     }
 }

@@ -6,6 +6,9 @@ import com.api.exception.UnauthorizedException;
 import com.api.model.User;
 import com.api.service.UserService;
 import com.api.util.JwtUtil;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -38,7 +42,16 @@ public class UserController {
     }
 
     @PostMapping("/regist")
-    public BaseResult regist(String mobile, String code, String name, String pwd) {
+    public BaseResult regist(String mobile, String code, String name, String pwd, String introducerMobile) {
+
+        if (StringUtils.isBlank(introducerMobile)) {
+            return new BaseResult(ResultCode.FAILURE, "介绍人不能为空", null);
+        }
+
+        User introducer = userService.getUserByLoginName(introducerMobile);
+        if (introducer == null) {
+            return new BaseResult(ResultCode.FAILURE, "介绍人信息错误", null);
+        }
 
         //todo 验证短信校验码
         if (code != code) {
@@ -50,7 +63,7 @@ public class UserController {
             return new BaseResult(ResultCode.FAILURE, "手机号码已经注册过", null);
         }
 
-        int result = userService.addUser(mobile, name, pwd);
+        int result = userService.addUser(introducer.getId(),mobile, name, pwd);
         if(result > 0){
             return new BaseResult(ResultCode.SUCCESS, "注册成功", null);
         }else {
@@ -58,13 +71,27 @@ public class UserController {
         }
     }
 
+    @GetMapping("/fetchMyTeam")
+    public BaseResult fetchMyTeam() {
+        //获取userId
+        Subject subject = SecurityUtils.getSubject();
+        if (!subject.isAuthenticated()) {
+            return new BaseResult(ResultCode.FAILURE, "验证不通过", null);
+        }
+        String mobile = JwtUtil.getMobileBySubject(subject);
+        User user = userService.getUserByLoginName(mobile);
 
-    @GetMapping("/fetchAddressList")
-    public BaseResult fetchAddressList(){
-        BaseResult result = new BaseResult();
 
-        return result;
+        List<User> userList = userService.getUsersByPid(user.getId());
+        String[] names = new String[userList.size()];
+        for (int i = 0; i < userList.size(); i++) {
+            names[i] = StringUtils.isBlank(userList.get(i).getName()) ? userList.get(i).getMobile() :  userList.get(i).getName();
+        }
+
+        return new BaseResult(ResultCode.SUCCESS, "成功", names);
     }
+
+
 
 
 
