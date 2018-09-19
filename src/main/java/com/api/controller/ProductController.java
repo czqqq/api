@@ -78,7 +78,7 @@ public class ProductController {
         BaseResult result = new BaseResult();
         PageInfo<Product> datas =  productService.inquireProducts(product,pageIndex,pageSize);
         Map<String,Object> resultMap = new HashMap<String, Object>(10);
-        resultMap.put("orders",datas);
+        resultMap.put("products",datas);
         result.setData(resultMap);
         return result;
     }
