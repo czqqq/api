@@ -22,4 +22,6 @@ public interface UserAddressDao {
     List<UserAddress> selectByEntity(UserAddress userAddress);
 
     public Integer countByEntity(UserAddress userAddress);
+
+    List<UserAddress> checkIsExists(UserAddress address);
 }

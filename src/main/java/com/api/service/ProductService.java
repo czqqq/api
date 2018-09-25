@@ -3,6 +3,8 @@ package com.api.service;
 import com.api.model.Product;
 import com.github.pagehelper.PageInfo;
 
+import java.util.List;
+
 public interface ProductService {
 
     /**
@@ -37,5 +39,10 @@ public interface ProductService {
      */
     public PageInfo<Product> inquireProducts(Product product, Integer pageIndex, Integer pageSize);
 
-
+    /**
+     * 校验该产品是否存在
+     * @param product
+     * @return
+     */
+    List<Product> checkIsExists(Product product);
 }

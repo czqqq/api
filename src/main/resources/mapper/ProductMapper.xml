@@ -225,7 +225,24 @@
       </if>
     </where>
   </select>
-  
+  <select id="checkIsExists" parameterType="com.api.model.Product" resultMap="BaseResultMap" >
+    SELECT
+    <include refid="BaseColumnList" />
+    FROM product
+    <where >
+      <if test="name != null" >
+        AND name = #{name,jdbcType=VARCHAR}
+      </if>
+      <if test="type != null" >
+        AND type = #{type,jdbcType=BIGINT}
+      </if>
+      <if test="id != null" >
+        AND id != #{id,jdbcType=BIGINT}
+      </if>
+    </where>
+
+  </select>
+
   <!-- 以下部分人工添加或修改 -->
   
 </mapper>

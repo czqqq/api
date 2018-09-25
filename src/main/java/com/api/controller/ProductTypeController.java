@@ -32,6 +32,10 @@ public class ProductTypeController {
     @RequestMapping("addProductType")
     public BaseResult addProductType(@RequestBody ProductType productType) {
         BaseResult result = new BaseResult();
+        List<ProductType> types = productTypeService.checkIsExists(productType);
+        if(types!=null&&types.size()>0){
+            return new BaseResult(ResultCode.SUCCESS,"该产品类型已存在",null);
+        }
         productTypeService.addProductType(productType);
         return result;
     }
@@ -42,11 +46,8 @@ public class ProductTypeController {
         if(productType == null){
             return new BaseResult(ResultCode.SUCCESS,"当前产品类型不存在",null);
         }else{
-            BaseResult result = new BaseResult();
-            Map<String,Object> resultMap = new HashMap<String, Object>();
-            resultMap.put("productType",productType);
-            result.setData(resultMap);
-            return result;
+           productTypeService.deleteProductType(productType);
+            return new BaseResult(ResultCode.SUCCESS,"删除成功",null);
         }
 
     }
@@ -60,9 +61,13 @@ public class ProductTypeController {
         if(pro == null){
             return new BaseResult(ResultCode.SUCCESS,"当前产品类型不存在",null);
         }
-        BaseResult result = new BaseResult();
-        productTypeService.modifyProductType(productType);
-        return result;
+        pro.setName(productType.getName());
+        List<ProductType> types = productTypeService.checkIsExists(pro);
+        if(types!=null&&types.size()>0){
+            return new BaseResult(ResultCode.SUCCESS,"该产品类型已存在",null);
+        }
+        productTypeService.modifyProductType(pro);
+        return   new BaseResult(ResultCode.SUCCESS,"修改成功",null);
     }
 
     @RequestMapping("inquireProductTypes")
@@ -78,7 +83,7 @@ public class ProductTypeController {
 
 
     @RequestMapping("inquireAllProductTypes")
-    public BaseResult inquireProductTypes() {
+    public BaseResult inquireAllProductTypes() {
         BaseResult result = new BaseResult();
         List<ProductType> datas =  productTypeService.inquireProductTypeList(new ProductType());
         Map<String,Object> resultMap = new HashMap<String, Object>(10);

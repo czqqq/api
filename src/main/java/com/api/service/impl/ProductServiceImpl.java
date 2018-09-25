@@ -8,6 +8,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -19,18 +20,21 @@ public class ProductServiceImpl implements ProductService {
     ProductDao productDao;
 
     @Override
+    @Transactional
     public void addProduct(Product product) {
         product.setCt(new Date());
         productDao.insert(product);
     }
 
     @Override
+    @Transactional
     public void modifyProduct(Product product) {
         product.setMt(new Date());
         productDao.update(product);
     }
 
     @Override
+    @Transactional
     public void deleteProduct(Product product) {
         productDao.deleteById(product.getId());
     }
@@ -46,5 +50,10 @@ public class ProductServiceImpl implements ProductService {
         List<Product> products = productDao.selectByEntity(product);
         PageInfo<Product> pages = new PageInfo<Product>(products);
         return pages;
+    }
+
+    @Override
+    public List<Product> checkIsExists(Product product) {
+        return productDao.checkIsExists(product);
     }
 }

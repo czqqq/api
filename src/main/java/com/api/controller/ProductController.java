@@ -4,11 +4,13 @@ import com.api.controller.dto.BaseResult;
 import com.api.controller.dto.ResultCode;
 import com.api.model.Order;
 import com.api.model.Product;
+import com.api.model.ProductType;
 import com.api.model.User;
 import com.api.model.vo.OrderDetailVo;
 import com.api.model.vo.OrderVo;
 import com.api.service.OrderService;
 import com.api.service.ProductService;
+import com.api.service.ProductTypeService;
 import com.api.service.UserService;
 import com.api.util.JwtUtil;
 import com.github.pagehelper.PageInfo;
@@ -33,31 +35,51 @@ public class ProductController {
     private ProductService productService;
 
     @Autowired
-    private UserService userService;
+    private ProductTypeService typeService;
 
 
     @RequestMapping("addProduct")
     public BaseResult addProduct(@RequestBody Product product) {
-        BaseResult result = new BaseResult();
+        BaseResult result = checkLegal(product);
+        if(result!=null){
+            return result;
+        }
         productService.addProduct(product);
-        return result;
+        return new BaseResult(ResultCode.SUCCESS,"添加成功",null);
     }
 
     @RequestMapping("removeProduct")
     public BaseResult removeProduct(@RequestParam(name = "productId",value = "productId")Long productId) {
+
         Product product = productService.getProduct(productId);
         if(product == null){
             return new BaseResult(ResultCode.SUCCESS,"当前产品不存在",null);
         }else{
-            BaseResult result = new BaseResult();
-            Map<String,Object> resultMap = new HashMap<String, Object>();
-            resultMap.put("product",product);
-            result.setData(resultMap);
-            return result;
+            productService.deleteProduct(product);
+            return new BaseResult(ResultCode.SUCCESS,"删除成功",null);
         }
 
     }
-
+    public BaseResult checkLegal(Product product){
+        if(product.getType()==null){
+            return new BaseResult(ResultCode.SUCCESS,"请选择产品类型",null);
+        }
+        ProductType type = typeService.getProductType(product.getType());
+        if(type==null){
+            return new BaseResult(ResultCode.SUCCESS,"请选择产品类型",null);
+        }
+        if(product.getName()==null){
+            return new BaseResult(ResultCode.SUCCESS,"产品名称不能为空",null);
+        }
+        if(product.getPrice()==null){
+            return new BaseResult(ResultCode.SUCCESS,"产品价格不能为空",null);
+        }
+        List<Product> types = productService.checkIsExists(product);
+        if(types!=null&&types.size()>0){
+            return new BaseResult(ResultCode.SUCCESS,"该产品已经存在",null);
+        }
+        return  null;
+    }
     @RequestMapping("modifyProduct")
     public BaseResult modifyProduct(@RequestBody Product product) {
         if(product.getId()==null){
@@ -67,9 +89,18 @@ public class ProductController {
         if(pro == null){
             return new BaseResult(ResultCode.SUCCESS,"当前产品不存在",null);
         }
-        BaseResult result = new BaseResult();
-        productService.modifyProduct(product);
-        return result;
+        BaseResult result = checkLegal(product);
+        if(result!=null){
+            return result;
+        }
+        pro.setName(product.getName());
+        pro.setPrice(product.getPrice());
+        pro.setPic(product.getPic());
+        pro.setColor(product.getColor());
+        pro.setSize(product.getSize());
+        pro.setType(product.getType());
+        productService.modifyProduct(pro);
+        return new BaseResult(ResultCode.SUCCESS,"修改成功",null);
     }
 
     @RequestMapping("inquireProducts")

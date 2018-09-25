@@ -2,6 +2,7 @@ package com.api.controller;
 
 import com.api.controller.dto.BaseResult;
 import com.api.controller.dto.ResultCode;
+import com.api.model.ProductType;
 import com.api.model.User;
 import com.api.model.UserAddress;
 import com.api.service.UserAddressService;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -43,6 +45,10 @@ public class UserAddressController {
         User user = userService.getUserByLoginName(mobile);
         BaseResult result = new BaseResult();
         userAddress.setUserId(user.getId());
+        List<UserAddress> addresses = userAddressService.checkIsExists(userAddress);
+        if(addresses!=null&&addresses.size()>0){
+            return new BaseResult(ResultCode.SUCCESS,"该地址已经存在",null);
+        }
         userAddressService.addUserAddress(userAddress);
         return result;
     }
@@ -81,12 +87,20 @@ public class UserAddressController {
         }
         String mobile = JwtUtil.getMobileBySubject(subject);
         User user = userService.getUserByLoginName(mobile);
-        UserAddress pro = userAddressService.getUserAddress(userAddress.getId(),user.getId());
-        if(pro == null){
+        UserAddress address = userAddressService.getUserAddress(userAddress.getId(),user.getId());
+        if(address == null){
             return new BaseResult(ResultCode.SUCCESS,"当前用户地址不存在",null);
         }
+        address.setIsdefault(userAddress.getIsdefault());
+        address.setRecAddress(userAddress.getRecAddress());
+        address.setRecMobile(userAddress.getRecMobile());
+        address.setRecName(userAddress.getRecName());
+        List<UserAddress> addresses = userAddressService.checkIsExists(address);
+        if(addresses!=null&&addresses.size()>0){
+            return new BaseResult(ResultCode.SUCCESS,"该地址已经存在",null);
+        }
         BaseResult result = new BaseResult();
-        userAddressService.modifyUserAddress(userAddress);
+        userAddressService.modifyUserAddress(address);
         return result;
     }
 

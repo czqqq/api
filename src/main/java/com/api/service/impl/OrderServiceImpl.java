@@ -57,6 +57,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public Long modifyOrder(OrderVo order) {
         Order orderPo;
         List<OrderDetail> detailPos ;
