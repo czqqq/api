@@ -15,4 +15,5 @@ public interface ProductTypeDao {
     public Long insert(ProductType productType);
     List<ProductType> selectByEntity(ProductType productType);
     public Integer countByEntity(ProductType productType);
+    List<ProductType> checkIsExists(ProductType productType);
 }

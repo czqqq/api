@@ -58,4 +58,5 @@ public interface ProductTypeService {
     public List<ProductType> inquireProductTypeList(ProductType productType);
 
 
+    List<ProductType> checkIsExists(ProductType productType);
 }

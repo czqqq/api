@@ -26,6 +26,7 @@ public class UserAddressServiceImpl implements UserAddressService {
     }
 
     @Override
+    @Transactional
     public void modifyUserAddress(UserAddress userAddress) {
         userAddress.setMt(new Date());
         userAddressDao.update(userAddress);
@@ -74,5 +75,10 @@ public class UserAddressServiceImpl implements UserAddressService {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public List<UserAddress> checkIsExists(UserAddress address) {
+        return userAddressDao.checkIsExists(address);
     }
 }

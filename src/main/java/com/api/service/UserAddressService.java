@@ -3,6 +3,8 @@ package com.api.service;
 import com.api.model.UserAddress;
 import com.github.pagehelper.PageInfo;
 
+import java.util.List;
+
 public interface UserAddressService {
 
     /**
@@ -50,4 +52,10 @@ public interface UserAddressService {
      */
     public UserAddress  getDefaultAddress( Long userId);
 
+    /**
+     * 校验是否存在
+     * @param address
+     * @return
+     */
+    List<UserAddress> checkIsExists(UserAddress address);
 }

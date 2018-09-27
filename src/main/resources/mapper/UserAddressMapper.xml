@@ -210,5 +210,27 @@
   </select>
   
   <!-- 以下部分人工添加或修改 -->
-  
+  <select id="checkIsExists" parameterType="com.api.model.UserAddress" resultMap="BaseResultMap">
+    SELECT
+    <include refid="BaseColumnList" />
+    FROM user_address
+    <where>
+      <if test="userId != null">
+        AND user_id = #{userId,jdbcType=BIGINT}
+      </if>
+      <if test="recMobile != null">
+        AND rec_mobile = #{recMobile,jdbcType=VARCHAR}
+      </if>
+      <if test="recAddress != null">
+        AND rec_address = #{recAddress,jdbcType=VARCHAR}
+      </if>
+      <if test="recName != null">
+        AND rec_name = #{recName,jdbcType=VARCHAR}
+      </if>
+      <if test="id != null">
+        AND id != #{id,jdbcType=BIGINT}
+      </if>
+    </where>
+  </select>
+
 </mapper>
