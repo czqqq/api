@@ -1,5 +1,6 @@
 package com.api.dao;
 
+import com.api.model.OrderDetail;
 import com.api.model.Product;
 import com.api.model.Product;
 import org.springframework.stereotype.Repository;
@@ -14,6 +15,7 @@ public interface ProductDao {
     public void update(Product product);
     public void updateSelective(Product product);
     public Long insert(Product product);
+    public Long insertSelective(Product product);
     List<Product> selectByEntity(Product product);
     public Integer countByEntity(Product product);
 

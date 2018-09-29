@@ -9,32 +9,32 @@
     <result column="rec_mobile" jdbcType="VARCHAR" property="recMobile" />
     <result column="rec_address" jdbcType="VARCHAR" property="recAddress" />
     <result column="rec_name" jdbcType="VARCHAR" property="recName" />
-    <result column="default" jdbcType="TINYINT" property="default" />
+    <result column="is_default" jdbcType="TINYINT" property="isDefault" />
     <result column="ct" jdbcType="TIMESTAMP" property="ct" />
     <result column="mt" jdbcType="TIMESTAMP" property="mt" />
   </resultMap>
   
   <sql id="BaseColumnList">
-    id, user_id, rec_mobile, rec_address, rec_name, default, ct, mt
+    id, user_id, rec_mobile, rec_address, rec_name, is_default, ct, mt
   </sql>
   
   <insert id="insert" parameterType="com.api.model.UserAddress">
     INSERT INTO user_address (id, user_id, rec_mobile, 
-      rec_address, rec_name, default, 
+      rec_address, rec_name, is_default,
       ct, mt)
     VALUES (#{id,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{recMobile,jdbcType=VARCHAR}, 
-      #{recAddress,jdbcType=VARCHAR}, #{recName,jdbcType=VARCHAR}, #{default,jdbcType=TINYINT}, 
+      #{recAddress,jdbcType=VARCHAR}, #{recName,jdbcType=VARCHAR}, #{isDefault,jdbcType=TINYINT},
       #{ct,jdbcType=TIMESTAMP}, #{mt,jdbcType=TIMESTAMP})
   </insert>
   
   <insert id="insertBatch" parameterType="java.util.List">
     INSERT INTO user_address (id, 
       user_id, rec_mobile, rec_address, 
-      rec_name, default, ct, 
+      rec_name, is_default, ct,
       mt)
     VALUES <foreach collection="list" index="index" item="item" separator=","> (#{item.id,jdbcType=BIGINT}, 
       #{item.userId,jdbcType=BIGINT}, #{item.recMobile,jdbcType=VARCHAR}, #{item.recAddress,jdbcType=VARCHAR}, 
-      #{item.recName,jdbcType=VARCHAR}, #{item.default,jdbcType=TINYINT}, #{item.ct,jdbcType=TIMESTAMP}, 
+      #{item.recName,jdbcType=VARCHAR}, #{item.isDefault,jdbcType=TINYINT}, #{item.ct,jdbcType=TIMESTAMP},
       #{item.mt,jdbcType=TIMESTAMP}) </foreach>
   </insert>
   
@@ -56,8 +56,8 @@
       <if test="recName != null">
         rec_name,
       </if>
-      <if test="default != null">
-        default,
+      <if test="isDefault != null">
+        is_default,
       </if>
       <if test="ct != null">
         ct,
@@ -82,8 +82,8 @@
       <if test="recName != null">
         #{recName,jdbcType=VARCHAR},
       </if>
-      <if test="default != null">
-        #{default,jdbcType=TINYINT},
+      <if test="isDefault != null">
+        #{isDefault,jdbcType=TINYINT},
       </if>
       <if test="ct != null">
         #{ct,jdbcType=TIMESTAMP},
@@ -105,7 +105,7 @@
       rec_mobile = #{recMobile,jdbcType=VARCHAR},
       rec_address = #{recAddress,jdbcType=VARCHAR},
       rec_name = #{recName,jdbcType=VARCHAR},
-      default = #{default,jdbcType=TINYINT},
+      is_default = #{isDefault,jdbcType=TINYINT},
       ct = #{ct,jdbcType=TIMESTAMP},
       mt = #{mt,jdbcType=TIMESTAMP}
     WHERE id = #{id,jdbcType=BIGINT}
@@ -126,8 +126,8 @@
       <if test="recName != null">
         rec_name = #{recName,jdbcType=VARCHAR},
       </if>
-      <if test="default != null">
-        default = #{default,jdbcType=TINYINT},
+      <if test="isDefault != null">
+        is_default = #{isDefault,jdbcType=TINYINT},
       </if>
       <if test="ct != null">
         ct = #{ct,jdbcType=TIMESTAMP},
@@ -170,8 +170,8 @@
       <if test="recName != null">
          AND rec_name = #{recName,jdbcType=VARCHAR}
       </if>
-      <if test="default != null">
-         AND default = #{default,jdbcType=TINYINT}
+      <if test="isDefault != null">
+         AND is_default = #{isDefault,jdbcType=TINYINT}
       </if>
       <if test="ct != null">
          AND ct = #{ct,jdbcType=TIMESTAMP}
@@ -197,8 +197,8 @@
       <if test="recName != null">
          AND rec_name = #{recName,jdbcType=VARCHAR}
       </if>
-      <if test="default != null">
-         AND default = #{default,jdbcType=TINYINT}
+      <if test="isDefault != null">
+         AND is_default = #{isDefault,jdbcType=TINYINT}
       </if>
       <if test="ct != null">
          AND ct = #{ct,jdbcType=TIMESTAMP}
@@ -232,5 +232,9 @@
       </if>
     </where>
   </select>
-
+  <update id="switchAddressToNoDefault" parameterType="java.lang.Integer">
+    update user_address set
+      is_default = '1'
+    where user_id = #{userId,jdbcType=BIGINT}
+  </update>
 </mapper>

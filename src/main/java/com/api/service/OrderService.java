@@ -41,5 +41,10 @@ public interface OrderService {
      */
     public PageInfo<OrderVo> inquireOrders(Order order, Integer pageIndex, Integer pageSize);
 
-
+    /**
+     * 根据订单号获取订单
+     * @param out_trade_no
+     * @return
+     */
+    OrderVo getOrderByOrderNo(String out_trade_no);
 }

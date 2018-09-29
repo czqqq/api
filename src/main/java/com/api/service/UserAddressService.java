@@ -1,5 +1,6 @@
 package com.api.service;
 
+import com.api.model.User;
 import com.api.model.UserAddress;
 import com.github.pagehelper.PageInfo;
 
@@ -58,4 +59,11 @@ public interface UserAddressService {
      * @return
      */
     List<UserAddress> checkIsExists(UserAddress address);
+
+    /**
+     * 设置默认地址
+     * @param address
+     * @param user
+     */
+    void setDefaultAddress(UserAddress address, User user);
 }

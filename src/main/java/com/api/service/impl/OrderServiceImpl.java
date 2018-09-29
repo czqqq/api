@@ -44,14 +44,14 @@ public class OrderServiceImpl implements OrderService {
         detailPos  =new ArrayList<OrderDetail>();
         covertOrderVoToPo(order,order.getOrderDetails(),orderPo,detailPos);
         orderPo.setCt(new Date());
-        Long id = orderDao.insert(orderPo);
+        Long id = orderDao.insertSelective(orderPo);
         for(OrderDetail detailPo : detailPos){
             detailPo.setOrderId(id);
             if(detailPo.getCount()==null){
                 detailPo.setCount(1);
             }
             detailPo.setCt(new Date());
-            orderDetailDao.insert(detailPo);
+            orderDetailDao.insertSelective(detailPo);
         }
         return orderPo.getId();
     }
@@ -174,5 +174,17 @@ public class OrderServiceImpl implements OrderService {
         List<OrderVo> orderList = orderDao.selectJoinByEntity(order);
         PageInfo<OrderVo> pageOrder = new PageInfo<OrderVo>(orderList);
         return pageOrder;
+    }
+
+    @Override
+    public OrderVo getOrderByOrderNo(String orderNo) {
+        Order condition = new Order();
+        OrderVo order = null;
+        condition.setCode(orderNo);
+        List<OrderVo> orders = orderDao.selectJoinByEntity(condition);
+        if(orders!=null && orders.size()>0){
+            order =  orders.get(0);
+        }
+        return  order ;
     }
 }

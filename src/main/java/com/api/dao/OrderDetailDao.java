@@ -11,5 +11,6 @@ public interface OrderDetailDao {
     public void update(OrderDetail detail);
     public void updateSelective(OrderDetail detail);
     public Long insert(OrderDetail detail);
+    public Long insertSelective(OrderDetail detail);
     List<OrderDetail> selectByEntity(OrderDetail detail);
 }

@@ -37,12 +37,12 @@ public class UserAddressController {
     @RequestMapping("addUserAddress")
     public BaseResult addUserAddress(@RequestBody UserAddress userAddress) {
         //获取userId
-        Subject subject = SecurityUtils.getSubject();
-        if (!subject.isAuthenticated()) {
-            return new BaseResult(ResultCode.SUCCESS, "验证不通过", null);
-        }
-        String mobile = JwtUtil.getMobileBySubject(subject);
-        User user = userService.getUserByLoginName(mobile);
+//        Subject subject = SecurityUtils.getSubject();
+//        if (!subject.isAuthenticated()) {
+//            return new BaseResult(ResultCode.SUCCESS, "验证不通过", null);
+//        }
+//        String mobile = JwtUtil.getMobileBySubject(subject);
+        User user = userService.getUserByLoginName("13333333333");
         BaseResult result = new BaseResult();
         userAddress.setUserId(user.getId());
         List<UserAddress> addresses = userAddressService.checkIsExists(userAddress);
@@ -56,12 +56,12 @@ public class UserAddressController {
     @RequestMapping("removeUserAddress")
     public BaseResult removeUserAddress(@RequestParam(name = "userAddressId",value = "userAddressId")Long userAddressId) {
         //获取userId
-        Subject subject = SecurityUtils.getSubject();
-        if (!subject.isAuthenticated()) {
-            return new BaseResult(ResultCode.SUCCESS, "验证不通过", null);
-        }
-        String mobile = JwtUtil.getMobileBySubject(subject);
-        User user = userService.getUserByLoginName(mobile);
+//        Subject subject = SecurityUtils.getSubject();
+//        if (!subject.isAuthenticated()) {
+//            return new BaseResult(ResultCode.SUCCESS, "验证不通过", null);
+//        }
+//        String mobile = JwtUtil.getMobileBySubject(subject);
+        User user = userService.getUserByLoginName("13333333333");
         UserAddress userAddress = userAddressService.getUserAddress(userAddressId,user.getId());
         if(userAddress == null){
             return new BaseResult(ResultCode.SUCCESS,"当前用户地址不存在",null);
@@ -75,23 +75,41 @@ public class UserAddressController {
 
     }
 
+    @RequestMapping("setDefaultAddress")
+    public BaseResult setDefaultAddress(@RequestParam(name = "userAddressId",value = "userAddressId")Long userAddressId ) {
+        //获取userId
+//        Subject subject = SecurityUtils.getSubject();
+//        if (!subject.isAuthenticated()) {
+//            return new BaseResult(ResultCode.SUCCESS, "验证不通过", null);
+//        }
+//        String mobile = JwtUtil.getMobileBySubject(subject);
+        User user = userService.getUserByLoginName("13333333333");
+        UserAddress address = userAddressService.getUserAddress(userAddressId,user.getId());
+        if(address == null){
+            return new BaseResult(ResultCode.SUCCESS,"当前用户地址不存在",null);
+        }
+        address.setIsDefault(Byte.valueOf("0"));
+        userAddressService.setDefaultAddress(address,user);
+        return new BaseResult(ResultCode.SUCCESS, "设置成功", null);
+    }
+
     @RequestMapping("modifyUserAddress")
     public BaseResult modifyUserAddress(@RequestBody UserAddress userAddress) {
         if(userAddress.getId()==null){
             return new BaseResult(ResultCode.SUCCESS,"当前用户地址不存在",null);
         }
         //获取userId
-        Subject subject = SecurityUtils.getSubject();
-        if (!subject.isAuthenticated()) {
-            return new BaseResult(ResultCode.SUCCESS, "验证不通过", null);
-        }
-        String mobile = JwtUtil.getMobileBySubject(subject);
-        User user = userService.getUserByLoginName(mobile);
+//        Subject subject = SecurityUtils.getSubject();
+//        if (!subject.isAuthenticated()) {
+//            return new BaseResult(ResultCode.SUCCESS, "验证不通过", null);
+//        }
+//        String mobile = JwtUtil.getMobileBySubject(subject);
+        User user = userService.getUserByLoginName("13333333333");
         UserAddress address = userAddressService.getUserAddress(userAddress.getId(),user.getId());
         if(address == null){
             return new BaseResult(ResultCode.SUCCESS,"当前用户地址不存在",null);
         }
-        address.setIsdefault(userAddress.getIsdefault());
+        address.setIsDefault(userAddress.getIsDefault());
         address.setRecAddress(userAddress.getRecAddress());
         address.setRecMobile(userAddress.getRecMobile());
         address.setRecName(userAddress.getRecName());
