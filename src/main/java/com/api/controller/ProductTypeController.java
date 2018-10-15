@@ -82,8 +82,8 @@ public class ProductTypeController {
     }
 
 
-    @RequestMapping("inquireAllProductTypes")
-    public BaseResult inquireAllProductTypes() {
+    @RequestMapping("fetchProductType")
+    public BaseResult fetchProductType() {
         BaseResult result = new BaseResult();
         List<ProductType> datas =  productTypeService.inquireProductTypeList(new ProductType());
         Map<String,Object> resultMap = new HashMap<String, Object>(10);

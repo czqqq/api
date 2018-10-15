@@ -37,12 +37,12 @@ public class UserAddressController {
     @RequestMapping("addUserAddress")
     public BaseResult addUserAddress(@RequestBody UserAddress userAddress) {
         //获取userId
-//        Subject subject = SecurityUtils.getSubject();
-//        if (!subject.isAuthenticated()) {
-//            return new BaseResult(ResultCode.SUCCESS, "验证不通过", null);
-//        }
-//        String mobile = JwtUtil.getMobileBySubject(subject);
-        User user = userService.getUserByLoginName("13333333333");
+        Subject subject = SecurityUtils.getSubject();
+        if (!subject.isAuthenticated()) {
+            return new BaseResult(ResultCode.SUCCESS, "验证不通过", null);
+        }
+        String mobile = JwtUtil.getMobileBySubject(subject);
+        User user = userService.getUserByLoginName(mobile);
         BaseResult result = new BaseResult();
         userAddress.setUserId(user.getId());
         List<UserAddress> addresses = userAddressService.checkIsExists(userAddress);
@@ -56,12 +56,12 @@ public class UserAddressController {
     @RequestMapping("removeUserAddress")
     public BaseResult removeUserAddress(@RequestParam(name = "userAddressId",value = "userAddressId")Long userAddressId) {
         //获取userId
-//        Subject subject = SecurityUtils.getSubject();
-//        if (!subject.isAuthenticated()) {
-//            return new BaseResult(ResultCode.SUCCESS, "验证不通过", null);
-//        }
-//        String mobile = JwtUtil.getMobileBySubject(subject);
-        User user = userService.getUserByLoginName("13333333333");
+        Subject subject = SecurityUtils.getSubject();
+        if (!subject.isAuthenticated()) {
+            return new BaseResult(ResultCode.SUCCESS, "验证不通过", null);
+        }
+        String mobile = JwtUtil.getMobileBySubject(subject);
+        User user = userService.getUserByLoginName(mobile);
         UserAddress userAddress = userAddressService.getUserAddress(userAddressId,user.getId());
         if(userAddress == null){
             return new BaseResult(ResultCode.SUCCESS,"当前用户地址不存在",null);
@@ -78,12 +78,12 @@ public class UserAddressController {
     @RequestMapping("setDefaultAddress")
     public BaseResult setDefaultAddress(@RequestParam(name = "userAddressId",value = "userAddressId")Long userAddressId ) {
         //获取userId
-//        Subject subject = SecurityUtils.getSubject();
-//        if (!subject.isAuthenticated()) {
-//            return new BaseResult(ResultCode.SUCCESS, "验证不通过", null);
-//        }
-//        String mobile = JwtUtil.getMobileBySubject(subject);
-        User user = userService.getUserByLoginName("13333333333");
+        Subject subject = SecurityUtils.getSubject();
+        if (!subject.isAuthenticated()) {
+            return new BaseResult(ResultCode.SUCCESS, "验证不通过", null);
+        }
+        String mobile = JwtUtil.getMobileBySubject(subject);
+        User user = userService.getUserByLoginName(mobile);
         UserAddress address = userAddressService.getUserAddress(userAddressId,user.getId());
         if(address == null){
             return new BaseResult(ResultCode.SUCCESS,"当前用户地址不存在",null);
@@ -99,12 +99,12 @@ public class UserAddressController {
             return new BaseResult(ResultCode.SUCCESS,"当前用户地址不存在",null);
         }
         //获取userId
-//        Subject subject = SecurityUtils.getSubject();
-//        if (!subject.isAuthenticated()) {
-//            return new BaseResult(ResultCode.SUCCESS, "验证不通过", null);
-//        }
-//        String mobile = JwtUtil.getMobileBySubject(subject);
-        User user = userService.getUserByLoginName("13333333333");
+        Subject subject = SecurityUtils.getSubject();
+        if (!subject.isAuthenticated()) {
+            return new BaseResult(ResultCode.SUCCESS, "验证不通过", null);
+        }
+        String mobile = JwtUtil.getMobileBySubject(subject);
+        User user = userService.getUserByLoginName(mobile);
         UserAddress address = userAddressService.getUserAddress(userAddress.getId(),user.getId());
         if(address == null){
             return new BaseResult(ResultCode.SUCCESS,"当前用户地址不存在",null);
@@ -122,8 +122,8 @@ public class UserAddressController {
         return result;
     }
 
-    @RequestMapping("inquireUserAddresss")
-    public BaseResult inquireUserAddresss( @RequestBody UserAddress userAddress,@RequestParam(name = "pageSize",value = "pageSize")Integer pageSize,
+    @RequestMapping("fetchAddressList")
+    public BaseResult fetchAddressList( @RequestBody UserAddress userAddress,@RequestParam(name = "pageSize",value = "pageSize")Integer pageSize,
         @RequestParam(name = "pageIndex",value = "pageIndex")Integer pageIndex) {
         //获取userId
         Subject subject = SecurityUtils.getSubject();

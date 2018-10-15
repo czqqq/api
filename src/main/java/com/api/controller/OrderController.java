@@ -51,12 +51,12 @@ public class OrderController {
     public BaseResult addOrder(@RequestBody OrderVo order) {
         BaseResult result = new BaseResult();
         //获取userId
-//        Subject subject = SecurityUtils.getSubject();
-//        if (!subject.isAuthenticated()) {
-//            return new BaseResult(ResultCode.SUCCESS, "验证不通过", null);
-//        }
-//        String mobile = JwtUtil.getMobileBySubject(subject);
-        User user = userService.getUserByLoginName("13333333333");
+        Subject subject = SecurityUtils.getSubject();
+        if (!subject.isAuthenticated()) {
+            return new BaseResult(ResultCode.SUCCESS, "验证不通过", null);
+        }
+        String mobile = JwtUtil.getMobileBySubject(subject);
+        User user = userService.getUserByLoginName(mobile);
         UserAddress userAddress = userAddressService.getDefaultAddress(user.getId());
         if (userAddress != null) {
             order.setRecAddress(userAddress.getRecAddress());
