@@ -75,6 +75,24 @@ public class UserAddressController {
 
     }
 
+    @RequestMapping("setDefaultAddress")
+    public BaseResult setDefaultAddress(@RequestParam(name = "userAddressId",value = "userAddressId")Long userAddressId ) {
+        //获取userId
+        Subject subject = SecurityUtils.getSubject();
+        if (!subject.isAuthenticated()) {
+            return new BaseResult(ResultCode.SUCCESS, "验证不通过", null);
+        }
+        String mobile = JwtUtil.getMobileBySubject(subject);
+        User user = userService.getUserByLoginName(mobile);
+        UserAddress address = userAddressService.getUserAddress(userAddressId,user.getId());
+        if(address == null){
+            return new BaseResult(ResultCode.SUCCESS,"当前用户地址不存在",null);
+        }
+        address.setIsDefault(Byte.valueOf("0"));
+        userAddressService.setDefaultAddress(address,user);
+        return new BaseResult(ResultCode.SUCCESS, "设置成功", null);
+    }
+
     @RequestMapping("modifyUserAddress")
     public BaseResult modifyUserAddress(@RequestBody UserAddress userAddress) {
         if(userAddress.getId()==null){
@@ -91,7 +109,7 @@ public class UserAddressController {
         if(address == null){
             return new BaseResult(ResultCode.SUCCESS,"当前用户地址不存在",null);
         }
-        address.setIsdefault(userAddress.getIsdefault());
+        address.setIsDefault(userAddress.getIsDefault());
         address.setRecAddress(userAddress.getRecAddress());
         address.setRecMobile(userAddress.getRecMobile());
         address.setRecName(userAddress.getRecName());
@@ -104,8 +122,8 @@ public class UserAddressController {
         return result;
     }
 
-    @RequestMapping("inquireUserAddresss")
-    public BaseResult inquireUserAddresss( @RequestBody UserAddress userAddress,@RequestParam(name = "pageSize",value = "pageSize")Integer pageSize,
+    @RequestMapping("fetchAddressList")
+    public BaseResult fetchAddressList( @RequestBody UserAddress userAddress,@RequestParam(name = "pageSize",value = "pageSize")Integer pageSize,
         @RequestParam(name = "pageIndex",value = "pageIndex")Integer pageIndex) {
         //获取userId
         Subject subject = SecurityUtils.getSubject();

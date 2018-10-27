@@ -23,7 +23,7 @@ public class ProductServiceImpl implements ProductService {
     @Transactional
     public void addProduct(Product product) {
         product.setCt(new Date());
-        productDao.insert(product);
+        productDao.insertSelective(product);
     }
 
     @Override

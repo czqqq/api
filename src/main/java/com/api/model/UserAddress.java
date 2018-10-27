@@ -14,7 +14,7 @@ public class UserAddress implements Serializable {
 
     private String recName;
 
-    private Byte isdefault;
+    private Byte isDefault;
 
     private Date ct;
 
@@ -60,12 +60,12 @@ public class UserAddress implements Serializable {
         this.recName = recName;
     }
 
-    public Byte getIsdefault() {
-        return isdefault;
+    public Byte getIsDefault() {
+        return isDefault;
     }
 
-    public void setIsdefault(Byte isdefault) {
-        this.isdefault = isdefault;
+    public void setIsDefault(Byte isDefault) {
+        this.isDefault = isDefault;
     }
 
     public Date getCt() {

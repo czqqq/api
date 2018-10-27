@@ -1,0 +1,22 @@
+package com.api.controller.util;
+
+public class AliPayUtil {
+
+    /** 支付宝支付业务：入参app_id */
+    public static final String APPID = "2016092200569844";
+
+    /** 支付宝网关*/
+    public static final String GATE = "https://openapi.alipay.com/gateway.do";
+
+    /** 支付宝私钥*/
+    public static final String APP_PRIVATE_KEY = "MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDMRZlUn9sfVfoikaGqhVOJBtHGrXkW8vaFn1us1lgfsYOmuu/vs4xa+l9rzOAGWFlnVJx1XhbqmIyeWb7JkZ92BLzT1hdvJOanXRhqED56YxWnQbDxyLHJ5Vt4xwBeEj3rA/6RFtama6S0QPlU9HowB4MruFN3iVe7YxKJoeMSFpXKyjf/RDJscCES9z9/qNbdHQGtnA3jUh1zomaEdLub1grDcRbYTSWqW/V5LhbenzscI99CEsegen5YRhHg7qEfJM70Qea7IFN1izp65QnFV3feNRTrlfDHj/XmCDzQaQu6F9r050eV7EUqjKvfsSW+amaRkEmNuPe4HPMrmLz7AgMBAAECggEACLI10tpzU6QvX+VfQokmg0DdEV41N3rkb8/W8Ua2vbKq7iArMsMsCHt8MHSqXNrKA5IgjwaQZzBTXDJp4t7mMPoGp+YHXV3uy9U0wt8qKb+qHlK3m7N1jijLehrOszKHnEexQK/+N1uByYKymqFFymGnfeb89qvMJlgTY/SWXCCyhrqb2Mv7y6sWBlMfibbqnOMjPQzrihaBrM3LCHDPz4WGinYfRjEQ6/UFgytngemgl9rq+3DXHyecmchTFCvz8uhm9z/kGfuKCSbMAKJXG958neJ8mLh9uHEkzYbZFfP8xgYoG++vjpc6FGlHOdGmP9wN3fH7o5OG6bVcGAScgQKBgQDuufiu+iuIOoDtia5jfPhwBohPnaRcs8O0JMbQ1GqKyfvNTPkfIsCAFMeDYTlu+molsRLI1EaeLQ/BxdNAcmzj094cP7UsBCJX/zeNkdbFnbIiBDYGs+Mobm5jO+RRpY1Ke3s3K7KrPVC/2n+p4jvRATdgY6hcAlAeuxws9AsB4QKBgQDbDWk/TWp1AiPlx/DJNyHITScghQi0ZYE4X5sv0RYYkMQ2fZCVIldTddZgF4EqEINlqSOLqRadzFptKq3UgX9Xu426oNXTryJQ6mn1RDriI9RFHilnHEFU1Uoyzz3r0/VhRDclJ13Dl6n06+lwjCaZDP/ZZv380QmPSVG4sbVSWwKBgQDO4Qcry8zR37E/KOOhf/lkS6TxKfH4DCj7AivxaUNzRxsZjS0O2HTuChPkPOsiy4wVYeCffaY9CVvwVtl9rivDPCXtYSBGJscEbz3bR5lR5Bks9W1EXbvrm9e503tHbiqFc4ESDKJnV1mVCWs887tWorE0rOiH49E+8HO4WTz4wQKBgCDSlZ6inv0BYRehKfc8h5dX2DELPg6p1v73dG1pywHLT1tK3Us7ZhJfacvkObpv1wB4o5bds0HZyQLqjjl1XftrYwU/7EpXx7CQL2hM3PXdoITqzBFjLnbjrsaGPyUDEZWNfyXWDDqukwzb/JKcrXvpcrzErfIf8GrD9bbTCfRZAoGBANA3N8pIB8hoc2GyvJ8Q0hk1BpTteUA9+t15LDuIykIjyV6SpHeMgzxrnUlYcB2Gq8vc0N9ff705JDhKLV9wrvdWcvmitMSILHkYdxLtVpf+PA2iUMRC7uOQ9RcwthWmtrL+ypkONZexR6C1Mp9vXKc9lkNKlcVnG3BHbI6QSVKj";
+
+    /** 支付宝公钥 */
+    public static final String ALIPAY_PUBLIC_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAoc82Sgpn8GzNHo+r1yV7s5V2CKfiqxTBzoXr+Vkh8TWhFSGX3miDtk2BmyC8gXZ82U49QoeFM1yk9dtSB3ZtSXhYSMn1WkkjJqv8pGM7zdHpT4hP9bI3Zl9uxr+W3FmspSnOryG2+G8S0dZyY1zAe824FiNDgyKLX2GHYZvr6S+qK2L6q7dhWLKdlBxlgPhwlEsM2XiLFj7IKNyFMLw3W76+8Qbu8mJxJ1zIVswFv7R/V1YLdTqDmGgvcVMs5WH2Dtbq+vn02dC1ktjtQqpsq6DyN5lBBCtfNtUK9IwiGOKBoB44f+5tvCNc0F6kCn1WeEzCndKhCX+UM51ELYCWlwIDAQAB";
+
+    /** 编码方式 */
+    public static final String CHARSET = "utf-8";
+
+    public static final String NOTIFY_URL="";
+    public static final String NOTIFY_URL_TEST="";
+}

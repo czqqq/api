@@ -22,7 +22,7 @@ public class ProductTypeServiceImpl implements ProductTypeService {
     @Transactional
     public void addProductType(ProductType productType) {
         productType.setCt(new Date());
-        productTypeDao.insert(productType);
+        productTypeDao.insertSelective(productType);
     }
 
     @Override

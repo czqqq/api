@@ -103,8 +103,8 @@ public class ProductController {
         return new BaseResult(ResultCode.SUCCESS,"修改成功",null);
     }
 
-    @RequestMapping("inquireProducts")
-    public BaseResult inquireProducts( @RequestBody Product product,@RequestParam(name = "pageSize",value = "pageSize")Integer pageSize,
+    @RequestMapping("fetchProduct")
+    public BaseResult fetchProduct( @RequestBody Product product,@RequestParam(name = "pageSize",value = "pageSize")Integer pageSize,
         @RequestParam(name = "pageIndex",value = "pageIndex")Integer pageIndex) {
         BaseResult result = new BaseResult();
         PageInfo<Product> datas =  productService.inquireProducts(product,pageIndex,pageSize);

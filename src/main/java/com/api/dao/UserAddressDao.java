@@ -18,10 +18,14 @@ public interface UserAddressDao {
     public void updateSelective(UserAddress userAddress);
 
     public Long insert(UserAddress userAddress);
-
+    public Long insertSelective(UserAddress userAddress);
     List<UserAddress> selectByEntity(UserAddress userAddress);
 
     public Integer countByEntity(UserAddress userAddress);
 
     List<UserAddress> checkIsExists(UserAddress address);
+
+    void switchAddressToNoDefault(Long userId);
+
+
 }

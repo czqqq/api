@@ -1,6 +1,7 @@
 package com.api.service.impl;
 
 import com.api.dao.UserAddressDao;
+import com.api.model.User;
 import com.api.model.UserAddress;
 import com.api.service.UserAddressService;
 import com.github.pagehelper.PageHelper;
@@ -22,7 +23,7 @@ public class UserAddressServiceImpl implements UserAddressService {
     @Transactional
     public void addUserAddress(UserAddress userAddress) {
         userAddress.setCt(new Date());
-        userAddressDao.insert(userAddress);
+        userAddressDao.insertSelective(userAddress);
     }
 
     @Override
@@ -65,10 +66,12 @@ public class UserAddressServiceImpl implements UserAddressService {
 
     @Override
     public UserAddress getDefaultAddress(Long userId) {
-        if (userId == null) return null;
+        if (userId == null){
+            return null;
+        }
         UserAddress condition = new UserAddress();
         condition.setUserId(userId);
-        condition.setIsdefault(Byte.valueOf("1"));
+        condition.setIsDefault(Byte.valueOf("0"));
         List<UserAddress> userAddresss = userAddressDao.selectByEntity(condition);
         if (userAddresss != null && userAddresss.size() > 0) {
             return userAddresss.get(0);
@@ -80,5 +83,12 @@ public class UserAddressServiceImpl implements UserAddressService {
     @Override
     public List<UserAddress> checkIsExists(UserAddress address) {
         return userAddressDao.checkIsExists(address);
+    }
+
+    @Override
+    public void setDefaultAddress(UserAddress address, User user) {
+        userAddressDao.switchAddressToNoDefault(user.getId());
+        address.setMt(new Date());
+        userAddressDao.update(address);
     }
 }

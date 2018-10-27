@@ -1,7 +1,15 @@
 package com.api.controller;
 
+import com.alipay.api.AlipayApiException;
+import com.alipay.api.AlipayClient;
+import com.alipay.api.DefaultAlipayClient;
+import com.alipay.api.domain.AlipayTradeAppPayModel;
+import com.alipay.api.internal.util.AlipaySignature;
+import com.alipay.api.request.AlipayTradeAppPayRequest;
+import com.alipay.api.response.AlipayTradeAppPayResponse;
 import com.api.controller.dto.BaseResult;
 import com.api.controller.dto.ResultCode;
+import com.api.controller.util.AliPayUtil;
 import com.api.model.Order;
 import com.api.model.User;
 import com.api.model.UserAddress;
@@ -20,11 +28,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.xml.transform.Result;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.net.URLDecoder;
+import java.util.*;
 
 @RestController
 public class OrderController {
@@ -130,10 +138,53 @@ public class OrderController {
 
     @ResponseBody
     @RequestMapping("verifyPay")
-    public BaseResult verifyPay(@RequestParam(name = "orderId", value = "orderId") Long orderId,
-                                @RequestParam(name = "code", value = "code") String code,
-                                @RequestParam(name = "tradeNum", value = "tradeNum") String tradeNum
-    ) {
+    public String verifyPay(HttpServletRequest request, HttpServletResponse response) {
+        //获取支付宝POST过来反馈信息
+        Map<String,String> params = new HashMap<String,String>();
+        Map requestParams = request.getParameterMap();
+        String result = null;
+        for (Iterator iter = requestParams.keySet().iterator(); iter.hasNext();) {
+            String name = (String) iter.next();
+            String[] values = (String[]) requestParams.get(name);
+            String valueStr = "";
+            for (int i = 0; i < values.length; i++) {
+                valueStr = (i == values.length - 1) ? valueStr + values[i]
+                        : valueStr + values[i] + ",";
+            }
+            //乱码解决，这段代码在出现乱码时使用。
+            //valueStr = new String(valueStr.getBytes("ISO-8859-1"), "utf-8");
+            params.put(name, valueStr);
+        }
+        //切记alipaypublickey是支付宝的公钥，请去open.alipay.com对应应用下查看。
+        //boolean AlipaySignature.rsaCheckV1(Map<String, String> params, String publicKey, String charset, String sign_type)
+        try {
+            boolean flag = AlipaySignature.rsaCheckV1(params, AliPayUtil.ALIPAY_PUBLIC_KEY, AliPayUtil.CHARSET, "RSA2");
+            if(flag){
+                if("TRADE_SUCCESS".equals(params.get("trade_status"))){
+                    //商户订单号
+                    String orderNo = params.get("out_trade_no");
+                    //支付宝交易号
+                    String tradeNumber = params.get("trade_no");
+                    OrderVo order = orderService.getOrderByOrderNo(orderNo);
+                    order.setStatus(Byte.valueOf("1"));
+                    order.setTradeNumber(tradeNumber);
+                    orderService.modifyOrder(order);
+                    result = "success";
+                }else{
+                    result = "fail";
+                }
+            }else{
+                result = "fail";
+            }
+        } catch (AlipayApiException e) {
+            logger.error(e.getMessage(),e);
+        }
+        return result;
+    }
+
+    @ResponseBody
+    @RequestMapping("getSign")
+    public BaseResult getSign(@RequestParam(name = "orderId", value = "orderId") Long orderId) {
         Subject subject = SecurityUtils.getSubject();
         if (!subject.isAuthenticated()) {
             return new BaseResult(ResultCode.SUCCESS, "验证不通过", null);
@@ -143,19 +194,45 @@ public class OrderController {
         OrderVo order = orderService.getOrder(orderId, user.getId());
         if (order == null) {
             return new BaseResult(ResultCode.SUCCESS, "当前订单不存在，请联系管理员", null);
-        } else {
-            //验证支付信息
-            order.setTradeNumber(tradeNum);
-            order.setStatus(Byte.valueOf("1"));
-            orderService.modifyOrder(order);
-            return new BaseResult(ResultCode.SUCCESS, "支付成功", null);
         }
+        AlipayClient alipayClient = new DefaultAlipayClient(AliPayUtil.GATE,
+                AliPayUtil.APPID,
+                AliPayUtil.APP_PRIVATE_KEY,
+                "json",
+                AliPayUtil.CHARSET,
+                AliPayUtil.ALIPAY_PUBLIC_KEY,
+                "RSA2");
+
+        //实例化具体API对应的request类,类名称和接口名称对应,当前调用接口名称：alipay.trade.app.pay
+        AlipayTradeAppPayRequest request = new AlipayTradeAppPayRequest();
+        //SDK已经封装掉了公共参数，这里只需要传入业务参数。以下方法为sdk的model入参方式(model和biz_content同时存在的情况下取biz_content)。
+        AlipayTradeAppPayModel model = new AlipayTradeAppPayModel();
+
+        model.setSubject("天磊商城]:"+order.getOrderDetails().get(0).getProductName());
+        model.setOutTradeNo(order.getCode());
+        model.setTimeoutExpress("30m");
+        model.setTotalAmount(order.getTotalPrice().toString());
+        model.setProductCode("QUICK_MSECURITY_PAY");
+        request.setBizModel(model);
+        request.setNotifyUrl(AliPayUtil.NOTIFY_URL);
+        AlipayTradeAppPayResponse response = null;
+        try {
+            //这里和普通的接口调用不同，使用的是sdkExecute
+            response = alipayClient.sdkExecute(request);
+        } catch (AlipayApiException e) {
+            e.printStackTrace();
+        }
+        BaseResult result = new BaseResult();
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        resultMap.put("order", response.getBody());
+        result.setData(resultMap);
+        return result;
     }
 
     @ResponseBody
     @RequestMapping("fetchOrder")
     public BaseResult fetchOrder(
-            @RequestParam(name = "orderNo", value = "orderNo", required = false) Integer orderNo,
+            @RequestParam(name = "orderNo", value = "orderNo", required = false) String orderNo,
             @RequestParam(name = "pageSize", value = "pageSize") Integer pageSize,
             @RequestParam(name = "pageIndex", value = "pageIndex") Integer pageIndex) {
         Subject subject = SecurityUtils.getSubject();

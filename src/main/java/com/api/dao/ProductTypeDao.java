@@ -1,5 +1,6 @@
 package com.api.dao;
 
+import com.api.model.Product;
 import com.api.model.ProductType;
 import org.springframework.stereotype.Repository;
 
@@ -13,6 +14,7 @@ public interface ProductTypeDao {
     public void update(ProductType productType);
     public void updateSelective(ProductType productType);
     public Long insert(ProductType productType);
+    public Long insertSelective(ProductType productType);
     List<ProductType> selectByEntity(ProductType productType);
     public Integer countByEntity(ProductType productType);
     List<ProductType> checkIsExists(ProductType productType);
