@@ -2,6 +2,7 @@ package com.api.controller;
 
 import com.api.controller.dto.BaseResult;
 import com.api.controller.dto.ResultCode;
+import com.api.model.Product;
 import com.api.model.ProductType;
 import com.api.service.ProductTypeService;
 import com.api.service.UserService;
@@ -9,10 +10,7 @@ import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -89,6 +87,21 @@ public class ProductTypeController {
         Map<String,Object> resultMap = new HashMap<String, Object>(10);
         resultMap.put("productTypes",datas);
         result.setData(resultMap);
+        return result;
+    }
+
+    @ResponseBody
+    @RequestMapping("fetchProductTypeDetail")
+    public BaseResult fetchProductTypeDetail(@RequestParam(name = "productTypeId", value = "productTypeId") Long productTypeId) {
+        BaseResult result = new BaseResult();
+        ProductType productType = productTypeService.getProductType(productTypeId);
+        if (productType == null) {
+            result.setMessage("当前产品类型不存在，请联系管理员");
+        } else {
+            Map<String, Object> resultMap = new HashMap<String, Object>();
+            resultMap.put("productType", productType);
+            result.setData(resultMap);
+        }
         return result;
     }
 }
