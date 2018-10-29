@@ -7,28 +7,33 @@
     <result column="mobile" jdbcType="VARCHAR" property="mobile" />
     <result column="pwd" jdbcType="VARCHAR" property="pwd" />
     <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="ct" jdbcType="TIMESTAMP" property="ct" />
     <result column="pid" jdbcType="BIGINT" property="pid" />
+    <result column="level" jdbcType="INTEGER" property="level" />
+    <result column="ct" jdbcType="TIMESTAMP" property="ct" />
   </resultMap>
   
   <sql id="BaseColumnList">
-    id, mobile, pwd, name, ct, pid
+    id, mobile, pwd, name, pid, level, ct
   </sql>
   
   <insert id="insert" parameterType="com.api.model.User">
     INSERT INTO user (id, mobile, pwd, 
-      name, ct, pid)
+      name, pid, level, ct
+      )
     VALUES (#{id,jdbcType=BIGINT}, #{mobile,jdbcType=VARCHAR}, #{pwd,jdbcType=VARCHAR}, 
-      #{name,jdbcType=VARCHAR}, #{ct,jdbcType=TIMESTAMP}, #{pid,jdbcType=BIGINT})
+      #{name,jdbcType=VARCHAR}, #{pid,jdbcType=BIGINT}, #{level,jdbcType=INTEGER}, #{ct,jdbcType=TIMESTAMP}
+      )
   </insert>
   
   <insert id="insertBatch" parameterType="java.util.List">
     INSERT INTO user (id, 
       mobile, pwd, name, 
-      ct, pid)
+      pid, level, ct
+      )
     VALUES <foreach collection="list" index="index" item="item" separator=","> (#{item.id,jdbcType=BIGINT}, 
       #{item.mobile,jdbcType=VARCHAR}, #{item.pwd,jdbcType=VARCHAR}, #{item.name,jdbcType=VARCHAR}, 
-      #{item.ct,jdbcType=TIMESTAMP}, #{item.pid,jdbcType=BIGINT}) </foreach>
+      #{item.pid,jdbcType=BIGINT}, #{item.level,jdbcType=INTEGER}, #{item.ct,jdbcType=TIMESTAMP}
+      ) </foreach>
   </insert>
   
   <insert id="insertSelective" parameterType="com.api.model.User">
@@ -46,11 +51,14 @@
       <if test="name != null">
         name,
       </if>
-      <if test="ct != null">
-        ct,
-      </if>
       <if test="pid != null">
         pid,
+      </if>
+      <if test="level != null">
+        level,
+      </if>
+      <if test="ct != null">
+        ct,
       </if>
     </trim>
     <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
@@ -66,11 +74,14 @@
       <if test="name != null">
         #{name,jdbcType=VARCHAR},
       </if>
-      <if test="ct != null">
-        #{ct,jdbcType=TIMESTAMP},
-      </if>
       <if test="pid != null">
         #{pid,jdbcType=BIGINT},
+      </if>
+      <if test="level != null">
+        #{level,jdbcType=INTEGER},
+      </if>
+      <if test="ct != null">
+        #{ct,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -85,8 +96,9 @@
     SET mobile = #{mobile,jdbcType=VARCHAR},
       pwd = #{pwd,jdbcType=VARCHAR},
       name = #{name,jdbcType=VARCHAR},
-      ct = #{ct,jdbcType=TIMESTAMP},
-      pid = #{pid,jdbcType=BIGINT}
+      pid = #{pid,jdbcType=BIGINT},
+      level = #{level,jdbcType=INTEGER},
+      ct = #{ct,jdbcType=TIMESTAMP}
     WHERE id = #{id,jdbcType=BIGINT}
   </update>
   
@@ -102,11 +114,14 @@
       <if test="name != null">
         name = #{name,jdbcType=VARCHAR},
       </if>
-      <if test="ct != null">
-        ct = #{ct,jdbcType=TIMESTAMP},
-      </if>
       <if test="pid != null">
         pid = #{pid,jdbcType=BIGINT},
+      </if>
+      <if test="level != null">
+        level = #{level,jdbcType=INTEGER},
+      </if>
+      <if test="ct != null">
+        ct = #{ct,jdbcType=TIMESTAMP},
       </if>
     </set>
     WHERE id = #{id,jdbcType=BIGINT}
@@ -140,11 +155,14 @@
       <if test="name != null">
          AND name = #{name,jdbcType=VARCHAR}
       </if>
-      <if test="ct != null">
-         AND ct = #{ct,jdbcType=TIMESTAMP}
-      </if>
       <if test="pid != null">
          AND pid = #{pid,jdbcType=BIGINT}
+      </if>
+      <if test="level != null">
+         AND level = #{level,jdbcType=INTEGER}
+      </if>
+      <if test="ct != null">
+         AND ct = #{ct,jdbcType=TIMESTAMP}
       </if>
     </where>
   </select>
@@ -161,15 +179,19 @@
       <if test="name != null">
          AND name = #{name,jdbcType=VARCHAR}
       </if>
-      <if test="ct != null">
-         AND ct = #{ct,jdbcType=TIMESTAMP}
-      </if>
       <if test="pid != null">
          AND pid = #{pid,jdbcType=BIGINT}
+      </if>
+      <if test="level != null">
+         AND level = #{level,jdbcType=INTEGER}
+      </if>
+      <if test="ct != null">
+         AND ct = #{ct,jdbcType=TIMESTAMP}
       </if>
     </where>
   </select>
   
   <!-- 以下部分人工添加或修改 -->
   
+
 </mapper>

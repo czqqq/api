@@ -11,7 +11,7 @@
  Target Server Version : 50620
  File Encoding         : 65001
 
- Date: 20/09/2018 00:48:59
+ Date: 29/10/2018 21:38:18
 */
 
 SET NAMES utf8mb4;
@@ -54,9 +54,6 @@ CREATE TABLE `order`  (
   `mt` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
   `code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '编码',
   `trade_number` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '交易号',
-  `rec_mobile` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '收货手机号码',
-  `rec_address` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '收货地址',
-  `rec_name` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '收货人',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '订单表' ROW_FORMAT = Compact;
 
@@ -68,8 +65,6 @@ CREATE TABLE `order_detail`  (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '\n自增ID',
   `order_id` bigint(20) NOT NULL COMMENT '\n订单ID',
   `product_id` bigint(20) NOT NULL COMMENT '产品ID',
-  `color` varchar(20) DEFAULT NULL COMMENT '颜色',
-  `size` varchar(10) DEFAULT NULL COMMENT '大小',
   `count` int(10) NOT NULL COMMENT '产品数量',
   `ct` datetime(0) NULL DEFAULT NULL COMMENT '\n创建时间',
   PRIMARY KEY (`id`) USING BTREE
@@ -83,8 +78,6 @@ CREATE TABLE `product`  (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '自增ID\n\n\n',
   `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '产品名称\n\n\n',
   `type` bigint(20) NULL DEFAULT NULL COMMENT '产品种类ID\n\n\n',
-  `color` varchar (255) DEFAULT NULL COMMENT '颜色',
-  `size` varchar(255) DEFAULT NULL COMMENT '号码',
   `price` double NOT NULL COMMENT '单价',
   `pic` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '图片路径',
   `ct` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
@@ -135,17 +128,18 @@ CREATE TABLE `user`  (
   `mobile` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '手机号码/登录账号',
   `pwd` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '登录密码',
   `name` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '姓名/昵称',
+  `pid` bigint(20) NOT NULL COMMENT '上级ID',
+  `level` int(11) NOT NULL DEFAULT 0 COMMENT '用户级别',
   `ct` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `pid` bigint(20) NOT NULL,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户表' ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES (1, '13333333333', '123', '菜头', '2018-09-15 13:05:42', 0);
-INSERT INTO `user` VALUES (2, '16666666666', '123', '坤妞', '2018-09-19 23:50:37', 1);
-INSERT INTO `user` VALUES (3, '18888888888', '123', '小红', '2018-09-19 23:51:15', 1);
+INSERT INTO `user` VALUES (1, '13333333333', '123', '菜头', 0, 0, '2018-09-15 13:05:42');
+INSERT INTO `user` VALUES (2, '16666666666', '123', '坤妞', 1, 0, '2018-09-19 23:50:37');
+INSERT INTO `user` VALUES (3, '18888888888', '123', '小红', 1, 0, '2018-09-19 23:51:15');
 
 -- ----------------------------
 -- Table structure for user_address
@@ -157,7 +151,7 @@ CREATE TABLE `user_address`  (
   `rec_mobile` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '\n收货手机号码',
   `rec_address` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '\n收货地址',
   `rec_name` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '\n收货人',
-  `is_default` tinyint(4) NOT NULL COMMENT '0:默认地址；1:其他',
+  `isDefault` tinyint(4) NOT NULL COMMENT '0:默认地址；1:其他',
   `ct` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   `mt` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`id`) USING BTREE
@@ -179,36 +173,3 @@ CREATE TABLE `withdraw`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = ' 提现表' ROW_FORMAT = Compact;
 
 SET FOREIGN_KEY_CHECKS = 1;
-
-
-DROP FUNCTION gennerate_no;
-CREATE FUNCTION `gennerate_no`( num int,orderNamePre char(2))
-RETURNS VARCHAR(20)
-BEGIN
-  DECLARE currentDate varCHAR (15) ;-- 当前日期,有可能包含时分秒
-  DECLARE maxNo INT DEFAULT 0 ; -- 离现在最近的满足条件的订单编号的流水号最后5位，如：O2013011000002的maxNo=2
-  DECLARE oldOrderNo VARCHAR (25) DEFAULT '' ;-- 离现在最近的满足条件的订单编号
-	DECLARE newOrderNo VARCHAR(25) DEFAULT '';
-
-  if num = 8 then -- 根据年月日生成订单编号
-    SELECT DATE_FORMAT(NOW(), '%Y%m%d') INTO currentDate ;-- 订单编号形式:前缀+年月日+流水号，如：O2013011000002
-  elseif num = 14 then -- 根据年月日时分秒生成订单编号
-    SELECT DATE_FORMAT(NOW(), '%Y%m%d%H%i%s') INTO currentDate ; -- 订单编号形式：前缀+年月日时分秒+流水号，如：O2013011010050700001,个人不推荐使用这种方法生成流水号
-  else -- 根据年月日时分生成订单编号
-    SELECT DATE_FORMAT(NOW(), '%Y%m%d%H%i') INTO currentDate ;-- 订单形式：前缀+年月日时分+流水号,如：O20130110100900005
-  end if ;
-
-  SELECT IFNULL(CODE, '') INTO oldOrderNo
-  FROM `order`
-  WHERE SUBSTRING(CODE, 2, num) = currentDate
-    AND SUBSTRING(CODE, 1, 1) = orderNamePre
-    and length(CODE) = 4 + num
-  ORDER BY id DESC LIMIT 1 ; -- 有多条时只显示离现在最近的一条
-
-  IF oldOrderNo != '' THEN
-    SET maxNo = CONVERT(SUBSTRING(oldOrderNo, -3), DECIMAL) ;-- SUBSTRING(oldOrderNo, -5)：订单编号如果不为‘‘截取订单的最后5位
-  END IF ;
-  SELECT
-    CONCAT(orderNamePre, currentDate,  LPAD((maxNo + 1), 3, '0')) INTO newOrderNo ; -- LPAD((maxNo + 1), 5, '0')：如果不足5位，将用0填充左边
-	RETURN newOrderNo;
-END

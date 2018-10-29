@@ -12,4 +12,6 @@ public interface UserService {
 
     List<User> getUsersByPid(Long pid);
 
+    List<User> getAll();
+
 }

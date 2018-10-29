@@ -46,4 +46,11 @@ public class UserServiceImpl implements UserService {
         List<User>  userList = userDao.selectByEntity(user);
         return userList;
     }
+
+    @Override
+    public List<User> getAll() {
+        User user = new User();
+        List<User>  userList = userDao.selectByEntity(user);
+        return userList;
+    }
 }
