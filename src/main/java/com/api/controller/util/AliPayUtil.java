@@ -17,6 +17,6 @@ public class AliPayUtil {
     /** 编码方式 */
     public static final String CHARSET = "utf-8";
 
-    public static final String NOTIFY_URL="";
+    public static final String NOTIFY_URL="http://47.107.79.61:8008/verifyPay";
     public static final String NOTIFY_URL_TEST="";
 }
