@@ -2,7 +2,7 @@ package com.api.controller;
 
 import com.api.controller.dto.BaseResult;
 import com.api.controller.dto.ResultCode;
-import com.api.model.ProductType;
+import com.api.model.UserAddress;
 import com.api.model.User;
 import com.api.model.UserAddress;
 import com.api.service.UserAddressService;
@@ -14,10 +14,7 @@ import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -138,6 +135,28 @@ public class UserAddressController {
         Map<String,Object> resultMap = new HashMap<String, Object>(10);
         resultMap.put("userAddresss",datas);
         result.setData(resultMap);
+        return result;
+    }
+
+    @ResponseBody
+    @RequestMapping("fetchUserAddressDetail")
+    public BaseResult fetchUserAddressDetail(@RequestParam(name = "userAddressId", value = "userAddressId") Long userAddressId) {
+        BaseResult result = new BaseResult();
+        //获取userId
+        Subject subject = SecurityUtils.getSubject();
+        if (!subject.isAuthenticated()) {
+            return new BaseResult(ResultCode.SUCCESS, "验证不通过", null);
+        }
+        String mobile = JwtUtil.getMobileBySubject(subject);
+        User user = userService.getUserByLoginName(mobile);
+        UserAddress userAddress = userAddressService.getUserAddress(userAddressId,user.getId());
+        if (userAddress == null) {
+            result.setMessage("当前地址不存在，请联系管理员");
+        } else {
+            Map<String, Object> resultMap = new HashMap<String, Object>();
+            resultMap.put("userAddress", userAddress);
+            result.setData(resultMap);
+        }
         return result;
     }
 

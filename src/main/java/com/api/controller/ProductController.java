@@ -2,13 +2,11 @@ package com.api.controller;
 
 import com.api.controller.dto.BaseResult;
 import com.api.controller.dto.ResultCode;
-import com.api.model.Order;
+import com.api.model.Product;
 import com.api.model.Product;
 import com.api.model.ProductType;
 import com.api.model.User;
-import com.api.model.vo.OrderDetailVo;
-import com.api.model.vo.OrderVo;
-import com.api.service.OrderService;
+import com.api.service.ProductService;
 import com.api.service.ProductService;
 import com.api.service.ProductTypeService;
 import com.api.service.UserService;
@@ -111,6 +109,21 @@ public class ProductController {
         Map<String,Object> resultMap = new HashMap<String, Object>(10);
         resultMap.put("products",datas);
         result.setData(resultMap);
+        return result;
+    }
+
+    @ResponseBody
+    @RequestMapping("fetchProductDetail")
+    public BaseResult fetchProductDetail(@RequestParam(name = "productId", value = "productId") Long productId) {
+        BaseResult result = new BaseResult();
+        Product product = productService.getProduct(productId);
+        if (product == null) {
+            result.setMessage("当前产品不存在，请联系管理员");
+        } else {
+            Map<String, Object> resultMap = new HashMap<String, Object>();
+            resultMap.put("product", product);
+            result.setData(resultMap);
+        }
         return result;
     }
 
