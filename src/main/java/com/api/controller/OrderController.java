@@ -224,7 +224,7 @@ public class OrderController {
         }
         BaseResult result = new BaseResult();
         Map<String, Object> resultMap = new HashMap<String, Object>();
-        resultMap.put("order", response.getBody());
+        resultMap.put("sign", response.getBody());
         result.setData(resultMap);
         return result;
     }
