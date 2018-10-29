@@ -20,7 +20,7 @@ public class CommissionTasks {
     @Autowired
     private UserService userService;
 
-    @Scheduled(cron = "0 0/1 * * * *")  //（秒 分 时 每月第几天 月 星期） //todo 测试用 0 0/1 * * * * 每分钟执行一次  正式运行用 0 0 1 * * * *每天凌晨1点执行
+    @Scheduled(cron = "0 0 1 * * *")  //（秒 分 时 每月第几天 月 星期） //todo 测试用 0 0/1 * * * * 每分钟执行一次  正式运行用 0 0 1 * * *每天凌晨1点执行
     public void calcCommission() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         logger.info(sdf.format(new Date()) +" 佣金统计任务开始...");
