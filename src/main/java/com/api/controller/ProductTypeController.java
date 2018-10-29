@@ -7,6 +7,7 @@ import com.api.model.ProductType;
 import com.api.service.ProductTypeService;
 import com.api.service.UserService;
 import com.github.pagehelper.PageInfo;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,9 +70,15 @@ public class ProductTypeController {
     }
 
     @RequestMapping("inquireProductTypes")
-    public BaseResult inquireProductTypes( @RequestBody ProductType productType,@RequestParam(name = "pageSize",value = "pageSize")Integer pageSize,
-        @RequestParam(name = "pageIndex",value = "pageIndex")Integer pageIndex) {
+    public BaseResult inquireProductTypes(
+            @RequestParam(name = "name",value = "name" ,required = false)String name,
+            @RequestParam(name = "pageSize",value = "pageSize")Integer pageSize,
+            @RequestParam(name = "pageIndex",value = "pageIndex")Integer pageIndex) {
         BaseResult result = new BaseResult();
+        ProductType productType = new ProductType();
+        if(StringUtils.isNotBlank(name)){
+            productType.setName(name);
+        }
         PageInfo<ProductType> datas =  productTypeService.inquireProductTypes(productType,pageIndex,pageSize);
         Map<String,Object> resultMap = new HashMap<String, Object>(10);
         resultMap.put("productTypes",datas);

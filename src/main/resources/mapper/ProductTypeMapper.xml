@@ -110,7 +110,7 @@
     FROM product_type
     <where >
       <if test="name != null" >
-         AND name = #{name,jdbcType=VARCHAR}
+         AND name like CONCAT('%',#{name,jdbcType=VARCHAR},'%')
       </if>
       <if test="ct != null" >
          AND ct = #{ct,jdbcType=TIMESTAMP}

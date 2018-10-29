@@ -1,6 +1,7 @@
 package com.api.controller;
 
 import com.api.controller.dto.BaseResult;
+import com.api.controller.dto.ProductDto;
 import com.api.controller.dto.ResultCode;
 import com.api.model.Product;
 import com.api.model.Product;
@@ -102,10 +103,9 @@ public class ProductController {
     }
 
     @RequestMapping("fetchProduct")
-    public BaseResult fetchProduct( @RequestBody Product product,@RequestParam(name = "pageSize",value = "pageSize")Integer pageSize,
-        @RequestParam(name = "pageIndex",value = "pageIndex")Integer pageIndex) {
+    public BaseResult fetchProduct(@RequestBody ProductDto product) {
         BaseResult result = new BaseResult();
-        PageInfo<Product> datas =  productService.inquireProducts(product,pageIndex,pageSize);
+        PageInfo<Product> datas =  productService.inquireProducts(product,product.getPageIndex(),product.getPageSize());
         Map<String,Object> resultMap = new HashMap<String, Object>(10);
         resultMap.put("products",datas);
         result.setData(resultMap);

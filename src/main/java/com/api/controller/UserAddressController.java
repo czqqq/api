@@ -2,6 +2,7 @@ package com.api.controller;
 
 import com.api.controller.dto.BaseResult;
 import com.api.controller.dto.ResultCode;
+import com.api.controller.dto.UserAddressDto;
 import com.api.model.UserAddress;
 import com.api.model.User;
 import com.api.model.UserAddress;
@@ -120,8 +121,7 @@ public class UserAddressController {
     }
 
     @RequestMapping("fetchAddressList")
-    public BaseResult fetchAddressList( @RequestBody UserAddress userAddress,@RequestParam(name = "pageSize",value = "pageSize")Integer pageSize,
-        @RequestParam(name = "pageIndex",value = "pageIndex")Integer pageIndex) {
+    public BaseResult fetchAddressList(@RequestBody UserAddressDto userAddress) {
         //获取userId
         Subject subject = SecurityUtils.getSubject();
         if (!subject.isAuthenticated()) {
@@ -131,7 +131,7 @@ public class UserAddressController {
         User user = userService.getUserByLoginName(mobile);
         userAddress.setUserId(user.getId());
         BaseResult result = new BaseResult();
-        PageInfo<UserAddress> datas =  userAddressService.inquireUserAddresss(userAddress,pageIndex,pageSize);
+        PageInfo<UserAddress> datas =  userAddressService.inquireUserAddresss(userAddress,userAddress.getPageIndex(),userAddress.getPageSize());
         Map<String,Object> resultMap = new HashMap<String, Object>(10);
         resultMap.put("userAddresss",datas);
         result.setData(resultMap);
