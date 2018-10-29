@@ -138,11 +138,11 @@ public class OrderController {
 
     @ResponseBody
     @RequestMapping("verifyPay")
-    public String verifyPay(HttpServletRequest request, HttpServletResponse response) {
+    public BaseResult verifyPay(HttpServletRequest request, HttpServletResponse response) {
         //获取支付宝POST过来反馈信息
+        BaseResult result = new BaseResult();
         Map<String,String> params = new HashMap<String,String>();
         Map requestParams = request.getParameterMap();
-        String result = null;
         for (Iterator iter = requestParams.keySet().iterator(); iter.hasNext();) {
             String name = (String) iter.next();
             String[] values = (String[]) requestParams.get(name);
@@ -169,12 +169,12 @@ public class OrderController {
                     order.setStatus(Byte.valueOf("1"));
                     order.setTradeNumber(tradeNumber);
                     orderService.modifyOrder(order);
-                    result = "success";
+                    result.setData("success");
                 }else{
-                    result = "fail";
+                    result.setData("fail");
                 }
             }else{
-                result = "fail";
+                result.setData("fail");
             }
         } catch (AlipayApiException e) {
             logger.error(e.getMessage(),e);
@@ -224,7 +224,7 @@ public class OrderController {
         }
         BaseResult result = new BaseResult();
         Map<String, Object> resultMap = new HashMap<String, Object>();
-        resultMap.put("order", response.getBody());
+        resultMap.put("sign", response.getBody());
         result.setData(resultMap);
         return result;
     }
