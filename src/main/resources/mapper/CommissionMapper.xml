@@ -100,5 +100,10 @@
   </select>
   
   <!-- 以下部分人工添加或修改 -->
+  <update id="addCommissionByUid" parameterType="map" >
+    UPDATE commission
+    SET commission = commission + #{commission,jdbcType=DOUBLE}
+    WHERE user_id = #{userId,jdbcType=BIGINT}
+  </update>
   
 </mapper>
