@@ -1,9 +1,8 @@
 package com.api.model;
 
-import java.io.Serializable;
 import java.util.Date;
 
-public class CommissionDetail implements Serializable {
+public class CommissionDetail {
     private Long id;
 
     private Long userId;
@@ -11,6 +10,8 @@ public class CommissionDetail implements Serializable {
     private Long comeby;
 
     private Double commission;
+
+    private String mark;
 
     private Date ct;
 
@@ -46,6 +47,14 @@ public class CommissionDetail implements Serializable {
 
     public void setCommission(Double commission) {
         this.commission = commission;
+    }
+
+    public String getMark() {
+        return mark;
+    }
+
+    public void setMark(String mark) {
+        this.mark = mark;
     }
 
     public Date getCt() {

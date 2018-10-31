@@ -2,8 +2,10 @@ package com.api.service.impl;
 
 import com.api.dao.CommissionDao;
 import com.api.dao.CommissionDetailDao;
+import com.api.dao.OrderDao;
 import com.api.dao.UserDao;
 import com.api.model.CommissionDetail;
+import com.api.model.Order;
 import com.api.model.User;
 import com.api.service.UserService;
 import com.github.pagehelper.PageHelper;
@@ -26,6 +28,8 @@ public class UserServiceImpl implements UserService {
     private CommissionDao commissionDao;
     @Autowired
     private CommissionDetailDao commissionDetailDao;
+    @Autowired
+    private OrderDao orderDao;
 
     @Override
     public User getUserByLoginName(String loginName) {
@@ -92,7 +96,7 @@ public class UserServiceImpl implements UserService {
 
             //计算购买产生的佣金
             int buyLevel;
-            double buyCommission=0, recommCommission=0,totalCommission=0;
+            double buyCommission=0, recommCommission=0,totalCommission;
             switch ((int)price) {
                 case 800 : buyLevel = 1; break;
                 case 6400 : buyLevel = 2; break;
@@ -141,19 +145,31 @@ public class UserServiceImpl implements UserService {
             commissionDetail.setCt(new Date());
             commissionDetail.setUserId(pUser.getId());
             commissionDetail.setComeby(user.getId());
+            commissionDetail.setMark("用户:"+user.getName() + " 购买产生的佣金，共:" + totalCommission);
             resule = commissionDetailDao.insertSelective(commissionDetail);
             if (resule < 1) {
                 logger.error("增加佣金明细失败，用户:" + pUser.getName() + "  佣金：" + totalCommission);
             }
         }
 
-
-
-
-
-
-
         return true;
     }
+
+    @Override
+    public int calcUserLevel(Long uid) {
+        if (uid == null) {
+            logger.error("用户ID不能为空");
+            return 0;
+        }
+        Order o = new Order();
+        o.setUserId(uid);
+        List<Order> orders = orderDao.selectByEntity(o);
+
+
+
+
+        return 0;
+    }
+
 
 }
