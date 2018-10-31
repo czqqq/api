@@ -122,7 +122,7 @@
     UPDATE product
     <set >
       <if test="name != null" >
-        name = #{name,jdbcType=VARCHAR},
+        name like CONCAT ('%',#{name,jdbcType=VARCHAR},'%'),
       </if>
       <if test="type != null" >
         type = #{type,jdbcType=BIGINT},
@@ -168,29 +168,20 @@
     <include refid="BaseColumnList" />
     FROM product
     <where >
-      <if test="name != null" >
-         AND name = #{name,jdbcType=VARCHAR}
+      <if test="name != null and name !=''" >
+         AND name like CONCAT ('%',#{name,jdbcType=VARCHAR},'%')
       </if>
       <if test="type != null" >
          AND type = #{type,jdbcType=BIGINT}
       </if>
-      <if test="color != null" >
+      <if test="color != null and color !=''" >
          AND color = #{color,jdbcType=VARCHAR}
       </if>
-      <if test="size != null" >
+      <if test="size != null and name !=''" >
          AND size = #{size,jdbcType=VARCHAR}
       </if>
-      <if test="price != null" >
+      <if test="price != null " >
          AND price = #{price,jdbcType=DOUBLE}
-      </if>
-      <if test="pic != null" >
-         AND pic = #{pic,jdbcType=VARCHAR}
-      </if>
-      <if test="ct != null" >
-         AND ct = #{ct,jdbcType=TIMESTAMP}
-      </if>
-      <if test="mt != null" >
-         AND mt = #{mt,jdbcType=TIMESTAMP}
       </if>
     </where>
 
@@ -199,13 +190,13 @@
   <select id="countByEntity" parameterType="com.api.model.Product" resultType="java.lang.Integer" >
     SELECT COUNT(1) FROM product
     <where >
-      <if test="name != null" >
-         AND name = #{name,jdbcType=VARCHAR}
+      <if test="name != null and name !=''" >
+         AND name like CONCAT ('%',#{name,jdbcType=VARCHAR},'%')
       </if>
       <if test="type != null" >
          AND type = #{type,jdbcType=BIGINT}
       </if>
-      <if test="color != null" >
+      <if test="color != null and color !=''" >
          AND color = #{color,jdbcType=VARCHAR}
       </if>
       <if test="size != null" >
@@ -230,7 +221,7 @@
     <include refid="BaseColumnList" />
     FROM product
     <where >
-      <if test="name != null" >
+      <if test="name != null and name !=''"  >
         AND name = #{name,jdbcType=VARCHAR}
       </if>
       <if test="type != null" >

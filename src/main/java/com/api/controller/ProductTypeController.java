@@ -80,9 +80,7 @@ public class ProductTypeController {
             productType.setName(name);
         }
         PageInfo<ProductType> datas =  productTypeService.inquireProductTypes(productType,pageIndex,pageSize);
-        Map<String,Object> resultMap = new HashMap<String, Object>(10);
-        resultMap.put("productTypes",datas);
-        result.setData(resultMap);
+        result.setData(datas);
         return result;
     }
 
@@ -91,9 +89,7 @@ public class ProductTypeController {
     public BaseResult fetchProductType() {
         BaseResult result = new BaseResult();
         List<ProductType> datas =  productTypeService.inquireProductTypeList(new ProductType());
-        Map<String,Object> resultMap = new HashMap<String, Object>(10);
-        resultMap.put("productTypes",datas);
-        result.setData(resultMap);
+        result.setData(datas);
         return result;
     }
 
@@ -105,9 +101,7 @@ public class ProductTypeController {
         if (productType == null) {
             result.setMessage("当前产品类型不存在，请联系管理员");
         } else {
-            Map<String, Object> resultMap = new HashMap<String, Object>();
-            resultMap.put("productType", productType);
-            result.setData(resultMap);
+            result.setData(productType);
         }
         return result;
     }
