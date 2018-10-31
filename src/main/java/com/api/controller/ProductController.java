@@ -106,9 +106,7 @@ public class ProductController {
     public BaseResult fetchProduct(@RequestBody ProductDto product) {
         BaseResult result = new BaseResult();
         PageInfo<Product> datas =  productService.inquireProducts(product,product.getPageIndex(),product.getPageSize());
-        Map<String,Object> resultMap = new HashMap<String, Object>(10);
-        resultMap.put("products",datas);
-        result.setData(resultMap);
+        result.setData(datas);
         return result;
     }
 
@@ -120,9 +118,7 @@ public class ProductController {
         if (product == null) {
             result.setMessage("当前产品不存在，请联系管理员");
         } else {
-            Map<String, Object> resultMap = new HashMap<String, Object>();
-            resultMap.put("product", product);
-            result.setData(resultMap);
+            result.setData(product);
         }
         return result;
     }

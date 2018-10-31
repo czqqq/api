@@ -89,9 +89,7 @@ public class OrderController {
         if (order == null) {
             result.setMessage("当前订单不存在，请联系管理员");
         } else {
-            Map<String, Object> resultMap = new HashMap<String, Object>();
-            resultMap.put("order", order);
-            result.setData(resultMap);
+            result.setData(order);
         }
         return result;
     }
@@ -104,9 +102,7 @@ public class OrderController {
             return new BaseResult(ResultCode.SUCCESS, "当前订单不存在，请联系管理员", null);
         } else {
             BaseResult result = new BaseResult();
-            Map<String, Object> resultMap = new HashMap<String, Object>();
-            resultMap.put("order", order);
-            result.setData(resultMap);
+            result.setData(order);
             return result;
         }
     }
@@ -245,9 +241,7 @@ public class OrderController {
         order.setUserId(user.getId());
         PageInfo<OrderVo> datas = orderService.inquireOrders(order, pageIndex, pageSize);
         BaseResult result = new BaseResult();
-        Map<String, Object> resultMap = new HashMap<String, Object>();
-        resultMap.put("orders", datas);
-        result.setData(resultMap);
+        result.setData(datas);
         return result;
     }
 
@@ -266,9 +260,7 @@ public class OrderController {
         order.setCode(code);
         PageInfo<OrderVo> datas = orderService.inquireOrders(order, pageIndex, pageSize);
         BaseResult result = new BaseResult();
-        Map<String, Object> resultMap = new HashMap<String, Object>(10);
-        resultMap.put("orders", datas);
-        result.setData(resultMap);
+        result.setData(datas);
         return result;
     }
 
