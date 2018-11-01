@@ -29,4 +29,15 @@ public class CommissionController {
         res.setData(withdrawVoList);
         return res;
     }
+
+
+    @PostMapping("/finishWithdraw")
+    public boolean finishWithdraw(Long id) {
+        boolean result = commissionService.finshWithout(id);
+        if(!result){
+            logger.error("修改提现状态失败");
+        }
+        return result;
+    }
+
 }
