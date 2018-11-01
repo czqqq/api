@@ -1,8 +1,9 @@
 package com.api.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class CommissionDetail {
+public class CommissionDetail implements Serializable {
     private Long id;
 
     private Long userId;
@@ -16,6 +17,8 @@ public class CommissionDetail {
     private Date ct;
 
     private Date mt;
+
+    private Byte status;
 
     public Long getId() {
         return id;
@@ -71,5 +74,13 @@ public class CommissionDetail {
 
     public void setMt(Date mt) {
         this.mt = mt;
+    }
+
+    public Byte getStatus() {
+        return status;
+    }
+
+    public void setStatus(Byte status) {
+        this.status = status;
     }
 }

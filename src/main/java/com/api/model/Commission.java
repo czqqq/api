@@ -7,6 +7,8 @@ public class Commission implements Serializable {
 
     private Double commission;
 
+    private Byte status;
+
     public Long getUserId() {
         return userId;
     }
@@ -21,5 +23,13 @@ public class Commission implements Serializable {
 
     public void setCommission(Double commission) {
         this.commission = commission;
+    }
+
+    public Byte getStatus() {
+        return status;
+    }
+
+    public void setStatus(Byte status) {
+        this.status = status;
     }
 }

@@ -10,30 +10,31 @@
     <result column="mark" jdbcType="VARCHAR" property="mark" />
     <result column="ct" jdbcType="TIMESTAMP" property="ct" />
     <result column="mt" jdbcType="TIMESTAMP" property="mt" />
+    <result column="status" jdbcType="TINYINT" property="status" />
   </resultMap>
   
   <sql id="BaseColumnList">
-    id, user_id, comeby, commission, mark, ct, mt
+    id, user_id, comeby, commission, mark, ct, mt, status
   </sql>
   
   <insert id="insert" parameterType="com.api.model.CommissionDetail">
     INSERT INTO commission_detail (id, user_id, comeby, 
       commission, mark, ct, 
-      mt)
+      mt, status)
     VALUES (#{id,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{comeby,jdbcType=BIGINT}, 
       #{commission,jdbcType=DOUBLE}, #{mark,jdbcType=VARCHAR}, #{ct,jdbcType=TIMESTAMP}, 
-      #{mt,jdbcType=TIMESTAMP})
+      #{mt,jdbcType=TIMESTAMP}, #{status,jdbcType=TINYINT})
   </insert>
   
   <insert id="insertBatch" parameterType="java.util.List">
     INSERT INTO commission_detail (id, 
       user_id, comeby, commission, 
-      mark, ct, mt
-      )
+      mark, ct, mt, 
+      status)
     VALUES <foreach collection="list" index="index" item="item" separator=","> (#{item.id,jdbcType=BIGINT}, 
       #{item.userId,jdbcType=BIGINT}, #{item.comeby,jdbcType=BIGINT}, #{item.commission,jdbcType=DOUBLE}, 
-      #{item.mark,jdbcType=VARCHAR}, #{item.ct,jdbcType=TIMESTAMP}, #{item.mt,jdbcType=TIMESTAMP}
-      ) </foreach>
+      #{item.mark,jdbcType=VARCHAR}, #{item.ct,jdbcType=TIMESTAMP}, #{item.mt,jdbcType=TIMESTAMP}, 
+      #{item.status,jdbcType=TINYINT}) </foreach>
   </insert>
   
   <insert id="insertSelective" parameterType="com.api.model.CommissionDetail">
@@ -60,6 +61,9 @@
       <if test="mt != null">
         mt,
       </if>
+      <if test="status != null">
+        status,
+      </if>
     </trim>
     <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -83,6 +87,9 @@
       <if test="mt != null">
         #{mt,jdbcType=TIMESTAMP},
       </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
+      </if>
     </trim>
   </insert>
   
@@ -98,7 +105,8 @@
       commission = #{commission,jdbcType=DOUBLE},
       mark = #{mark,jdbcType=VARCHAR},
       ct = #{ct,jdbcType=TIMESTAMP},
-      mt = #{mt,jdbcType=TIMESTAMP}
+      mt = #{mt,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=TINYINT}
     WHERE id = #{id,jdbcType=BIGINT}
   </update>
   
@@ -122,6 +130,9 @@
       </if>
       <if test="mt != null">
         mt = #{mt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=TINYINT},
       </if>
     </set>
     WHERE id = #{id,jdbcType=BIGINT}
@@ -164,6 +175,9 @@
       <if test="mt != null">
          AND mt = #{mt,jdbcType=TIMESTAMP}
       </if>
+      <if test="status != null">
+         AND status = #{status,jdbcType=TINYINT}
+      </if>
     </where>
     <if test="orderBy != null">
       ORDER BY ${orderBy}
@@ -191,10 +205,14 @@
       <if test="mt != null">
          AND mt = #{mt,jdbcType=TIMESTAMP}
       </if>
+      <if test="status != null">
+         AND status = #{status,jdbcType=TINYINT}
+      </if>
     </where>
   </select>
   
   <!-- 以下部分人工添加或修改 -->
+
 
   
 </mapper>

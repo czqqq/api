@@ -1,106 +1,128 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.api.dao.CommissionDao" >
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.api.dao.CommissionDao">
   
-  <resultMap id="BaseResultMap" type="com.api.model.Commission" >
-    <id column="user_id" property="userId" jdbcType="BIGINT" />
-    <result column="commission" property="commission" jdbcType="DOUBLE" />
+  <resultMap id="BaseResultMap" type="com.api.model.Commission">
+    <id column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="commission" jdbcType="DOUBLE" property="commission" />
+    <result column="status" jdbcType="TINYINT" property="status" />
   </resultMap>
   
-  <sql id="BaseColumnList" >
-    user_id, commission
+  <sql id="BaseColumnList">
+    user_id, commission, status
   </sql>
   
-  <insert id="insert" parameterType="com.api.model.Commission" >
-    INSERT INTO commission (user_id, commission)
-    VALUES (#{userId,jdbcType=BIGINT}, #{commission,jdbcType=DOUBLE})
+  <insert id="insert" parameterType="com.api.model.Commission">
+    INSERT INTO commission (user_id, commission, status
+      )
+    VALUES (#{userId,jdbcType=BIGINT}, #{commission,jdbcType=DOUBLE}, #{status,jdbcType=TINYINT}
+      )
   </insert>
   
-  <insert id="insertBatch" parameterType="java.util.List" >
+  <insert id="insertBatch" parameterType="java.util.List">
     INSERT INTO commission (user_id, 
-      commission)
-    VALUES <foreach collection="list" item="item" index="index" separator=","> (#{item.userId,jdbcType=BIGINT}, 
-      #{item.commission,jdbcType=DOUBLE}) </foreach>
+      commission, status)
+    VALUES <foreach collection="list" index="index" item="item" separator=","> (#{item.userId,jdbcType=BIGINT}, 
+      #{item.commission,jdbcType=DOUBLE}, #{item.status,jdbcType=TINYINT}) </foreach>
   </insert>
   
-  <insert id="insertSelective" parameterType="com.api.model.Commission" >
+  <insert id="insertSelective" parameterType="com.api.model.Commission">
     INSERT INTO commission
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="userId != null" >
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
         user_id,
       </if>
-      <if test="commission != null" >
+      <if test="commission != null">
         commission,
       </if>
+      <if test="status != null">
+        status,
+      </if>
     </trim>
-    <trim prefix="VALUES (" suffix=")" suffixOverrides="," >
-      <if test="userId != null" >
+    <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
         #{userId,jdbcType=BIGINT},
       </if>
-      <if test="commission != null" >
+      <if test="commission != null">
         #{commission,jdbcType=DOUBLE},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
       </if>
     </trim>
   </insert>
   
-  <delete id="deleteById" parameterType="java.lang.Long" >
+  <delete id="deleteById" parameterType="java.lang.Long">
     DELETE FROM commission
     WHERE user_id = #{userId,jdbcType=BIGINT}
   </delete>
   
-  <update id="update" parameterType="com.api.model.Commission" >
+  <update id="update" parameterType="com.api.model.Commission">
     UPDATE commission
-    SET commission = #{commission,jdbcType=DOUBLE}
+    SET commission = #{commission,jdbcType=DOUBLE},
+      status = #{status,jdbcType=TINYINT}
     WHERE user_id = #{userId,jdbcType=BIGINT}
   </update>
   
-  <update id="updateSelective" parameterType="com.api.model.Commission" >
+  <update id="updateSelective" parameterType="com.api.model.Commission">
     UPDATE commission
-    <set >
-      <if test="commission != null" >
+    <set>
+      <if test="commission != null">
         commission = #{commission,jdbcType=DOUBLE},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=TINYINT},
       </if>
     </set>
     WHERE user_id = #{userId,jdbcType=BIGINT}
   </update>
   
-  <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+  <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
     SELECT 
     <include refid="BaseColumnList" />
     FROM commission
     WHERE user_id = #{userId,jdbcType=BIGINT}
   </select>
   
-  <select id="selectByIds" resultMap="BaseResultMap" >
+  <select id="selectByIds" resultMap="BaseResultMap">
     SELECT 
     <include refid="BaseColumnList" />
     FROM commission
-    WHERE user_id IN <foreach collection="list" item="item" open="(" separator="," close=")"> #{item}  </foreach> 
+    WHERE user_id IN <foreach close=")" collection="list" item="item" open="(" separator=","> #{item}  </foreach> 
   </select>
   
-  <select id="selectByEntity" parameterType="com.api.model.Commission" resultMap="BaseResultMap" >
+  <select id="selectByEntity" parameterType="com.api.model.Commission" resultMap="BaseResultMap">
     SELECT 
     <include refid="BaseColumnList" />
     FROM commission
-    <where >
-      <if test="commission != null" >
+    <where>
+      <if test="commission != null">
          AND commission = #{commission,jdbcType=DOUBLE}
       </if>
+      <if test="status != null">
+         AND status = #{status,jdbcType=TINYINT}
+      </if>
     </where>
-
+    <if test="orderBy != null">
+      ORDER BY ${orderBy}
+    </if>
   </select>
   
-  <select id="countByEntity" parameterType="com.api.model.Commission" resultType="java.lang.Integer" >
+  <select id="countByEntity" parameterType="com.api.model.Commission" resultType="java.lang.Integer">
     SELECT COUNT(1) FROM commission
-    <where >
-      <if test="commission != null" >
+    <where>
+      <if test="commission != null">
          AND commission = #{commission,jdbcType=DOUBLE}
+      </if>
+      <if test="status != null">
+         AND status = #{status,jdbcType=TINYINT}
       </if>
     </where>
   </select>
-  
+
+
   <!-- 以下部分人工添加或修改 -->
-  <update id="addCommissionByUid" parameterType="map" >
+  <update id="addCommissionByUid" parameterType="map">
     UPDATE commission
     SET commission = commission + #{commission,jdbcType=DOUBLE}
     WHERE user_id = #{userId,jdbcType=BIGINT}
