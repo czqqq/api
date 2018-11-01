@@ -12,6 +12,7 @@
     <result column="pic" property="pic" jdbcType="VARCHAR" />
     <result column="ct" property="ct" jdbcType="TIMESTAMP" />
     <result column="mt" property="mt" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="TIMESTAMP" />
   </resultMap>
   
   <sql id="BaseColumnList" >
@@ -21,21 +22,21 @@
   <insert id="insert" parameterType="com.api.model.Product" >
     INSERT INTO product (id, name, type, 
       color, size, price, 
-      pic, ct, mt)
+      pic, ct, mt,remark)
     VALUES (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{type,jdbcType=BIGINT}, 
       #{color,jdbcType=VARCHAR}, #{size,jdbcType=VARCHAR}, #{price,jdbcType=DOUBLE}, 
-      #{pic,jdbcType=VARCHAR}, #{ct,jdbcType=TIMESTAMP}, #{mt,jdbcType=TIMESTAMP})
+      #{pic,jdbcType=VARCHAR}, #{ct,jdbcType=TIMESTAMP}, #{mt,jdbcType=TIMESTAMP},#{remark,jdbcType=VARCHAR})
   </insert>
   
   <insert id="insertBatch" parameterType="java.util.List" >
     INSERT INTO product (id, 
       name, type, color, 
       size, price, pic, 
-      ct, mt)
+      ct, mt,remark)
     VALUES <foreach collection="list" item="item" index="index" separator=","> (#{item.id,jdbcType=BIGINT}, 
       #{item.name,jdbcType=VARCHAR}, #{item.type,jdbcType=BIGINT}, #{item.color,jdbcType=VARCHAR}, 
       #{item.size,jdbcType=VARCHAR}, #{item.price,jdbcType=DOUBLE}, #{item.pic,jdbcType=VARCHAR}, 
-      #{item.ct,jdbcType=TIMESTAMP}, #{item.mt,jdbcType=TIMESTAMP}) </foreach>
+      #{item.ct,jdbcType=TIMESTAMP}, #{item.mt,jdbcType=TIMESTAMP},#{remark,jdbcType=VARCHAR}) </foreach>
   </insert>
   
   <insert id="insertSelective" parameterType="com.api.model.Product" >
@@ -68,6 +69,9 @@
       <if test="mt != null" >
         mt,
       </if>
+      <if test="remark != null" >
+        remark,
+      </if>
     </trim>
     <trim prefix="VALUES (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -97,6 +101,9 @@
       <if test="mt != null" >
         #{mt,jdbcType=TIMESTAMP},
       </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
     </trim>
   </insert>
   
@@ -114,7 +121,8 @@
       price = #{price,jdbcType=DOUBLE},
       pic = #{pic,jdbcType=VARCHAR},
       ct = #{ct,jdbcType=TIMESTAMP},
-      mt = #{mt,jdbcType=TIMESTAMP}
+      mt = #{mt,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR}
     WHERE id = #{id,jdbcType=BIGINT}
   </update>
   
@@ -144,6 +152,9 @@
       </if>
       <if test="mt != null" >
         mt = #{mt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
       </if>
     </set>
     WHERE id = #{id,jdbcType=BIGINT}

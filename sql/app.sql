@@ -173,3 +173,7 @@ CREATE TABLE `withdraw`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = ' 提现表' ROW_FORMAT = Compact;
 
 SET FOREIGN_KEY_CHECKS = 1;
+
+
+ALTER TABLE `product`
+ADD COLUMN `remark`  varchar(255) NULL AFTER `mt`;

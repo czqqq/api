@@ -18,6 +18,8 @@ public class Product implements Serializable {
 
     private String pic;
 
+    private String remark;
+
     private Date ct;
 
     private Date mt;
@@ -92,5 +94,13 @@ public class Product implements Serializable {
 
     public void setMt(Date mt) {
         this.mt = mt;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }
