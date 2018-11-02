@@ -33,7 +33,7 @@ public class UserAddressController {
 
 
     @RequestMapping("addUserAddress")
-    public BaseResult addUserAddress(@RequestBody UserAddress userAddress) {
+    public BaseResult addUserAddress( UserAddress userAddress) {
         //获取userId
         Subject subject = SecurityUtils.getSubject();
         if (!subject.isAuthenticated()) {

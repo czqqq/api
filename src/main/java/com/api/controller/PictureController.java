@@ -86,12 +86,21 @@ public class PictureController {
     public String multiUpload(HttpServletRequest request) {
         List<MultipartFile> files = ((MultipartHttpServletRequest) request).getFiles("file");
         String filePath = getBannerPicPath();
+
+        File uploadFile = new File(filePath);
+        File[] uploadFiles = uploadFile.listFiles();
+        int imgs = uploadFiles.length;
+
         for (int i = 0; i < files.size(); i++) {
             MultipartFile file = files.get(i);
             if (file.isEmpty()) {
                 return "上传第" + (i++) + "个文件失败";
             }
-            String fileName = file.getOriginalFilename();
+            imgs += 1;
+            if((imgs > 6)){
+                imgs = 1;
+            }
+            String fileName = "banner" + imgs + "." +(file.getOriginalFilename().substring(file.getOriginalFilename().indexOf(".")));
 
             File dest = new File(filePath + fileName);
             try {
