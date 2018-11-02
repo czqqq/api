@@ -14,7 +14,9 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class PictureController {
@@ -40,14 +42,19 @@ public class PictureController {
             logger.error("banner文件夹为空");
         } else {
             int length = files.length;
-            List<String> list = new ArrayList<>(length);
+            List<Map<String,String>> list = new ArrayList<>(length);
             for(int i = 0 ; i< length ; i++){
                 //todo 只写服务器上的地址
                 String os = System.getProperty("os.name");
+                Map<String,String> map = new HashMap<>();
                 if (os.toLowerCase().startsWith("win")) {
-                    list.add("http://localhost/pic/banner/"+files[i].getName());
+                    map.put("name",files[i].getName());
+                    map.put("url","http://localhost/pic/banner/"+files[i].getName());
+                    list.add(map);
                 }else {
-                    list.add("http://47.107.79.61/pic/banner/"+files[i].getName());
+                    map.put("name",files[i].getName());
+                    map.put("url","http://47.107.79.61/pic/banner/"+files[i].getName());
+                    list.add(map);
                 }
             }
             baseResult.setData(list);
@@ -100,7 +107,7 @@ public class PictureController {
             if((imgs > 6)){
                 imgs = 1;
             }
-            String fileName = "banner" + imgs + "." +(file.getOriginalFilename().substring(file.getOriginalFilename().indexOf(".")));
+            String fileName = "banner" + imgs + "." +(file.getOriginalFilename().substring(file.getOriginalFilename().indexOf(".")+1));
 
             File dest = new File(filePath + fileName);
             try {
