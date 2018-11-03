@@ -92,7 +92,7 @@ public class UserAddressController {
     }
 
     @RequestMapping("modifyUserAddress")
-    public BaseResult modifyUserAddress(@RequestBody UserAddress userAddress) {
+    public BaseResult modifyUserAddress( UserAddress userAddress) {
         if(userAddress.getId()==null){
             return new BaseResult(ResultCode.SUCCESS,"当前用户地址不存在",null);
         }
@@ -121,7 +121,7 @@ public class UserAddressController {
     }
 
     @RequestMapping("fetchAddressList")
-    public BaseResult fetchAddressList(@RequestBody UserAddressDto userAddress) {
+    public BaseResult fetchAddressList( UserAddressDto userAddress) {
         //获取userId
         Subject subject = SecurityUtils.getSubject();
         if (!subject.isAuthenticated()) {

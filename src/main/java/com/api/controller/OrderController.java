@@ -11,10 +11,12 @@ import com.api.controller.dto.BaseResult;
 import com.api.controller.dto.ResultCode;
 import com.api.controller.util.AliPayUtil;
 import com.api.model.Order;
+import com.api.model.OrderDetail;
 import com.api.model.User;
 import com.api.model.UserAddress;
 import com.api.model.vo.OrderDetailVo;
 import com.api.model.vo.OrderVo;
+import com.api.service.OrderDetailService;
 import com.api.service.OrderService;
 import com.api.service.UserAddressService;
 import com.api.service.UserService;
@@ -42,13 +44,16 @@ public class OrderController {
     private OrderService orderService;
 
     @Autowired
+    private OrderDetailService orderDetailService;
+
+    @Autowired
     private UserService userService;
 
     @Autowired
     private UserAddressService userAddressService;
 
     @RequestMapping("addOrder")
-    public BaseResult addOrder(@RequestBody OrderVo order) {
+    public BaseResult addOrder( OrderVo order) {
         BaseResult result = new BaseResult();
         //获取userId
         Subject subject = SecurityUtils.getSubject();
@@ -258,7 +263,11 @@ public class OrderController {
             order.setUserId(user.getId());
         }
         order.setCode(code);
-        PageInfo<OrderVo> datas = orderService.inquireOrders(order, pageIndex, pageSize);
+            PageInfo<OrderVo> datas = orderService.inquireOrders(order, pageIndex, pageSize);
+            for(OrderVo vo : datas.getList()){
+            List<OrderDetailVo > detailVos = orderDetailService.getDetails(vo.getId());
+            vo.setOrderDetails(detailVos);
+        }
         BaseResult result = new BaseResult();
         result.setData(datas);
         return result;

@@ -29,7 +29,7 @@ public class ProductTypeController {
 
 
     @RequestMapping("addProductType")
-    public BaseResult addProductType(@RequestBody ProductType productType) {
+    public BaseResult addProductType(ProductType productType) {
         BaseResult result = new BaseResult();
         List<ProductType> types = productTypeService.checkIsExists(productType);
         if(types!=null&&types.size()>0){

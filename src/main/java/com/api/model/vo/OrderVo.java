@@ -145,4 +145,5 @@ public class OrderVo {
     public void setMobile(String mobile) {
         this.mobile = mobile;
     }
+
 }

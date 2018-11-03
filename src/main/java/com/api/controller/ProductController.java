@@ -38,7 +38,7 @@ public class ProductController {
 
 
     @RequestMapping("addProduct")
-    public BaseResult addProduct(@RequestBody Product product) {
+    public BaseResult addProduct( Product product) {
         BaseResult result = checkLegal(product);
         if(result!=null){
             return result;
@@ -80,7 +80,7 @@ public class ProductController {
         return  null;
     }
     @RequestMapping("modifyProduct")
-    public BaseResult modifyProduct(@RequestBody Product product) {
+    public BaseResult modifyProduct( Product product) {
         if(product.getId()==null){
             return new BaseResult(ResultCode.SUCCESS,"当前产品不存在",null);
         }
@@ -103,7 +103,7 @@ public class ProductController {
     }
 
     @RequestMapping("fetchProduct")
-    public BaseResult fetchProduct(@RequestBody ProductDto product) {
+    public BaseResult fetchProduct( ProductDto product) {
         BaseResult result = new BaseResult();
         PageInfo<Product> datas =  productService.inquireProducts(product,product.getPageIndex(),product.getPageSize());
         String os = System.getProperty("os.name");

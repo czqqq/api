@@ -169,9 +169,10 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public PageInfo<OrderVo> inquireOrders(Order order, Integer pageIndex, Integer pageSize) {
+    public PageInfo<OrderVo>  inquireOrders(Order order, Integer pageIndex, Integer pageSize) {
         PageHelper.startPage(pageIndex,pageSize);
         List<OrderVo> orderList = orderDao.selectJoinByEntity(order);
+
         PageInfo<OrderVo> pageOrder = new PageInfo<OrderVo>(orderList);
         return pageOrder;
     }
