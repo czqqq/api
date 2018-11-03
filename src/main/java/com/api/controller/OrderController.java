@@ -80,12 +80,26 @@ public class OrderController {
         return result;
     }
 
+    @RequestMapping("modifyOrder")
+    public BaseResult modifyOrder( OrderVo order) {
+        BaseResult result = new BaseResult();
+        OrderVo ordert = orderService.getOrder(order.getId(),null);
+        if (ordert == null) {
+            return new BaseResult(ResultCode.FAILURE, "当前订单不存在，请联系管理员", null);
+        } else {
+            //获取地址信息
+            ordert.setStatus(order.getStatus());
+            orderService.modifyOrder(order);
+            return new BaseResult(ResultCode.SUCCESS, "修改成功", null);
+        }
+    }
+
     @ResponseBody
     @RequestMapping("fetchOrderDetail")
     public BaseResult fetchOrderDetail(@RequestParam(name = "orderId", value = "orderId") Long orderId) {
         Subject subject = SecurityUtils.getSubject();
         if (!subject.isAuthenticated()) {
-            return new BaseResult(ResultCode.SUCCESS, "验证不通过", null);
+            return new BaseResult(ResultCode.FAILURE, "验证不通过", null);
         }
         BaseResult result = new BaseResult();
         String mobile = JwtUtil.getMobileBySubject(subject);
@@ -104,7 +118,7 @@ public class OrderController {
     public BaseResult fetchOrderDetailWeb(@RequestParam(name = "orderId", value = "orderId") Long orderId) {
         OrderVo order = orderService.getOrder(orderId, null);
         if (order == null) {
-            return new BaseResult(ResultCode.SUCCESS, "当前订单不存在，请联系管理员", null);
+            return new BaseResult(ResultCode.FAILURE, "当前订单不存在，请联系管理员", null);
         } else {
             BaseResult result = new BaseResult();
             result.setData(order);
@@ -117,13 +131,13 @@ public class OrderController {
     public BaseResult fetchOrderDetail(@RequestParam(name = "orderId", value = "orderId") Long orderId, @RequestParam(name = "addressId", value = "addressId") Long addressId) {
         Subject subject = SecurityUtils.getSubject();
         if (!subject.isAuthenticated()) {
-            return new BaseResult(ResultCode.SUCCESS, "验证不通过", null);
+            return new BaseResult(ResultCode.FAILURE, "验证不通过", null);
         }
         String mobile = JwtUtil.getMobileBySubject(subject);
         User user = userService.getUserByLoginName(mobile);
         OrderVo order = orderService.getOrder(orderId, user.getId());
         if (order == null) {
-            return new BaseResult(ResultCode.SUCCESS, "当前订单不存在，请联系管理员", null);
+            return new BaseResult(ResultCode.FAILURE, "当前订单不存在，请联系管理员", null);
         } else {
             //获取地址信息
             UserAddress userAddress = userAddressService.getUserAddress(user.getId(), addressId);
@@ -188,13 +202,13 @@ public class OrderController {
     public BaseResult getSign(@RequestParam(name = "orderId", value = "orderId") Long orderId) {
         Subject subject = SecurityUtils.getSubject();
         if (!subject.isAuthenticated()) {
-            return new BaseResult(ResultCode.SUCCESS, "验证不通过", null);
+            return new BaseResult(ResultCode.FAILURE, "验证不通过", null);
         }
         String mobile = JwtUtil.getMobileBySubject(subject);
         User user = userService.getUserByLoginName(mobile);
         OrderVo order = orderService.getOrder(orderId, user.getId());
         if (order == null) {
-            return new BaseResult(ResultCode.SUCCESS, "当前订单不存在，请联系管理员", null);
+            return new BaseResult(ResultCode.FAILURE, "当前订单不存在，请联系管理员", null);
         }
         AlipayClient alipayClient = new DefaultAlipayClient(AliPayUtil.GATE,
                 AliPayUtil.APPID,
@@ -238,7 +252,7 @@ public class OrderController {
             @RequestParam(name = "pageIndex", value = "pageIndex") Integer pageIndex) {
         Subject subject = SecurityUtils.getSubject();
         if (!subject.isAuthenticated()) {
-            return new BaseResult(ResultCode.SUCCESS, "验证不通过", null);
+            return new BaseResult(ResultCode.FAILURE, "验证不通过", null);
         }
         String mobile = JwtUtil.getMobileBySubject(subject);
         User user = userService.getUserByLoginName(mobile);

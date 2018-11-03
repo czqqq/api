@@ -52,7 +52,7 @@ public class ProductController {
 
         Product product = productService.getProduct(productId);
         if(product == null){
-            return new BaseResult(ResultCode.SUCCESS,"当前产品不存在",null);
+            return new BaseResult(ResultCode.FAILURE,"当前产品不存在",null);
         }else{
             productService.deleteProduct(product);
             return new BaseResult(ResultCode.SUCCESS,"删除成功",null);
@@ -61,32 +61,32 @@ public class ProductController {
     }
     public BaseResult checkLegal(Product product){
         if(product.getType()==null){
-            return new BaseResult(ResultCode.SUCCESS,"请选择产品类型",null);
+            return new BaseResult(ResultCode.FAILURE,"请选择产品类型",null);
         }
         ProductType type = typeService.getProductType(product.getType());
         if(type==null){
-            return new BaseResult(ResultCode.SUCCESS,"请选择产品类型",null);
+            return new BaseResult(ResultCode.FAILURE,"请选择产品类型",null);
         }
         if(product.getName()==null){
-            return new BaseResult(ResultCode.SUCCESS,"产品名称不能为空",null);
+            return new BaseResult(ResultCode.FAILURE,"产品名称不能为空",null);
         }
         if(product.getPrice()==null){
-            return new BaseResult(ResultCode.SUCCESS,"产品价格不能为空",null);
+            return new BaseResult(ResultCode.FAILURE,"产品价格不能为空",null);
         }
         List<Product> types = productService.checkIsExists(product);
         if(types!=null&&types.size()>0){
-            return new BaseResult(ResultCode.SUCCESS,"该产品已经存在",null);
+            return new BaseResult(ResultCode.FAILURE,"该产品已经存在",null);
         }
         return  null;
     }
     @RequestMapping("modifyProduct")
     public BaseResult modifyProduct( Product product) {
         if(product.getId()==null){
-            return new BaseResult(ResultCode.SUCCESS,"当前产品不存在",null);
+            return new BaseResult(ResultCode.FAILURE,"当前产品不存在",null);
         }
         Product pro = productService.getProduct(product.getId());
         if(pro == null){
-            return new BaseResult(ResultCode.SUCCESS,"当前产品不存在",null);
+            return new BaseResult(ResultCode.FAILURE,"当前产品不存在",null);
         }
         BaseResult result = checkLegal(product);
         if(result!=null){
@@ -130,6 +130,7 @@ public class ProductController {
             product.setPic("http://47.107.79.61/pic/product/"+product.getPic());
         }
         if (product == null) {
+            result.setCode(ResultCode.FAILURE);
             result.setMessage("当前产品不存在，请联系管理员");
         } else {
             result.setData(product);

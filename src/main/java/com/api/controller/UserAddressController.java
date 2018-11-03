@@ -37,7 +37,7 @@ public class UserAddressController {
         //获取userId
         Subject subject = SecurityUtils.getSubject();
         if (!subject.isAuthenticated()) {
-            return new BaseResult(ResultCode.SUCCESS, "验证不通过", null);
+            return new BaseResult(ResultCode.FAILURE, "验证不通过", null);
         }
         String mobile = JwtUtil.getMobileBySubject(subject);
         User user = userService.getUserByLoginName(mobile);
@@ -45,7 +45,7 @@ public class UserAddressController {
         userAddress.setUserId(user.getId());
         List<UserAddress> addresses = userAddressService.checkIsExists(userAddress);
         if(addresses!=null&&addresses.size()>0){
-            return new BaseResult(ResultCode.SUCCESS,"该地址已经存在",null);
+            return new BaseResult(ResultCode.FAILURE,"该地址已经存在",null);
         }
         userAddressService.addUserAddress(userAddress);
         return result;
@@ -56,13 +56,13 @@ public class UserAddressController {
         //获取userId
         Subject subject = SecurityUtils.getSubject();
         if (!subject.isAuthenticated()) {
-            return new BaseResult(ResultCode.SUCCESS, "验证不通过", null);
+            return new BaseResult(ResultCode.FAILURE, "验证不通过", null);
         }
         String mobile = JwtUtil.getMobileBySubject(subject);
         User user = userService.getUserByLoginName(mobile);
         UserAddress userAddress = userAddressService.getUserAddress(userAddressId,user.getId());
         if(userAddress == null){
-            return new BaseResult(ResultCode.SUCCESS,"当前用户地址不存在",null);
+            return new BaseResult(ResultCode.FAILURE,"当前用户地址不存在",null);
         }else{
             BaseResult result = new BaseResult();
             Map<String,Object> resultMap = new HashMap<String, Object>();
@@ -78,13 +78,13 @@ public class UserAddressController {
         //获取userId
         Subject subject = SecurityUtils.getSubject();
         if (!subject.isAuthenticated()) {
-            return new BaseResult(ResultCode.SUCCESS, "验证不通过", null);
+            return new BaseResult(ResultCode.FAILURE, "验证不通过", null);
         }
         String mobile = JwtUtil.getMobileBySubject(subject);
         User user = userService.getUserByLoginName(mobile);
         UserAddress address = userAddressService.getUserAddress(userAddressId,user.getId());
         if(address == null){
-            return new BaseResult(ResultCode.SUCCESS,"当前用户地址不存在",null);
+            return new BaseResult(ResultCode.FAILURE,"当前用户地址不存在",null);
         }
         address.setIsDefault(Byte.valueOf("0"));
         userAddressService.setDefaultAddress(address,user);
@@ -94,18 +94,18 @@ public class UserAddressController {
     @RequestMapping("modifyUserAddress")
     public BaseResult modifyUserAddress( UserAddress userAddress) {
         if(userAddress.getId()==null){
-            return new BaseResult(ResultCode.SUCCESS,"当前用户地址不存在",null);
+            return new BaseResult(ResultCode.FAILURE,"当前用户地址不存在",null);
         }
         //获取userId
         Subject subject = SecurityUtils.getSubject();
         if (!subject.isAuthenticated()) {
-            return new BaseResult(ResultCode.SUCCESS, "验证不通过", null);
+            return new BaseResult(ResultCode.FAILURE, "验证不通过", null);
         }
         String mobile = JwtUtil.getMobileBySubject(subject);
         User user = userService.getUserByLoginName(mobile);
         UserAddress address = userAddressService.getUserAddress(userAddress.getId(),user.getId());
         if(address == null){
-            return new BaseResult(ResultCode.SUCCESS,"当前用户地址不存在",null);
+            return new BaseResult(ResultCode.FAILURE,"当前用户地址不存在",null);
         }
         address.setIsDefault(userAddress.getIsDefault());
         address.setRecAddress(userAddress.getRecAddress());
@@ -113,7 +113,7 @@ public class UserAddressController {
         address.setRecName(userAddress.getRecName());
         List<UserAddress> addresses = userAddressService.checkIsExists(address);
         if(addresses!=null&&addresses.size()>0){
-            return new BaseResult(ResultCode.SUCCESS,"该地址已经存在",null);
+            return new BaseResult(ResultCode.FAILURE,"该地址已经存在",null);
         }
         BaseResult result = new BaseResult();
         userAddressService.modifyUserAddress(address);
@@ -125,7 +125,7 @@ public class UserAddressController {
         //获取userId
         Subject subject = SecurityUtils.getSubject();
         if (!subject.isAuthenticated()) {
-            return new BaseResult(ResultCode.SUCCESS, "验证不通过", null);
+            return new BaseResult(ResultCode.FAILURE, "验证不通过", null);
         }
         String mobile = JwtUtil.getMobileBySubject(subject);
         User user = userService.getUserByLoginName(mobile);
@@ -145,12 +145,13 @@ public class UserAddressController {
         //获取userId
         Subject subject = SecurityUtils.getSubject();
         if (!subject.isAuthenticated()) {
-            return new BaseResult(ResultCode.SUCCESS, "验证不通过", null);
+            return new BaseResult(ResultCode.FAILURE, "验证不通过", null);
         }
         String mobile = JwtUtil.getMobileBySubject(subject);
         User user = userService.getUserByLoginName(mobile);
         UserAddress userAddress = userAddressService.getUserAddress(userAddressId,user.getId());
         if (userAddress == null) {
+            result.setCode(ResultCode.FAILURE);
             result.setMessage("当前地址不存在，请联系管理员");
         } else {
             Map<String, Object> resultMap = new HashMap<String, Object>();

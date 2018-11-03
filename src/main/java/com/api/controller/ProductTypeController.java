@@ -33,7 +33,7 @@ public class ProductTypeController {
         BaseResult result = new BaseResult();
         List<ProductType> types = productTypeService.checkIsExists(productType);
         if(types!=null&&types.size()>0){
-            return new BaseResult(ResultCode.SUCCESS,"该产品类型已存在",null);
+            return new BaseResult(ResultCode.FAILURE,"该产品类型已存在",null);
         }
         productTypeService.addProductType(productType);
         return result;
@@ -43,7 +43,7 @@ public class ProductTypeController {
     public BaseResult removeProductType(@RequestParam(name = "productTypeId",value = "productTypeId")Long productTypeId) {
         ProductType productType = productTypeService.getProductType(productTypeId);
         if(productType == null){
-            return new BaseResult(ResultCode.SUCCESS,"当前产品类型不存在",null);
+            return new BaseResult(ResultCode.FAILURE,"当前产品类型不存在",null);
         }else{
            productTypeService.deleteProductType(productType);
             return new BaseResult(ResultCode.SUCCESS,"删除成功",null);
@@ -54,16 +54,16 @@ public class ProductTypeController {
     @RequestMapping("modifyProductType")
     public BaseResult modifyProductType(@RequestBody ProductType productType) {
         if(productType.getId()==null){
-            return new BaseResult(ResultCode.SUCCESS,"当前产品类型不存在",null);
+            return new BaseResult(ResultCode.FAILURE,"当前产品类型不存在",null);
         }
         ProductType pro = productTypeService.getProductType(productType.getId());
         if(pro == null){
-            return new BaseResult(ResultCode.SUCCESS,"当前产品类型不存在",null);
+            return new BaseResult(ResultCode.FAILURE,"当前产品类型不存在",null);
         }
         pro.setName(productType.getName());
         List<ProductType> types = productTypeService.checkIsExists(pro);
         if(types!=null&&types.size()>0){
-            return new BaseResult(ResultCode.SUCCESS,"该产品类型已存在",null);
+            return new BaseResult(ResultCode.FAILURE,"该产品类型已存在",null);
         }
         productTypeService.modifyProductType(pro);
         return   new BaseResult(ResultCode.SUCCESS,"修改成功",null);
@@ -99,6 +99,8 @@ public class ProductTypeController {
         BaseResult result = new BaseResult();
         ProductType productType = productTypeService.getProductType(productTypeId);
         if (productType == null) {
+            result.setCode(ResultCode.FAILURE);
+            result.setCode(ResultCode.FAILURE);
             result.setMessage("当前产品类型不存在，请联系管理员");
         } else {
             result.setData(productType);
