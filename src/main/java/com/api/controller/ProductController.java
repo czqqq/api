@@ -106,6 +106,14 @@ public class ProductController {
     public BaseResult fetchProduct(@RequestBody ProductDto product) {
         BaseResult result = new BaseResult();
         PageInfo<Product> datas =  productService.inquireProducts(product,product.getPageIndex(),product.getPageSize());
+        String os = System.getProperty("os.name");
+        for(Product pro : datas.getList()){
+            if (os.toLowerCase().startsWith("win")) {
+                pro.setPic("http://localhost/pic/product/"+pro.getPic());
+            }else {
+                pro.setPic("http://47.107.79.61/pic/product/"+pro.getPic());
+            }
+        }
         result.setData(datas);
         return result;
     }
@@ -115,6 +123,12 @@ public class ProductController {
     public BaseResult fetchProductDetail(@RequestParam(name = "productId", value = "productId") Long productId) {
         BaseResult result = new BaseResult();
         Product product = productService.getProduct(productId);
+        String os = System.getProperty("os.name");
+        if (os.toLowerCase().startsWith("win")) {
+            product.setPic("http://localhost/pic/product/"+product.getPic());
+        }else {
+            product.setPic("http://47.107.79.61/pic/product/"+product.getPic());
+        }
         if (product == null) {
             result.setMessage("当前产品不存在，请联系管理员");
         } else {
