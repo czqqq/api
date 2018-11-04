@@ -43,6 +43,12 @@ public class UserController {
         }
     }
 
+    @GetMapping("/logout")
+    public BaseResult logout() {
+        Subject subject = SecurityUtils.getSubject();
+        subject.logout();
+        return new BaseResult();
+    }
     @PostMapping("/regist")
     public BaseResult regist(String mobile, String name, String pwd, String introducerMobile) {
 
@@ -62,6 +68,7 @@ public class UserController {
         int result = userService.addUser(introducer.getId(),mobile, name, pwd);
         if(result > 0){
             return new BaseResult(ResultCode.SUCCESS, "注册成功", null);
+
         }else {
             return new BaseResult(ResultCode.FAILURE, "注册失败", null);
         }

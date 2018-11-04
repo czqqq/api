@@ -1,6 +1,5 @@
 package com.api.util;
 
-import com.api.model.User;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -13,7 +12,7 @@ import java.util.Date;
 
 public class JwtUtil {
 
-    // 过期时间5分钟
+    // 过期时间10天
     private static final long EXPIRE_TIME = 10*24*60*60*1000;
 
     /**
