@@ -65,9 +65,7 @@ public class UserAddressController {
             return new BaseResult(ResultCode.FAILURE,"当前用户地址不存在",null);
         }else{
             BaseResult result = new BaseResult();
-            Map<String,Object> resultMap = new HashMap<String, Object>();
-            resultMap.put("userAddress",userAddress);
-            result.setData(resultMap);
+            result.setData(userAddress);
             return result;
         }
 
@@ -132,9 +130,7 @@ public class UserAddressController {
         userAddress.setUserId(user.getId());
         BaseResult result = new BaseResult();
         List<UserAddress> datas =  userAddressService.inquireUserAddresss(userAddress);
-        Map<String,Object> resultMap = new HashMap<String, Object>(10);
-        resultMap.put("userAddresss",datas);
-        result.setData(resultMap);
+        result.setData(datas);
         return result;
     }
 
@@ -154,9 +150,7 @@ public class UserAddressController {
             result.setCode(ResultCode.FAILURE);
             result.setMessage("当前地址不存在，请联系管理员");
         } else {
-            Map<String, Object> resultMap = new HashMap<String, Object>();
-            resultMap.put("userAddress", userAddress);
-            result.setData(resultMap);
+            result.setData(userAddress);
         }
         return result;
     }
