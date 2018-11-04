@@ -42,7 +42,7 @@ public class UserController {
     }
 
     @PostMapping("/regist")
-    public BaseResult regist(String mobile, String code, String name, String pwd, String introducerMobile) {
+    public BaseResult regist(String mobile, String name, String pwd, String introducerMobile) {
 
         if (StringUtils.isBlank(introducerMobile)) {
             return new BaseResult(ResultCode.FAILURE, "介绍人不能为空", null);
@@ -52,12 +52,6 @@ public class UserController {
         if (introducer == null) {
             return new BaseResult(ResultCode.FAILURE, "介绍人信息错误", null);
         }
-
-        //todo 验证短信校验码
-        if (code != code) {
-            return new BaseResult(ResultCode.FAILURE, "验证码校验失败", null);
-        }
-
         User user = userService.getUserByLoginName(mobile);
         if (user != null) {
             return new BaseResult(ResultCode.FAILURE, "手机号码已经注册过", null);
@@ -69,6 +63,12 @@ public class UserController {
         }else {
             return new BaseResult(ResultCode.FAILURE, "注册失败", null);
         }
+    }
+
+    @PostMapping("/fetchUserDetail")
+    public BaseResult fetchUserDetail(String mobile) {
+        User user = userService.getUserByLoginName(mobile);
+        return new BaseResult(ResultCode.SUCCESS, "成功", user);
     }
 
     @GetMapping("/fetchMyTeam")

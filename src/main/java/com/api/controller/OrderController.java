@@ -82,7 +82,6 @@ public class OrderController {
 
     @RequestMapping("modifyOrder")
     public BaseResult modifyOrder( OrderVo order) {
-        BaseResult result = new BaseResult();
         OrderVo ordert = orderService.getOrder(order.getId(),null);
         if (ordert == null) {
             return new BaseResult(ResultCode.FAILURE, "当前订单不存在，请联系管理员", null);
