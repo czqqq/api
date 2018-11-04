@@ -17,6 +17,8 @@ public class Withdraw implements Serializable {
 
     private Byte status;
 
+    private String name;
+
     public Long getId() {
         return id;
     }
@@ -71,5 +73,13 @@ public class Withdraw implements Serializable {
 
     public void setStatus(Byte status) {
         this.status = status;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
