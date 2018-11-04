@@ -37,9 +37,10 @@ public class CommissionTasks {
             //步骤1 按照级别计算每天返现
             switch (level){
                 case 1: reappearance = 8;    break;
-                case 2: reappearance = 300;  break;
-                case 3: reappearance = 700;  break;
-                case 4: reappearance = 1600; break;
+                case 2: reappearance = 100;  break;
+                case 3: reappearance = 300;  break;
+                case 4: reappearance = 700; break;
+                case 5: reappearance = 1600; break;
                 default: break;
             }
 

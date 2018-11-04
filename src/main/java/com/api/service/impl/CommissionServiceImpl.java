@@ -26,6 +26,12 @@ public class CommissionServiceImpl implements CommissionService {
     private WithdrawDao withdrawDao;
 
     @Override
+    public Commission fetchCommission(Long uid) {
+
+        return commissionDao.selectById(uid);
+    }
+
+    @Override
     public List<WithdrawVo> fetchWithout() {
         List<WithdrawVo> withdrawVos = withdrawDao.fetchWithdrawList();
         return withdrawVos;
@@ -42,5 +48,15 @@ public class CommissionServiceImpl implements CommissionService {
         withdraw.setStatus((byte)1);
         int result = withdrawDao.updateSelective(withdraw);
         return result == 1;
+    }
+
+    @Override
+    public List<WithdrawVo> fetchWithdrawByUid(Long uid) {
+        return withdrawDao.fetchWithdrawByUid(uid);
+    }
+
+    @Override
+    public int applyWithdraw(Withdraw withdraw) {
+        return withdrawDao.insertSelective(withdraw);
     }
 }

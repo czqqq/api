@@ -6,6 +6,8 @@ import java.util.List;
 
 public interface UserService {
 
+    User getUserById(Long id);
+
     User getUserByLoginName(String loginName);
 
     int addUser(Long introducerId, String mobile, String name, String pwd);

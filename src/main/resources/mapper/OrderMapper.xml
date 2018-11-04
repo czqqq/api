@@ -205,45 +205,7 @@
     FROM `order`
     WHERE id IN <foreach collection="list" item="item" open="(" separator="," close=")"> #{item}  </foreach> 
   </select>
-  
-  <select id="selectByEntity" parameterType="com.api.model.Order" resultMap="BaseResultMap" >
-    SELECT 
-    <include refid="BaseColumnList" />
-    FROM `order`
-    <where >
-      <if test="userId != null" >
-         AND user_id = #{userId,jdbcType=BIGINT}
-      </if>
-      <if test="totalPrice != null" >
-         AND total_price = #{totalPrice,jdbcType=DOUBLE}
-      </if>
-      <if test="status != null" >
-         AND status = #{status,jdbcType=TINYINT}
-      </if>
-      <if test="ct != null" >
-         AND ct = #{ct,jdbcType=TIMESTAMP}
-      </if>
-      <if test="mt != null" >
-         AND mt = #{mt,jdbcType=TIMESTAMP}
-      </if>
-      <if test="recName != null" >
-         AND rec_name = #{recName,jdbcType=VARCHAR}
-      </if>
-      <if test="recAddress != null" >
-         AND rec_address = #{recAddress,jdbcType=VARCHAR}
-      </if>
-      <if test="recMobile != null" >
-         AND rec_mobile = #{recMobile,jdbcType=VARCHAR}
-      </if>
-      <if test="code != null" >
-         AND code = #{code,jdbcType=VARCHAR}
-      </if>
-      <if test="tradeNumber != null" >
-         AND trade_number = #{tradeNumber,jdbcType=VARCHAR}
-      </if>
-    </where>
 
-  </select>
   
   <select id="countByEntity" parameterType="com.api.model.Order" resultType="java.lang.Integer" >
     SELECT COUNT(1) FROM `order`
@@ -357,4 +319,44 @@
     </set>
     WHERE order_id = #{orderId,jdbcType=BIGINT}
   </update>
+
+
+  <select id="selectByEntity" parameterType="com.api.model.Order" resultMap="BaseResultMap" >
+    SELECT
+    <include refid="BaseColumnList" />
+    FROM `order`
+    <where >
+      <if test="userId != null" >
+        AND user_id = #{userId,jdbcType=BIGINT}
+      </if>
+      <if test="totalPrice != null" >
+        AND total_price = #{totalPrice,jdbcType=DOUBLE}
+      </if>
+      <if test="status != null" >
+        AND status = #{status,jdbcType=TINYINT}
+      </if>
+      <if test="ct != null" >
+        AND ct = #{ct,jdbcType=TIMESTAMP}
+      </if>
+      <if test="mt != null" >
+        AND mt = #{mt,jdbcType=TIMESTAMP}
+      </if>
+      <if test="recName != null" >
+        AND rec_name = #{recName,jdbcType=VARCHAR}
+      </if>
+      <if test="recAddress != null" >
+        AND rec_address = #{recAddress,jdbcType=VARCHAR}
+      </if>
+      <if test="recMobile != null" >
+        AND rec_mobile = #{recMobile,jdbcType=VARCHAR}
+      </if>
+      <if test="code != null" >
+        AND code = #{code,jdbcType=VARCHAR}
+      </if>
+      <if test="tradeNumber != null" >
+        AND trade_number = #{tradeNumber,jdbcType=VARCHAR}
+      </if>
+    </where>
+    order by ct desc
+  </select>
 </mapper>

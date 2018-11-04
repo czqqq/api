@@ -4,6 +4,7 @@ import com.api.controller.dto.BaseResult;
 import com.api.controller.dto.ResultCode;
 import com.api.exception.UnauthorizedException;
 import com.api.model.User;
+import com.api.model.vo.UserVo;
 import com.api.service.UserService;
 import com.api.util.JwtUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -11,6 +12,7 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -91,6 +93,27 @@ public class UserController {
         return new BaseResult(ResultCode.SUCCESS, "成功", names);
     }
 
+
+    @GetMapping("/fetchUserInfo")
+    public BaseResult fetchUserInfo() {
+        //获取userId
+        Subject subject = SecurityUtils.getSubject();
+        if (!subject.isAuthenticated()) {
+            return new BaseResult(ResultCode.FAILURE, "验证不通过", null);
+        }
+        String mobile = JwtUtil.getMobileBySubject(subject);
+        User user = userService.getUserByLoginName(mobile);
+        User pUser = userService.getUserById(user.getPid());
+
+        UserVo userVo = new UserVo();
+        BeanUtils.copyProperties(user, userVo);
+        userVo.setPwd(null);
+        if (pUser != null) {
+            userVo.setpName(pUser.getName());
+        }
+
+        return new BaseResult(ResultCode.SUCCESS, "成功", userVo);
+    }
 
 
 

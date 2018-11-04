@@ -10,5 +10,9 @@ import java.util.List;
 public interface WithdrawDao {
     List<WithdrawVo> fetchWithdrawList();
 
+    List<WithdrawVo> fetchWithdrawByUid(Long userId);
+
     int updateSelective(Withdraw withdraw);
+
+    int insertSelective(Withdraw withdraw);
 }

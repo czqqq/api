@@ -9,6 +9,7 @@ import com.api.model.Order;
 import com.api.model.User;
 import com.api.service.UserService;
 import com.github.pagehelper.PageHelper;
+import org.apache.commons.codec.language.bm.Languages;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,11 @@ public class UserServiceImpl implements UserService {
     private CommissionDetailDao commissionDetailDao;
     @Autowired
     private OrderDao orderDao;
+
+    @Override
+    public User getUserById(Long id) {
+        return userDao.selectById(id);
+    }
 
     @Override
     public User getUserByLoginName(String loginName) {
@@ -161,9 +167,59 @@ public class UserServiceImpl implements UserService {
             logger.error("用户ID不能为空");
             return 0;
         }
+
+        User user = userDao.selectById(uid);
+        int nowLevel = user.getLevel();
+
         Order o = new Order();
         o.setUserId(uid);
         List<Order> orders = orderDao.selectByEntity(o);
+        if (orders != null && orders.size() > 0) {
+            Order lastOrder = orders.get(0);
+            //最后一次购买的金额
+            double lastPrice = lastOrder.getTotalPrice();
+
+            //之前的总消费金额
+            double consumption = 0.0;
+            for (int i = 1; i < orders.size(); i++) {
+                if (orders.get(i).getTotalPrice() > 800) {
+                    //购买800 以上的产品才进行累计升级
+                    consumption += orders.get(i).getTotalPrice();
+                }
+            }
+
+            //根据购买的产品判断等级是否变更
+            if (lastPrice > 800.0) {//购买最低级别的产品不进行升级
+                int buyLevel = 0, addupLevel = 0; //计算这次买的等级和累计的等级
+                switch ((int)lastPrice) {
+                    case 800 : buyLevel = 1; break;
+                    case 6400 : buyLevel = 2; break;
+                    case 12800 : buyLevel = 3; break;
+                    case 24800 : buyLevel = 4; break;
+                    case 56800 : buyLevel = 5; break;
+                    default: break;
+                }
+
+                switch ((int)consumption) {
+                    case 800 : addupLevel = 1; break;
+                    case 6400 : addupLevel = 2; break;
+                    case 12800 : addupLevel = 3; break;
+                    case 24800 : addupLevel = 4; break;
+                    case 56800 : addupLevel = 5; break;
+                    default: break;
+                }
+
+                int newLevel = Math.max(nowLevel, Math.max(buyLevel,addupLevel));
+
+            }
+
+
+
+
+
+
+        }
+
 
 
 
