@@ -121,7 +121,7 @@ public class UserAddressController {
     }
 
     @RequestMapping("fetchAddressList")
-    public BaseResult fetchAddressList( UserAddressDto userAddress) {
+    public BaseResult fetchAddressList( UserAddress userAddress) {
         //获取userId
         Subject subject = SecurityUtils.getSubject();
         if (!subject.isAuthenticated()) {
@@ -131,7 +131,7 @@ public class UserAddressController {
         User user = userService.getUserByLoginName(mobile);
         userAddress.setUserId(user.getId());
         BaseResult result = new BaseResult();
-        PageInfo<UserAddress> datas =  userAddressService.inquireUserAddresss(userAddress,userAddress.getPageIndex(),userAddress.getPageSize());
+        List<UserAddress> datas =  userAddressService.inquireUserAddresss(userAddress);
         Map<String,Object> resultMap = new HashMap<String, Object>(10);
         resultMap.put("userAddresss",datas);
         result.setData(resultMap);

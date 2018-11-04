@@ -39,11 +39,9 @@ public interface UserAddressService {
     /**
      * 分页查询
      * @param userAddress
-     * @param pageIndex
-     * @param pageSize
      * @return
      */
-    public PageInfo<UserAddress> inquireUserAddresss(UserAddress userAddress, Integer pageIndex, Integer pageSize);
+    public List<UserAddress> inquireUserAddresss(UserAddress userAddress);
 
 
     /**

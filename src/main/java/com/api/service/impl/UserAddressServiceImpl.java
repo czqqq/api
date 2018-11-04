@@ -57,11 +57,9 @@ public class UserAddressServiceImpl implements UserAddressService {
     }
 
     @Override
-    public PageInfo<UserAddress> inquireUserAddresss(UserAddress userAddress, Integer pageIndex, Integer pageSize) {
-        PageHelper.startPage(pageIndex, pageSize);
+    public List<UserAddress> inquireUserAddresss(UserAddress userAddress) {
         List<UserAddress> userAddressList = userAddressDao.selectByEntity(userAddress);
-        PageInfo<UserAddress> pageUserAddress = new PageInfo<UserAddress>(userAddressList);
-        return pageUserAddress;
+        return userAddressList;
     }
 
     @Override
