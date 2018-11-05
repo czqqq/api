@@ -38,4 +38,6 @@ public interface UserService {
     int deleteTokenById(String token);
 
     Token getTokenbyId(String token);
+
+    int saveUserDailyCommission(User user, Double commission);
 }

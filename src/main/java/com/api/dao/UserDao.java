@@ -10,4 +10,5 @@ public interface UserDao {
     int insertSelective(User user);
     User selectById(Long id);
     List<User> selectByEntity(User user);
+    int updateSelective(User user);
 }

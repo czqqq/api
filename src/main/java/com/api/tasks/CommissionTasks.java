@@ -1,6 +1,5 @@
 package com.api.tasks;
 
-import com.api.dao.UserDao;
 import com.api.model.User;
 import com.api.service.UserService;
 import org.slf4j.Logger;
@@ -45,13 +44,12 @@ public class CommissionTasks {
             }
 
             commission += reappearance;
-            logger.info(user.getName()+"的佣金为：" + commission);
+            logger.info(user.getName()+"的返现金额为：" + commission);
+            int result = userService.saveUserDailyCommission(user, commission);
+            if (result < 0) {
+                logger.error("用户"+user.getName()+"每日返现失败");
+            }
         }
-
-
-
-
-
 
 
 

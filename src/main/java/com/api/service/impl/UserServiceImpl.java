@@ -167,6 +167,7 @@ public class UserServiceImpl implements UserService {
             logger.error("用户ID不能为空");
             return 0;
         }
+        int result = 0;
 
         User user = userDao.selectById(uid);
         int nowLevel = user.getLevel();
@@ -210,21 +211,18 @@ public class UserServiceImpl implements UserService {
                 }
 
                 int newLevel = Math.max(nowLevel, Math.max(buyLevel,addupLevel));
-
+                User userNew = new User();
+                userNew.setId(user.getId());
+                userNew.setLevel(newLevel);
+                result = userDao.updateSelective(userNew);
+                if (result > 0) {
+                    logger.info("用户： "+user.getName()+" 更新用户等级成功,升级为 " + newLevel + " 级用户");
+                }
             }
 
 
-
-
-
-
         }
-
-
-
-
-
-        return 0;
+        return result;
     }
 
     @Override
@@ -255,6 +253,30 @@ public class UserServiceImpl implements UserService {
     @Override
     public Token getTokenbyId(String token) {
         return tokenDao.selectById(token);
+    }
+
+    @Override
+    public int saveUserDailyCommission(User user, Double commission) {
+        Map<String,Object> params = new HashMap<>();
+        params.put("commission", commission);
+        params.put("userId", user.getId());
+        int resule = commissionDao.addCommissionByUid(params);
+        if (resule < 1) {
+            logger.error("增加佣金失败，用户:" + user.getName() + "  佣金：" + commission);
+        }else{
+            CommissionDetail commissionDetail = new CommissionDetail();
+            commissionDetail.setCommission(commission);
+            commissionDetail.setCt(new Date());
+            commissionDetail.setUserId(user.getId());
+            commissionDetail.setComeby(user.getId());
+            commissionDetail.setMark("用户:"+user.getName() + " 每日返现，共:" + commission);
+            resule = commissionDetailDao.insertSelective(commissionDetail);
+            if (resule < 1) {
+                logger.error("增加佣金明细失败，用户:" + user.getName() + "  佣金：" + commission);
+            }
+        }
+
+        return resule;
     }
 
 
