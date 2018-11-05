@@ -58,7 +58,7 @@ public class OrderController {
         //获取userId
         Subject subject = SecurityUtils.getSubject();
         if (!subject.isAuthenticated()) {
-            return new BaseResult(ResultCode.SUCCESS, "验证不通过", null);
+            return new BaseResult(ResultCode.UNAUTHORIZED, "验证不通过", null);
         }
         String mobile = JwtUtil.getMobileBySubject(subject);
         User user = userService.getUserByLoginName(mobile);
@@ -98,7 +98,7 @@ public class OrderController {
     public BaseResult fetchOrderDetail(@RequestParam(name = "orderId", value = "orderId") Long orderId) {
         Subject subject = SecurityUtils.getSubject();
         if (!subject.isAuthenticated()) {
-            return new BaseResult(ResultCode.FAILURE, "验证不通过", null);
+            return new BaseResult(ResultCode.UNAUTHORIZED, "验证不通过", null);
         }
         BaseResult result = new BaseResult();
         String mobile = JwtUtil.getMobileBySubject(subject);
@@ -130,7 +130,7 @@ public class OrderController {
     public BaseResult fetchOrderDetail(@RequestParam(name = "orderId", value = "orderId") Long orderId, @RequestParam(name = "addressId", value = "addressId") Long addressId) {
         Subject subject = SecurityUtils.getSubject();
         if (!subject.isAuthenticated()) {
-            return new BaseResult(ResultCode.FAILURE, "验证不通过", null);
+            return new BaseResult(ResultCode.UNAUTHORIZED, "验证不通过", null);
         }
         String mobile = JwtUtil.getMobileBySubject(subject);
         User user = userService.getUserByLoginName(mobile);
@@ -201,7 +201,7 @@ public class OrderController {
     public BaseResult getSign(@RequestParam(name = "orderId", value = "orderId") Long orderId) {
         Subject subject = SecurityUtils.getSubject();
         if (!subject.isAuthenticated()) {
-            return new BaseResult(ResultCode.FAILURE, "验证不通过", null);
+            return new BaseResult(ResultCode.UNAUTHORIZED, "验证不通过", null);
         }
         String mobile = JwtUtil.getMobileBySubject(subject);
         User user = userService.getUserByLoginName(mobile);
@@ -251,7 +251,7 @@ public class OrderController {
             @RequestParam(name = "pageIndex", value = "pageIndex") Integer pageIndex) {
         Subject subject = SecurityUtils.getSubject();
         if (!subject.isAuthenticated()) {
-            return new BaseResult(ResultCode.FAILURE, "验证不通过", null);
+            return new BaseResult(ResultCode.UNAUTHORIZED, "验证不通过", null);
         }
         String mobile = JwtUtil.getMobileBySubject(subject);
         User user = userService.getUserByLoginName(mobile);

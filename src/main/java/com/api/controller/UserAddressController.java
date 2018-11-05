@@ -37,7 +37,7 @@ public class UserAddressController {
         //获取userId
         Subject subject = SecurityUtils.getSubject();
         if (!subject.isAuthenticated()) {
-            return new BaseResult(ResultCode.FAILURE, "验证不通过", null);
+            return new BaseResult(ResultCode.UNAUTHORIZED, "验证不通过", null);
         }
         String mobile = JwtUtil.getMobileBySubject(subject);
         User user = userService.getUserByLoginName(mobile);
@@ -56,7 +56,7 @@ public class UserAddressController {
         //获取userId
         Subject subject = SecurityUtils.getSubject();
         if (!subject.isAuthenticated()) {
-            return new BaseResult(ResultCode.FAILURE, "验证不通过", null);
+            return new BaseResult(ResultCode.UNAUTHORIZED, "验证不通过", null);
         }
         String mobile = JwtUtil.getMobileBySubject(subject);
         User user = userService.getUserByLoginName(mobile);
@@ -76,7 +76,7 @@ public class UserAddressController {
         //获取userId
         Subject subject = SecurityUtils.getSubject();
         if (!subject.isAuthenticated()) {
-            return new BaseResult(ResultCode.FAILURE, "验证不通过", null);
+            return new BaseResult(ResultCode.UNAUTHORIZED, "验证不通过", null);
         }
         String mobile = JwtUtil.getMobileBySubject(subject);
         User user = userService.getUserByLoginName(mobile);
@@ -97,7 +97,7 @@ public class UserAddressController {
         //获取userId
         Subject subject = SecurityUtils.getSubject();
         if (!subject.isAuthenticated()) {
-            return new BaseResult(ResultCode.FAILURE, "验证不通过", null);
+            return new BaseResult(ResultCode.UNAUTHORIZED, "验证不通过", null);
         }
         String mobile = JwtUtil.getMobileBySubject(subject);
         User user = userService.getUserByLoginName(mobile);
@@ -123,7 +123,7 @@ public class UserAddressController {
         //获取userId
         Subject subject = SecurityUtils.getSubject();
         if (!subject.isAuthenticated()) {
-            return new BaseResult(ResultCode.FAILURE, "验证不通过", null);
+            return new BaseResult(ResultCode.UNAUTHORIZED, "验证不通过", null);
         }
         String mobile = JwtUtil.getMobileBySubject(subject);
         User user = userService.getUserByLoginName(mobile);
@@ -141,7 +141,7 @@ public class UserAddressController {
         //获取userId
         Subject subject = SecurityUtils.getSubject();
         if (!subject.isAuthenticated()) {
-            return new BaseResult(ResultCode.FAILURE, "验证不通过", null);
+            return new BaseResult(ResultCode.UNAUTHORIZED, "验证不通过", null);
         }
         String mobile = JwtUtil.getMobileBySubject(subject);
         User user = userService.getUserByLoginName(mobile);
