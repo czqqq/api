@@ -3,7 +3,7 @@ package com.api.controller.util;
 public class AliPayUtil {
 
     /** 支付宝支付业务：入参app_id */
-    public static final String APPID = "2016092200569844";
+    public static final String APPID = "2018102661781703";
 
     /** 支付宝网关*/
     public static final String GATE = "https://openapi.alipay.com/gateway.do";
