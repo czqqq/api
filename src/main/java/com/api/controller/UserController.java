@@ -3,6 +3,7 @@ package com.api.controller;
 import com.api.controller.dto.BaseResult;
 import com.api.controller.dto.ResultCode;
 import com.api.exception.UnauthorizedException;
+import com.api.model.Token;
 import com.api.model.User;
 import com.api.model.vo.UserVo;
 import com.api.service.UserService;
@@ -33,10 +34,12 @@ public class UserController {
     public BaseResult login(@RequestParam("mobile") String mobile,
                               @RequestParam("pwd") String pwd) {
         User user = userService.getUserByLoginName(mobile);
-        Map<String, Object> resultMap =new HashMap<>();
-        resultMap.put("name", user.getName());
-        resultMap.put("token", JwtUtil.sign(mobile, pwd));
         if (user.getPwd().equals(pwd)) {
+            Map<String, Object> resultMap =new HashMap<>();
+            resultMap.put("name", user.getName());
+            String token = JwtUtil.sign(mobile, pwd);
+            resultMap.put("token", token);
+            userService.signToken(user.getId(), token);
             return new BaseResult(200, "登录成功", resultMap);
         } else {
             throw new UnauthorizedException();
@@ -45,8 +48,14 @@ public class UserController {
 
     @GetMapping("/logout")
     public BaseResult logout() {
+        //获取userId
         Subject subject = SecurityUtils.getSubject();
-        subject.logout();
+        if (!subject.isAuthenticated()) {
+            return new BaseResult(ResultCode.UNAUTHORIZED, "验证不通过", null);
+        }
+        String mobile = JwtUtil.getMobileBySubject(subject);
+        User user = userService.getUserByLoginName(mobile);
+        userService.invalidToken(user.getId());
         return new BaseResult();
     }
     @PostMapping("/regist")

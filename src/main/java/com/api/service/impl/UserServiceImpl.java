@@ -1,11 +1,9 @@
 package com.api.service.impl;
 
-import com.api.dao.CommissionDao;
-import com.api.dao.CommissionDetailDao;
-import com.api.dao.OrderDao;
-import com.api.dao.UserDao;
+import com.api.dao.*;
 import com.api.model.CommissionDetail;
 import com.api.model.Order;
+import com.api.model.Token;
 import com.api.model.User;
 import com.api.service.UserService;
 import com.github.pagehelper.PageHelper;
@@ -31,6 +29,8 @@ public class UserServiceImpl implements UserService {
     private CommissionDetailDao commissionDetailDao;
     @Autowired
     private OrderDao orderDao;
+    @Autowired
+    private TokenDao tokenDao;
 
     @Override
     public User getUserById(Long id) {
@@ -225,6 +225,36 @@ public class UserServiceImpl implements UserService {
 
 
         return 0;
+    }
+
+    @Override
+    public int signToken(Long userId, String token) {
+
+
+        Token token1 = tokenDao.selectById(token);
+        if (token1 == null) {
+            token1 = new Token();
+            token1.setToken(token);
+            token1.setUserId(userId);
+            return tokenDao.insertSelective(token1);
+        }else {
+            return 1;
+        }
+    }
+
+    @Override
+    public int invalidToken(Long userId) {
+        return tokenDao.deleteByUserId(userId);
+    }
+
+    @Override
+    public int deleteTokenById(String token) {
+        return tokenDao.deleteById(token);
+    }
+
+    @Override
+    public Token getTokenbyId(String token) {
+        return tokenDao.selectById(token);
     }
 
 

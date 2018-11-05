@@ -1,5 +1,6 @@
 package com.api.service;
 
+import com.api.model.Token;
 import com.api.model.User;
 
 import java.util.List;
@@ -29,4 +30,12 @@ public interface UserService {
      * @return int
      */
     int calcUserLevel(Long uid);
+
+    int signToken(Long userId, String token);
+
+    int invalidToken(Long userId);
+
+    int deleteTokenById(String token);
+
+    Token getTokenbyId(String token);
 }

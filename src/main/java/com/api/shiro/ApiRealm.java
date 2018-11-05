@@ -1,5 +1,6 @@
 package com.api.shiro;
 
+import com.api.model.Token;
 import com.api.model.User;
 import com.api.service.UserService;
 import com.api.util.JwtUtil;
@@ -64,7 +65,14 @@ public class ApiRealm extends AuthorizingRealm{
             throw new AuthenticationException("User didn't existed!");
         }
 
+        Token token1 = userService.getTokenbyId(token);
+        if (token1 == null) {
+            throw new AuthenticationException("token is invalid");
+        }
+
+
         if (! JwtUtil.verify(token, username, user.getPwd())) {
+            userService.deleteTokenById(token);
             throw new AuthenticationException("Username or password error");
         }
 
