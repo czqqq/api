@@ -209,6 +209,9 @@ public class OrderController {
         if (order == null) {
             return new BaseResult(ResultCode.FAILURE, "当前订单不存在，请联系管理员", null);
         }
+        if(!order.getStatus().equals(0)){
+            return new BaseResult(ResultCode.FAILURE, "该订单已支付", null);
+        }
         AlipayClient alipayClient = new DefaultAlipayClient(AliPayUtil.GATE,
                 AliPayUtil.APPID,
                 AliPayUtil.APP_PRIVATE_KEY,
