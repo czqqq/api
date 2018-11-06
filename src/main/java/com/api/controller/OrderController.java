@@ -151,7 +151,7 @@ public class OrderController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "verifyPay",method = RequestMethod.POST)
+    @RequestMapping(value = "verifyPay",method = RequestMethod.POST,produces="application/json;charset=utf-8")
     public BaseResult verifyPay(HttpServletRequest request) {
         //获取支付宝POST过来反馈信息
         BaseResult result = new BaseResult();
