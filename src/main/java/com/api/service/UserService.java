@@ -19,11 +19,11 @@ public interface UserService {
 
     /**
      * 用户购买商品后，该用户上级返利
-     * @param mobile 用户手机号
+     * @param userId 用户ID
      * @param price 产品价格
      * @return boolean
      */
-    boolean addParentCommission(String mobile, double price);
+    boolean addParentCommission(Long userId, double price);
 
     /**
      * 用户购买商品后，计算用户等级变更

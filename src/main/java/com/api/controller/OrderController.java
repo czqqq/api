@@ -184,6 +184,10 @@ public class OrderController {
                     order.setTradeNumber(tradeNumber);
                     orderService.modifyOrder(order);
                     result.setData("success");
+
+                    //支付完成后计算佣金、用户等级
+                    userService.addParentCommission(order.getUserId(),order.getTotalPrice());
+                    userService.calcUserLevel(order.getUserId());
                 }else{
                     result.setData("fail");
                 }

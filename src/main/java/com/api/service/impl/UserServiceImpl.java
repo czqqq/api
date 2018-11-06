@@ -76,8 +76,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean addParentCommission(String mobile, double price) {
-        User user = getUserByLoginName(mobile);
+    public boolean addParentCommission(Long userId, double price) {
+        User user = getUserById(userId);
         if (user == null) {
             logger.info("用户为空");
             return false;
