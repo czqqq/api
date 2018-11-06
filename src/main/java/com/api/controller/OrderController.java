@@ -151,8 +151,8 @@ public class OrderController {
     }
 
     @ResponseBody
-    @GetMapping("verifyPay")
-    public BaseResult verifyPay(HttpServletRequest request, HttpServletResponse response) {
+    @RequestMapping(value = "verifyPay",method = RequestMethod.POST)
+    public BaseResult verifyPay(HttpServletRequest request) {
         //获取支付宝POST过来反馈信息
         BaseResult result = new BaseResult();
         Map<String,String> params = new HashMap<String,String>();
