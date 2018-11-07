@@ -55,7 +55,7 @@ public class OrderController {
     private UserAddressService userAddressService;
 
     @RequestMapping("addOrder")
-    public BaseResult addOrder( OrderVo order) {
+    public BaseResult addOrder( Double totalPrice,OrderDetailVo detailVo) {
         BaseResult result = new BaseResult();
         //获取userId
         Subject subject = SecurityUtils.getSubject();
@@ -65,6 +65,7 @@ public class OrderController {
         String mobile = JwtUtil.getMobileBySubject(subject);
         User user = userService.getUserByLoginName(mobile);
         UserAddress userAddress = userAddressService.getDefaultAddress(user.getId());
+        OrderVo order = new OrderVo();
         if (userAddress != null) {
             order.setRecAddress(userAddress.getRecAddress());
             order.setRecMobile(userAddress.getRecMobile());
@@ -73,8 +74,9 @@ public class OrderController {
         order.setStatus(Byte.valueOf("0"));
         order.setUserName(user.getName());
         order.setUserId(user.getId());
+        order.setTotalPrice(totalPrice);
         //获取默认地址信息
-        List<OrderDetailVo> detailVos = new ArrayList<OrderDetailVo>();
+        order.setOrderDetails(Arrays.asList(detailVo));
         Long id = orderService.addOrder(order);
         Map<String, Object> resultMap = new HashMap<String, Object>();
         resultMap.put("id", id);
@@ -178,8 +180,12 @@ public class OrderController {
         //3.签名验证(对支付宝返回的数据验证，确定是支付宝返回的)
         boolean signVerified = false;
         try {
+            logger.info(params.toString());
             //3.1调用SDK验证签名
             signVerified = AlipaySignature.rsaCheckV1(params, AliPayUtil.ALIPAY_PUBLIC_KEY, AliPayUtil.CHARSET, "RSA2");
+            logger.info(String.valueOf(signVerified));
+            boolean signVerified1 = AlipaySignature.rsaCheckV2(params, AliPayUtil.ALIPAY_PUBLIC_KEY, AliPayUtil.CHARSET, "RSA2");
+            logger.info(String.valueOf(signVerified1));
         } catch (AlipayApiException e) {
             e.printStackTrace();
         }

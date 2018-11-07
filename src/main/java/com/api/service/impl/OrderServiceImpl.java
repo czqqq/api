@@ -44,9 +44,9 @@ public class OrderServiceImpl implements OrderService {
         detailPos  =new ArrayList<OrderDetail>();
         covertOrderVoToPo(order,order.getOrderDetails(),orderPo,detailPos);
         orderPo.setCt(new Date());
-        Long id = orderDao.insertSelective(orderPo);
+        orderDao.insertSelective(orderPo);
         for(OrderDetail detailPo : detailPos){
-            detailPo.setOrderId(id);
+            detailPo.setOrderId(orderPo.getId());
             if(detailPo.getCount()==null){
                 detailPo.setCount(1);
             }
@@ -164,7 +164,7 @@ public class OrderServiceImpl implements OrderService {
         vo.setTotalPrice(po.getTotalPrice());
         vo.setTradeNumber(po.getTradeNumber());
         vo.setUserId(po.getUserId());
-        User user = userDao.selectById(po.getId());
+        User user = userDao.selectById(po.getUserId());
         vo.setUserName(user.getName());
     }
 

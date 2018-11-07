@@ -49,7 +49,7 @@
     VALUES (#{id,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{totalPrice,jdbcType=DOUBLE}, 
       #{status,jdbcType=TINYINT}, #{ct,jdbcType=TIMESTAMP}, #{mt,jdbcType=TIMESTAMP}, 
       #{recName,jdbcType=VARCHAR}, #{recAddress,jdbcType=VARCHAR}, #{recMobile,jdbcType=VARCHAR}, 
-      gennerate_no(8,'O'), #{tradeNumber,jdbcType=VARCHAR})
+      gennerate_no(12,'O'), #{tradeNumber,jdbcType=VARCHAR})
   </insert>
   
   <insert id="insertBatch" parameterType="java.util.List" >
@@ -65,7 +65,7 @@
       #{item.tradeNumber,jdbcType=VARCHAR}) </foreach>
   </insert>
   
-  <insert id="insertSelective" parameterType="com.api.model.Order" >
+  <insert id="insertSelective" parameterType="com.api.model.Order" keyProperty="id" useGeneratedKeys="true">
     INSERT INTO `order`
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -210,6 +210,9 @@
   <select id="countByEntity" parameterType="com.api.model.Order" resultType="java.lang.Integer" >
     SELECT COUNT(1) FROM `order`
     <where >
+      <if test="id != null" >
+        AND id = #{id,jdbcType=BIGINT}
+      </if>
       <if test="userId != null" >
          AND user_id = #{userId,jdbcType=BIGINT}
       </if>
@@ -250,6 +253,9 @@
     FROM `order` a
     INNER JOIN `user` b on b.id = a.user_id
     <where >
+      <if test="id != null" >
+        AND a.id = #{id,jdbcType=BIGINT}
+      </if>
       <if test="userId != null" >
         AND a.user_id = #{userId,jdbcType=BIGINT}
       </if>
@@ -326,6 +332,9 @@
     <include refid="BaseColumnList" />
     FROM `order`
     <where >
+      <if test="id != null" >
+        AND id = #{id,jdbcType=BIGINT}
+      </if>
       <if test="userId != null" >
         AND user_id = #{userId,jdbcType=BIGINT}
       </if>
