@@ -28,11 +28,13 @@ import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.transform.Result;
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.*;
 
@@ -151,8 +153,8 @@ public class OrderController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "verifyPay",method = RequestMethod.POST,produces="application/json;charset=utf-8")
-    public BaseResult verifyPay(HttpServletRequest request) {
+    @RequestMapping(value = "notify_url",method={RequestMethod.POST,RequestMethod.GET})
+    public String  verifyPay(HttpServletRequest request) {
         //获取支付宝POST过来反馈信息
         BaseResult result = new BaseResult();
         Map<String,String> params = new HashMap<String,String>();
@@ -169,37 +171,69 @@ public class OrderController {
             //valueStr = new String(valueStr.getBytes("ISO-8859-1"), "utf-8");
             params.put(name, valueStr);
         }
-        //切记alipaypublickey是支付宝的公钥，请去open.alipay.com对应应用下查看。
-        //boolean AlipaySignature.rsaCheckV1(Map<String, String> params, String publicKey, String charset, String sign_type)
+        //2.封装必须参数
+        String out_trade_no = request.getParameter("out_trade_no");            // 商户订单号
+        String orderType = request.getParameter("body");                    // 订单内容
+        String tradeStatus = request.getParameter("trade_status");            //交易状态
+        //3.签名验证(对支付宝返回的数据验证，确定是支付宝返回的)
+        boolean signVerified = false;
         try {
-            boolean flag = AlipaySignature.rsaCheckV1(params, AliPayUtil.ALIPAY_PUBLIC_KEY, AliPayUtil.CHARSET, "RSA2");
-            if(flag){
-                if("TRADE_SUCCESS".equals(params.get("trade_status"))){
-                    //商户订单号
-                    String orderNo = params.get("out_trade_no");
-                    //支付宝交易号
-                    String tradeNumber = params.get("trade_no");
-                    OrderVo order = orderService.getOrderByOrderNo(orderNo);
-                    order.setStatus(Byte.valueOf("1"));
-                    order.setTradeNumber(tradeNumber);
-                    orderService.modifyOrder(order);
-                    result.setData("success");
-
-                    //支付完成后计算佣金、用户等级
-                    userService.addParentCommission(order.getUserId(),order.getTotalPrice());
-                    userService.calcUserLevel(order.getUserId());
-                }else{
-                    result.setData("fail");
-                }
-            }else{
-                result.setData("fail");
-            }
+            //3.1调用SDK验证签名
+            signVerified = AlipaySignature.rsaCheckV1(params, AliPayUtil.ALIPAY_PUBLIC_KEY, AliPayUtil.CHARSET, "RSA2");
         } catch (AlipayApiException e) {
-            logger.error(e.getMessage(),e);
+            e.printStackTrace();
         }
-        return result;
-    }
+        if(signVerified){
+            if("TRADE_SUCCESS".equals(params.get("trade_status"))){
+                //商户订单号
+                String orderNo = params.get("out_trade_no");
+                //支付宝交易号
+                String tradeNumber = params.get("trade_no");
+                OrderVo order = orderService.getOrderByOrderNo(orderNo);
+                order.setStatus(Byte.valueOf("1"));
+                order.setTradeNumber(tradeNumber);
+                orderService.modifyOrder(order);
+                //支付完成后计算佣金、用户等级
+                userService.addParentCommission(order.getUserId(),order.getTotalPrice());
+                userService.calcUserLevel(order.getUserId());
+                return "success";
 
+
+            }else{
+                return "fail";
+            }
+        }else{
+            return "fail";
+        }
+    }
+    @RequestMapping(value="return_url",method={RequestMethod.POST,RequestMethod.GET})
+    @ResponseBody
+    public Model returnUrl(@RequestParam("id") String id, HttpServletRequest request, Model model) throws UnsupportedEncodingException {
+         Map  returnMap = new HashMap();
+         try {
+
+             OrderVo order = orderService.getOrderByOrderNo(id);
+              // 返回值Map
+             if(order !=null && order.getStatus() == 1){
+                     User user = userService.getUserById(order.getUserId());
+                     returnMap.put("phoneNum", user.getMobile());             //支付帐号
+                     returnMap.put("tradeMoney", order.getTotalPrice()+"");        //订单金额
+
+                 }else{
+                      model.addAttribute("msg", "查询失败");
+                      model.addAttribute("status", 0);
+                 }
+              model.addAttribute("returnMap", returnMap);
+              System.err.println(returnMap);
+              model.addAttribute("msg", "查询成功");
+              model.addAttribute("status", 0);
+             } catch (Exception e) {
+                 model.addAttribute("msg", "查询失败");
+                 model.addAttribute("status", 1);
+             }
+
+          return model;
+    }
     @ResponseBody
     @RequestMapping("getSign")
     public BaseResult getSign(@RequestParam(name = "orderId", value = "orderId") Long orderId) {
@@ -236,6 +270,7 @@ public class OrderController {
         model.setProductCode("QUICK_MSECURITY_PAY");
         request.setBizModel(model);
         request.setNotifyUrl(AliPayUtil.NOTIFY_URL);
+        request.setReturnUrl(AliPayUtil.RETURN_URL);
         AlipayTradeAppPayResponse response = null;
         try {
             //这里和普通的接口调用不同，使用的是sdkExecute
