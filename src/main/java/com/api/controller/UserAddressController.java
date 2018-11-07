@@ -64,8 +64,9 @@ public class UserAddressController {
         if(userAddress == null){
             return new BaseResult(ResultCode.FAILURE,"当前用户地址不存在",null);
         }else{
+            userAddressService.deleteUserAddress(userAddress);
             BaseResult result = new BaseResult();
-            result.setData(userAddress);
+
             return result;
         }
 

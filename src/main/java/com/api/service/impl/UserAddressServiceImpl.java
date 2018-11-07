@@ -23,7 +23,7 @@ public class UserAddressServiceImpl implements UserAddressService {
     @Transactional
     public void addUserAddress(UserAddress userAddress) {
         if(userAddress.getIsDefault().equals(Byte.valueOf("0"))){
-            userAddressDao.switchAddressToNoDefault(userAddress.getId());
+            userAddressDao.switchAddressToNoDefault(userAddress.getUserId());
         }
         userAddress.setCt(new Date());
         userAddressDao.insertSelective(userAddress);
@@ -33,7 +33,7 @@ public class UserAddressServiceImpl implements UserAddressService {
     @Transactional
     public void modifyUserAddress(UserAddress userAddress) {
         if(userAddress.getIsDefault().equals(Byte.valueOf("0"))){
-            userAddressDao.switchAddressToNoDefault(userAddress.getId());
+            userAddressDao.switchAddressToNoDefault(userAddress.getUserId());
         }
         userAddress.setMt(new Date());
         userAddressDao.update(userAddress);
@@ -90,6 +90,7 @@ public class UserAddressServiceImpl implements UserAddressService {
     }
 
     @Override
+    @Transactional
     public void setDefaultAddress(UserAddress address, User user) {
         userAddressDao.switchAddressToNoDefault(user.getId());
         address.setMt(new Date());

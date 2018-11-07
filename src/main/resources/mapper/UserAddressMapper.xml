@@ -232,7 +232,7 @@
       </if>
     </where>
   </select>
-  <update id="switchAddressToNoDefault" parameterType="java.lang.Integer">
+  <update id="switchAddressToNoDefault" parameterType="java.lang.Long">
     update user_address set
       is_default = '1'
     where user_id = #{userId,jdbcType=BIGINT}

@@ -80,6 +80,8 @@ CREATE TABLE `product`  (
   `type` bigint(20) NULL DEFAULT NULL COMMENT '产品种类ID\n\n\n',
   `price` double NOT NULL COMMENT '单价',
   `pic` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '图片路径',
+  `color` varchar(255) DEFAULT NULL COMMENT '颜色',
+  `size` varchar(255) DEFAULT NULL COMMENT '号码',
   `ct` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   `mt` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`id`) USING BTREE
