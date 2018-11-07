@@ -22,6 +22,9 @@ public class UserAddressServiceImpl implements UserAddressService {
     @Override
     @Transactional
     public void addUserAddress(UserAddress userAddress) {
+        if(userAddress.getIsDefault().equals(Byte.valueOf("0"))){
+            userAddressDao.switchAddressToNoDefault(userAddress.getId());
+        }
         userAddress.setCt(new Date());
         userAddressDao.insertSelective(userAddress);
     }
@@ -29,6 +32,9 @@ public class UserAddressServiceImpl implements UserAddressService {
     @Override
     @Transactional
     public void modifyUserAddress(UserAddress userAddress) {
+        if(userAddress.getIsDefault().equals(Byte.valueOf("0"))){
+            userAddressDao.switchAddressToNoDefault(userAddress.getId());
+        }
         userAddress.setMt(new Date());
         userAddressDao.update(userAddress);
     }
