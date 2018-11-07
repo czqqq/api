@@ -22,7 +22,7 @@ public class UserAddressServiceImpl implements UserAddressService {
     @Override
     @Transactional
     public void addUserAddress(UserAddress userAddress) {
-        if(userAddress.getIsDefault().equals(Byte.valueOf("0"))){
+        if(userAddress.getIsDefault().equals(Byte.valueOf("1"))){
             userAddressDao.switchAddressToNoDefault(userAddress.getUserId());
         }
         userAddress.setCt(new Date());
@@ -32,7 +32,7 @@ public class UserAddressServiceImpl implements UserAddressService {
     @Override
     @Transactional
     public void modifyUserAddress(UserAddress userAddress) {
-        if(userAddress.getIsDefault().equals(Byte.valueOf("0"))){
+        if(userAddress.getIsDefault().equals(Byte.valueOf("1"))){
             userAddressDao.switchAddressToNoDefault(userAddress.getUserId());
         }
         userAddress.setMt(new Date());
@@ -75,7 +75,7 @@ public class UserAddressServiceImpl implements UserAddressService {
         }
         UserAddress condition = new UserAddress();
         condition.setUserId(userId);
-        condition.setIsDefault(Byte.valueOf("0"));
+        condition.setIsDefault(Byte.valueOf("1"));
         List<UserAddress> userAddresss = userAddressDao.selectByEntity(condition);
         if (userAddresss != null && userAddresss.size() > 0) {
             return userAddresss.get(0);

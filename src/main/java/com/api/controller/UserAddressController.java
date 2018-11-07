@@ -85,7 +85,7 @@ public class UserAddressController {
         if(address == null){
             return new BaseResult(ResultCode.FAILURE,"当前用户地址不存在",null);
         }
-        address.setIsDefault(Byte.valueOf("0"));
+        address.setIsDefault(Byte.valueOf("1"));
         userAddressService.setDefaultAddress(address,user);
         return new BaseResult(ResultCode.SUCCESS, "设置成功", null);
     }
