@@ -158,6 +158,9 @@
     <include refid="BaseColumnList" />
     FROM user_address
     <where>
+      <if test="id != null">
+        AND id = #{id,jdbcType=BIGINT}
+      </if>
       <if test="userId != null">
          AND user_id = #{userId,jdbcType=BIGINT}
       </if>
