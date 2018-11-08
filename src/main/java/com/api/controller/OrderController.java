@@ -78,9 +78,8 @@ public class OrderController {
         //获取默认地址信息
         order.setOrderDetails(Arrays.asList(detailVo));
         Long id = orderService.addOrder(order);
-        Map<String, Object> resultMap = new HashMap<String, Object>();
-        resultMap.put("id", id);
-        result.setData(resultMap);
+        OrderVo returnOrder = orderService.getOrder(id,user.getId());
+        result.setData(returnOrder);
         return result;
     }
 
@@ -90,9 +89,12 @@ public class OrderController {
         if (ordert == null) {
             return new BaseResult(ResultCode.FAILURE, "当前订单不存在，请联系管理员", null);
         } else {
+            if(!ordert.getStatus().equals(Byte.valueOf("1"))){
+                return new BaseResult(ResultCode.FAILURE, "订单状态不为已支付,不能调整状态", null);
+            }
             //获取地址信息
             ordert.setStatus(order.getStatus());
-            orderService.modifyOrder(order);
+            orderService.modifyOrder(ordert);
             return new BaseResult(ResultCode.SUCCESS, "修改成功", null);
         }
     }
@@ -182,7 +184,7 @@ public class OrderController {
         try {
             logger.info(params.toString());
             //3.1调用SDK验证签名
-            signVerified = AlipaySignature.rsaCheckV1(params, AliPayUtil.ALIPAY_PUBLIC_KEY, AliPayUtil.CHARSET, "RSA2");
+            signVerified = AlipaySignature.rsaCheckV1(params, AliPayUtil.ALIPAY_PUBLIC_KEY, AliPayUtil.CHARSET);
             logger.info(String.valueOf(signVerified));
             boolean signVerified1 = AlipaySignature.rsaCheckV2(params, AliPayUtil.ALIPAY_PUBLIC_KEY, AliPayUtil.CHARSET, "RSA2");
             logger.info(String.valueOf(signVerified1));
