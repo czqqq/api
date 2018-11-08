@@ -18,7 +18,7 @@ public class OrderVo {
 
     private String ct;
 
-    private String code;
+    private String orderCode;
 
     private String tradeNumber;
 
@@ -82,12 +82,12 @@ public class OrderVo {
         this.ct = ct;
     }
 
-    public String getCode() {
-        return code;
+    public String getOrderCode() {
+        return orderCode;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setOrderCode(String orderCode) {
+        this.orderCode = orderCode;
     }
 
     public String getTradeNumber() {
