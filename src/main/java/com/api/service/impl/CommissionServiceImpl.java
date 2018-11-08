@@ -4,9 +4,11 @@ import com.api.dao.CommissionDao;
 import com.api.dao.CommissionDetailDao;
 import com.api.dao.WithdrawDao;
 import com.api.model.Commission;
+import com.api.model.CommissionDetail;
 import com.api.model.Withdraw;
 import com.api.model.vo.WithdrawVo;
 import com.api.service.CommissionService;
+import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,9 +34,16 @@ public class CommissionServiceImpl implements CommissionService {
     }
 
     @Override
-    public List<WithdrawVo> fetchWithout() {
+    public List<WithdrawVo> fetchWithout(Integer start, Integer length) {
+        PageHelper.startPage(start, length);
         List<WithdrawVo> withdrawVos = withdrawDao.fetchWithdrawList();
         return withdrawVos;
+    }
+
+    @Override
+    public List<CommissionDetail> fetchCommissionDetail(Long userId,Integer start, Integer length) {
+        PageHelper.startPage(start, length);
+        return commissionDetailDao.selectByUserId(userId);
     }
 
     @Override

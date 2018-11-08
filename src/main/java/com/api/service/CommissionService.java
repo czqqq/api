@@ -1,6 +1,7 @@
 package com.api.service;
 
 import com.api.model.Commission;
+import com.api.model.CommissionDetail;
 import com.api.model.Withdraw;
 import com.api.model.vo.WithdrawVo;
 
@@ -17,7 +18,14 @@ public interface CommissionService {
      * status = 1
      * @return
      */
-    List<WithdrawVo> fetchWithout();
+    List<WithdrawVo> fetchWithout(Integer start, Integer length);
+
+    /**
+     * 获取佣金明细
+     * @param userId
+     * @return
+     */
+    List<CommissionDetail>  fetchCommissionDetail(Long userId,Integer start, Integer length);
 
     /**
      * 完成提现

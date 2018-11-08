@@ -1,10 +1,7 @@
 package com.api.service.impl;
 
 import com.api.dao.*;
-import com.api.model.CommissionDetail;
-import com.api.model.Order;
-import com.api.model.Token;
-import com.api.model.User;
+import com.api.model.*;
 import com.api.service.UserService;
 import com.github.pagehelper.PageHelper;
 import org.apache.commons.codec.language.bm.Languages;
@@ -138,6 +135,16 @@ public class UserServiceImpl implements UserService {
 
 
             //保存到数据库
+
+            Commission commission = commissionDao.selectById(pUser.getId());
+            if (commission == null) {
+                commission = new Commission();
+                commission.setUserId(pUser.getId());
+                commission.setCommission(0.0);
+                commission.setStatus((byte)0);
+                commissionDao.insertSelective(commission);
+            }
+
             Map<String,Object> params = new HashMap<>();
             params.put("commission", totalCommission);
             params.put("userId", pUser.getId());
@@ -174,6 +181,7 @@ public class UserServiceImpl implements UserService {
 
         Order o = new Order();
         o.setUserId(uid);
+        o.setStatus((byte)1);
         List<Order> orders = orderDao.selectByEntity(o);
         if (orders != null && orders.size() > 0) {
             Order lastOrder = orders.get(0);
@@ -182,7 +190,7 @@ public class UserServiceImpl implements UserService {
 
             //之前的总消费金额
             double consumption = 0.0;
-            for (int i = 1; i < orders.size(); i++) {
+            for (int i = 0; i < orders.size(); i++) {
                 if (orders.get(i).getTotalPrice() > 800) {
                     //购买800 以上的产品才进行累计升级
                     consumption += orders.get(i).getTotalPrice();
@@ -190,7 +198,7 @@ public class UserServiceImpl implements UserService {
             }
 
             //根据购买的产品判断等级是否变更
-            if (lastPrice > 800.0) {//购买最低级别的产品不进行升级
+            if (lastPrice >= 800.0) {//购买最低级别的产品不进行升级
                 int buyLevel = 0, addupLevel = 0; //计算这次买的等级和累计的等级
                 switch ((int)lastPrice) {
                     case 800 : buyLevel = 1; break;
@@ -201,7 +209,7 @@ public class UserServiceImpl implements UserService {
                     default: break;
                 }
 
-                switch ((int)consumption) {
+                switch ((int)consumption) { //todo 用 if else
                     case 800 : addupLevel = 1; break;
                     case 6400 : addupLevel = 2; break;
                     case 12800 : addupLevel = 3; break;
@@ -211,12 +219,14 @@ public class UserServiceImpl implements UserService {
                 }
 
                 int newLevel = Math.max(nowLevel, Math.max(buyLevel,addupLevel));
-                User userNew = new User();
-                userNew.setId(user.getId());
-                userNew.setLevel(newLevel);
-                result = userDao.updateSelective(userNew);
-                if (result > 0) {
-                    logger.info("用户： "+user.getName()+" 更新用户等级成功,升级为 " + newLevel + " 级用户");
+                if(newLevel != nowLevel){
+                    User userNew = new User();
+                    userNew.setId(user.getId());
+                    userNew.setLevel(newLevel);
+                    result = userDao.updateSelective(userNew);
+                    if (result > 0) {
+                        logger.info("用户： "+user.getName()+" 更新用户等级成功,升级为 " + newLevel + " 级用户");
+                    }
                 }
             }
 

@@ -213,6 +213,14 @@
   
   <!-- 以下部分人工添加或修改 -->
 
+  <select id="selectByUserId" parameterType="long" resultMap="BaseResultMap">
+    select * from
+    commission_detail
+    where
+    user_id = #{userId,jdbcType=BIGINT}
+    order by ct desc
+  </select>
+
 
   
 </mapper>

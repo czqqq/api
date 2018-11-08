@@ -5,6 +5,7 @@ import com.api.controller.dto.DatatablesReq;
 import com.api.controller.dto.DatatablesRes;
 import com.api.controller.dto.ResultCode;
 import com.api.model.Commission;
+import com.api.model.CommissionDetail;
 import com.api.model.User;
 import com.api.model.Withdraw;
 import com.api.model.vo.WithdrawVo;
@@ -35,12 +36,25 @@ public class CommissionController {
 
     @PostMapping("/fetchWithdrawList")
     public DatatablesRes fetchWithdrawList(DatatablesReq req) {
-        List<WithdrawVo> withdrawVoList = commissionService.fetchWithout();
+        List<WithdrawVo> withdrawVoList = commissionService.fetchWithout(req.getStart(),req.getLength());
         DatatablesRes res = new DatatablesRes();
         res.setDraw(req.getDraw());
         res.setRecordsTotal(withdrawVoList.size());
         res.setRecordsFiltered(withdrawVoList.size());
         res.setData(withdrawVoList);
+        return res;
+    }
+
+
+
+    @PostMapping("/fetchCommissionDetail")
+    public DatatablesRes fetchCommissionDetail(Integer draw ,Integer start, Integer length ,Long userId) {
+        List<CommissionDetail> commissionDetailList = commissionService.fetchCommissionDetail(userId,start,length);
+        DatatablesRes res = new DatatablesRes();
+        res.setDraw(draw);
+        res.setRecordsTotal(commissionDetailList.size());
+        res.setRecordsFiltered(commissionDetailList.size());
+        res.setData(commissionDetailList);
         return res;
     }
 

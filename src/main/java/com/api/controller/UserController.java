@@ -34,7 +34,9 @@ public class UserController {
     public BaseResult login(@RequestParam("mobile") String mobile,
                               @RequestParam("pwd") String pwd) {
         User user = userService.getUserByLoginName(mobile);
-        if (user.getPwd().equals(pwd)) {
+        if (user == null) {
+            throw new UnauthorizedException();
+        }else if (user.getPwd().equals(pwd)) {
             Map<String, Object> resultMap =new HashMap<>();
             resultMap.put("name", user.getName());
             String token = JwtUtil.sign(mobile, pwd);
