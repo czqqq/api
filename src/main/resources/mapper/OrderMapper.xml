@@ -26,7 +26,7 @@
     <result column="rec_name" property="recName" jdbcType="VARCHAR" />
     <result column="rec_address" property="recAddress" jdbcType="VARCHAR" />
     <result column="rec_mobile" property="recMobile" jdbcType="VARCHAR" />
-    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="code" property="orderCode" jdbcType="VARCHAR" />
     <result column="trade_number" property="tradeNumber" jdbcType="VARCHAR" />
     <result column="name" property="userName" jdbcType="VARCHAR" />
     <result column="mobile" property="mobile" jdbcType="VARCHAR" />
