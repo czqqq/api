@@ -142,7 +142,7 @@ public class OrderServiceImpl implements OrderService {
             details.add(detailVo);
         }
         vo.setOrderDetails(details);
-        vo.setCode(po.getCode());
+        vo.setOrderCode(po.getCode());
         vo.setId(po.getId());
         vo.setRecAddress(po.getRecAddress());
         vo.setRecMobile(po.getRecMobile());

@@ -272,7 +272,7 @@ public class OrderController {
         AlipayTradeAppPayModel model = new AlipayTradeAppPayModel();
 
         model.setSubject("【天磊商城】:"+order.getOrderDetails().get(0).getProductName());
-        model.setOutTradeNo(order.getCode());
+        model.setOutTradeNo(order.getOrderCode());
         model.setTimeoutExpress("30m");
         model.setTotalAmount(order.getTotalPrice().toString());
         model.setProductCode("QUICK_MSECURITY_PAY");
