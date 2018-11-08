@@ -192,6 +192,20 @@
   </select>
   
   <!-- 以下部分人工添加或修改 -->
-  
+  <resultMap id="ExtResultMap" type="com.api.model.vo.UserVo">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="pwd" jdbcType="VARCHAR" property="pwd" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="pid" jdbcType="BIGINT" property="pid" />
+    <result column="level" jdbcType="INTEGER" property="level" />
+    <result column="ct" jdbcType="TIMESTAMP" property="ct" />
+    <result column="pName" jdbcType="VARCHAR" property="pName" />
+  </resultMap>
 
+
+  <select id="fetchAllUser" resultMap="ExtResultMap">
+    select u1.*,u2.name as pName from user u1 left join user u2 on u1.pid = u2.id
+    order by id
+  </select>
 </mapper>

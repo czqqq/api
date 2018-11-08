@@ -2,6 +2,7 @@ package com.api.service.impl;
 
 import com.api.dao.*;
 import com.api.model.*;
+import com.api.model.vo.UserVo;
 import com.api.service.UserService;
 import com.github.pagehelper.PageHelper;
 import org.apache.commons.codec.language.bm.Languages;
@@ -70,6 +71,13 @@ public class UserServiceImpl implements UserService {
         User user = new User();
         List<User>  userList = userDao.selectByEntity(user);
         return userList;
+    }
+
+    @Override
+    public List<UserVo> fetchAllUser(Integer start, Integer length) {
+        User user = new User();
+        PageHelper.startPage(start, length);
+        return userDao.fetchAllUser();
     }
 
     @Override
@@ -209,14 +217,28 @@ public class UserServiceImpl implements UserService {
                     default: break;
                 }
 
-                switch ((int)consumption) { //todo 用 if else
+                if(consumption < 800){
+                    addupLevel = 0;
+                }else if(consumption < 6400){
+                    addupLevel = 1;
+                }else if(consumption <12800){
+                    addupLevel = 2;
+                }else if(consumption <24800){
+                    addupLevel = 3;
+                }else if(consumption < 56800){
+                    addupLevel = 4;
+                }else{
+                    addupLevel = 5;
+                }
+
+               /* switch ((int)consumption) { //todo 用 if else
                     case 800 : addupLevel = 1; break;
                     case 6400 : addupLevel = 2; break;
                     case 12800 : addupLevel = 3; break;
                     case 24800 : addupLevel = 4; break;
                     case 56800 : addupLevel = 5; break;
                     default: break;
-                }
+                }*/
 
                 int newLevel = Math.max(nowLevel, Math.max(buyLevel,addupLevel));
                 if(newLevel != nowLevel){
@@ -267,6 +289,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public int saveUserDailyCommission(User user, Double commission) {
+        Commission commi = commissionDao.selectById(user.getId());
+        if (commi == null) {
+            commi = new Commission();
+            commi.setUserId(user.getId());
+            commi.setCommission(0.0);
+            commi.setStatus((byte)0);
+            commissionDao.insertSelective(commi);
+        }
+
         Map<String,Object> params = new HashMap<>();
         params.put("commission", commission);
         params.put("userId", user.getId());

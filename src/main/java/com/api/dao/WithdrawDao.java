@@ -15,4 +15,6 @@ public interface WithdrawDao {
     int updateSelective(Withdraw withdraw);
 
     int insertSelective(Withdraw withdraw);
+
+    Withdraw selectById(Long id);
 }

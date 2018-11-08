@@ -1,6 +1,8 @@
 package com.api.controller;
 
 import com.api.controller.dto.BaseResult;
+import com.api.controller.dto.DatatablesReq;
+import com.api.controller.dto.DatatablesRes;
 import com.api.controller.dto.ResultCode;
 import com.api.exception.UnauthorizedException;
 import com.api.model.Token;
@@ -133,7 +135,16 @@ public class UserController {
         return new BaseResult(ResultCode.SUCCESS, "成功", userVo);
     }
 
-
+    @PostMapping("/fetchAllUser")
+    public DatatablesRes fetchAllUser(DatatablesReq req) {
+        DatatablesRes res = new DatatablesRes();
+        List<UserVo> userVos = userService.fetchAllUser(req.getStart(),req.getLength());
+        res.setData(userVos);
+        res.setDraw(req.getDraw());
+        res.setRecordsTotal(userVos.size());
+        res.setRecordsFiltered(userVos.size());
+        return res;
+    }
 
 
     @RequestMapping(path = "/401")

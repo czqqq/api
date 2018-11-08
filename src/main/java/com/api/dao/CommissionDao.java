@@ -12,4 +12,6 @@ public interface CommissionDao {
     int addCommissionByUid(Map<String, Object> params);
 
     Commission selectById(Long userId);
+
+    int updateSelective(Commission commission);
 }

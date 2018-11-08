@@ -2,6 +2,7 @@ package com.api.service;
 
 import com.api.model.Token;
 import com.api.model.User;
+import com.api.model.vo.UserVo;
 
 import java.util.List;
 
@@ -16,6 +17,7 @@ public interface UserService {
     List<User> getUsersByPid(Long pid);
 
     List<User> getAll();
+    List<UserVo> fetchAllUser(Integer start, Integer length);
 
     /**
      * 用户购买商品后，该用户上级返利

@@ -52,10 +52,29 @@ public class CommissionServiceImpl implements CommissionService {
             logger.error("id 不能为空");
             return false;
         }
+
+
         Withdraw withdraw = new Withdraw();
         withdraw.setId(id);
         withdraw.setStatus((byte)1);
         int result = withdrawDao.updateSelective(withdraw);
+
+        if (result > 0) {
+            //修改佣金金额
+            withdraw = withdrawDao.selectById(id);
+            double withoutPrice = withdraw.getMoney();
+            Long userId = withdraw.getUserId();
+            Commission commission = commissionDao.selectById(userId);
+            double commi = commission.getCommission();
+            if (withoutPrice > commi) {
+                logger.error("提现操作，提现金额出错，超过现有佣金");
+            } else {
+                commission.setCommission(commi - withoutPrice);
+                result = commissionDao.updateSelective(commission);
+            }
+        }
+
+
         return result == 1;
     }
 
