@@ -158,12 +158,12 @@ public class OrderController {
 
     @ResponseBody
     @RequestMapping(value = "notify_url",method={RequestMethod.POST,RequestMethod.GET})
-    public String  verifyPay(HttpServletRequest request) {
+    public String  verifyPay(HttpServletRequest request) throws UnsupportedEncodingException {
         //获取支付宝POST过来反馈信息
         BaseResult result = new BaseResult();
         Map<String,String> params = new HashMap<String,String>();
-        Map requestParams = request.getParameterMap();
-        for (Iterator iter = requestParams.keySet().iterator(); iter.hasNext();) {
+        Map<String,String[]> requestParams = request.getParameterMap();
+        for (Iterator<String> iter = requestParams.keySet().iterator(); iter.hasNext();) {
             String name = (String) iter.next();
             String[] values = (String[]) requestParams.get(name);
             String valueStr = "";
@@ -171,23 +171,23 @@ public class OrderController {
                 valueStr = (i == values.length - 1) ? valueStr + values[i]
                         : valueStr + values[i] + ",";
             }
-            //乱码解决，这段代码在出现乱码时使用。
-            //valueStr = new String(valueStr.getBytes("ISO-8859-1"), "utf-8");
+            //乱码解决，这段代码在出现乱码时使用
+            valueStr = new String(valueStr.getBytes("ISO-8859-1"), "utf-8");
             params.put(name, valueStr);
         }
         //2.封装必须参数
         String out_trade_no = request.getParameter("out_trade_no");            // 商户订单号
         String orderType = request.getParameter("body");                    // 订单内容
         String tradeStatus = request.getParameter("trade_status");            //交易状态
+        //total_amount
+        String total_amount = new String(request.getParameter("total_amount").getBytes("ISO-8859-1"),"UTF-8");
         //3.签名验证(对支付宝返回的数据验证，确定是支付宝返回的)
         boolean signVerified = false;
         try {
             logger.info(params.toString());
             //3.1调用SDK验证签名
-            signVerified = AlipaySignature.rsaCheckV1(params, AliPayUtil.ALIPAY_PUBLIC_KEY, AliPayUtil.CHARSET);
+            signVerified = AlipaySignature.rsaCheckV1(params, AliPayUtil.ALIPAY_PUBLIC_KEY, AliPayUtil.CHARSET, "RSA2");
             logger.info(String.valueOf(signVerified));
-            boolean signVerified1 = AlipaySignature.rsaCheckV2(params, AliPayUtil.ALIPAY_PUBLIC_KEY, AliPayUtil.CHARSET, "RSA2");
-            logger.info(String.valueOf(signVerified1));
         } catch (AlipayApiException e) {
             e.printStackTrace();
         }
@@ -198,6 +198,13 @@ public class OrderController {
                 //支付宝交易号
                 String tradeNumber = params.get("trade_no");
                 OrderVo order = orderService.getOrderByOrderNo(orderNo);
+
+                if(order == null){
+                    return "fail";
+                }
+                if(!order.getTotalPrice().equals(Double.valueOf(total_amount))){
+                    return "fail";
+                }
                 order.setStatus(Byte.valueOf("1"));
                 order.setTradeNumber(tradeNumber);
                 orderService.modifyOrder(order);
