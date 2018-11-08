@@ -89,9 +89,12 @@ public class OrderController {
         if (ordert == null) {
             return new BaseResult(ResultCode.FAILURE, "当前订单不存在，请联系管理员", null);
         } else {
+            if(!ordert.getStatus().equals(Byte.valueOf("1"))){
+                return new BaseResult(ResultCode.FAILURE, "订单状态不为已支付,不能调整状态", null);
+            }
             //获取地址信息
             ordert.setStatus(order.getStatus());
-            orderService.modifyOrder(order);
+            orderService.modifyOrder(ordert);
             return new BaseResult(ResultCode.SUCCESS, "修改成功", null);
         }
     }
