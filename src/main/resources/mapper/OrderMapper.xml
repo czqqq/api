@@ -286,9 +286,9 @@
       <if test="tradeNumber != null" >
         AND a.trade_number = #{tradeNumber,jdbcType=VARCHAR}
       </if>
-      order by a.ct desc
-    </where>
 
+    </where>
+    order by a.ct desc
   </select>
   <update id="updateSelectiveByOrderId" parameterType="com.api.model.Order" >
     UPDATE `order`

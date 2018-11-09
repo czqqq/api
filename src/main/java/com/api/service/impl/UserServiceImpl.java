@@ -75,7 +75,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserVo> fetchAllUser(Integer start, Integer length) {
-        User user = new User();
         PageHelper.startPage(start, length);
         return userDao.fetchAllUser();
     }

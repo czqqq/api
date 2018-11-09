@@ -37,10 +37,11 @@ public class CommissionController {
     @PostMapping("/fetchWithdrawList")
     public DatatablesRes fetchWithdrawList(DatatablesReq req) {
         List<WithdrawVo> withdrawVoList = commissionService.fetchWithout(req.getStart(),req.getLength());
+        List<WithdrawVo> withdrawVoListAll = commissionService.fetchWithout(null,null);
         DatatablesRes res = new DatatablesRes();
         res.setDraw(req.getDraw());
-        res.setRecordsTotal(withdrawVoList.size());
-        res.setRecordsFiltered(withdrawVoList.size());
+        res.setRecordsTotal(withdrawVoListAll.size());
+        res.setRecordsFiltered(withdrawVoListAll.size());
         res.setData(withdrawVoList);
         return res;
     }
@@ -50,10 +51,11 @@ public class CommissionController {
     @PostMapping("/fetchCommissionDetail")
     public DatatablesRes fetchCommissionDetail(Integer draw ,Integer start, Integer length ,Long userId) {
         List<CommissionDetail> commissionDetailList = commissionService.fetchCommissionDetail(userId,start,length);
+        List<CommissionDetail> commissionDetailListAll = commissionService.fetchCommissionDetail(userId,null,null);
         DatatablesRes res = new DatatablesRes();
         res.setDraw(draw);
-        res.setRecordsTotal(commissionDetailList.size());
-        res.setRecordsFiltered(commissionDetailList.size());
+        res.setRecordsTotal(commissionDetailListAll.size());
+        res.setRecordsFiltered(commissionDetailListAll.size());
         res.setData(commissionDetailList);
         return res;
     }

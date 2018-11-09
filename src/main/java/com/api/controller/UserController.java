@@ -37,7 +37,7 @@ public class UserController {
                               @RequestParam("pwd") String pwd) {
         User user = userService.getUserByLoginName(mobile);
         if (user == null) {
-            throw new UnauthorizedException();
+            return new BaseResult(ResultCode.NOTUSER, "该用户不存在！", null);
         }else if (user.getPwd().equals(pwd)) {
             Map<String, Object> resultMap =new HashMap<>();
             resultMap.put("name", user.getName());
@@ -46,7 +46,7 @@ public class UserController {
             userService.signToken(user.getId(), token);
             return new BaseResult(200, "登录成功", resultMap);
         } else {
-            throw new UnauthorizedException();
+            return new BaseResult(ResultCode.LOGININVALID, "用户名密码错误！", null);
         }
     }
 
@@ -139,10 +139,11 @@ public class UserController {
     public DatatablesRes fetchAllUser(DatatablesReq req) {
         DatatablesRes res = new DatatablesRes();
         List<UserVo> userVos = userService.fetchAllUser(req.getStart(),req.getLength());
+        List<User> users = userService.getAll();
         res.setData(userVos);
         res.setDraw(req.getDraw());
-        res.setRecordsTotal(userVos.size());
-        res.setRecordsFiltered(userVos.size());
+        res.setRecordsTotal(users.size());
+        res.setRecordsFiltered(users.size());
         return res;
     }
 

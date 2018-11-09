@@ -35,14 +35,18 @@ public class CommissionServiceImpl implements CommissionService {
 
     @Override
     public List<WithdrawVo> fetchWithout(Integer start, Integer length) {
-        PageHelper.startPage(start, length);
+        if(start != null && length != null){
+            PageHelper.startPage(start, length);
+        }
         List<WithdrawVo> withdrawVos = withdrawDao.fetchWithdrawList();
         return withdrawVos;
     }
 
     @Override
     public List<CommissionDetail> fetchCommissionDetail(Long userId,Integer start, Integer length) {
-        PageHelper.startPage(start, length);
+        if (start != null && length != null) {
+            PageHelper.startPage(start, length);
+        }
         return commissionDetailDao.selectByUserId(userId);
     }
 
