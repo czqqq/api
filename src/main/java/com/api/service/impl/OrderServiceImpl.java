@@ -66,7 +66,7 @@ public class OrderServiceImpl implements OrderService {
         detailPos  =new ArrayList<OrderDetail>();
         covertOrderVoToPo(order,order.getOrderDetails(),orderPo,detailPos);
         orderPo.setMt(new Date());
-        orderDao.update(orderPo);
+        orderDao.updateSelective(orderPo);
         for(OrderDetail detailPo : detailPos){
             detailPo.setOrderId(order.getId());
             if(detailPo.getCount()==null){
@@ -84,6 +84,8 @@ public class OrderServiceImpl implements OrderService {
         orderPo.setRecName(order.getRecName());
         orderPo.setStatus(order.getStatus());
         orderPo.setTotalPrice(order.getTotalPrice());
+        orderPo.setCode(order.getOrderCode());
+        orderPo.setTradeNumber(order.getTradeNumber());
         orderPo.setUserId(order.getUserId());
         orderPo.setId(order.getId());
         if(details!=null&&details.size()>0){

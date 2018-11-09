@@ -172,7 +172,7 @@ public class OrderController {
                         : valueStr + values[i] + ",";
             }
             //乱码解决，这段代码在出现乱码时使用
-            valueStr = new String(valueStr.getBytes("ISO-8859-1"), "utf-8");
+//            valueStr = new String(valueStr.getBytes("ISO-8859-1"), "utf-8");
             params.put(name, valueStr);
         }
         //2.封装必须参数
@@ -180,14 +180,12 @@ public class OrderController {
         String orderType = request.getParameter("body");                    // 订单内容
         String tradeStatus = request.getParameter("trade_status");            //交易状态
         //total_amount
-        String total_amount = new String(request.getParameter("total_amount").getBytes("ISO-8859-1"),"UTF-8");
+        String total_amount = request.getParameter("total_amount");
         //3.签名验证(对支付宝返回的数据验证，确定是支付宝返回的)
         boolean signVerified = false;
         try {
-            logger.info(params.toString());
             //3.1调用SDK验证签名
             signVerified = AlipaySignature.rsaCheckV1(params, AliPayUtil.ALIPAY_PUBLIC_KEY, AliPayUtil.CHARSET, "RSA2");
-            logger.info(String.valueOf(signVerified));
         } catch (AlipayApiException e) {
             e.printStackTrace();
         }
@@ -212,8 +210,6 @@ public class OrderController {
                 userService.addParentCommission(order.getUserId(),order.getTotalPrice());
                 userService.calcUserLevel(order.getUserId());
                 return "success";
-
-
             }else{
                 return "fail";
             }

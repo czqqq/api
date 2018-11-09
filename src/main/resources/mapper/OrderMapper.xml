@@ -128,7 +128,7 @@
       <if test="recMobile != null" >
         #{recMobile,jdbcType=VARCHAR},
       </if>
-      gennerate_no(8,'O'),
+      gennerate_no(12,'O'),
       <if test="tradeNumber != null" >
         #{tradeNumber,jdbcType=VARCHAR},
       </if>
