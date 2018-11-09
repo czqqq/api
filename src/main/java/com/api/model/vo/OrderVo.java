@@ -18,6 +18,8 @@ public class OrderVo {
 
     private String ct;
 
+    private String mt;
+
     private String orderCode;
 
     private String tradeNumber;
@@ -146,4 +148,11 @@ public class OrderVo {
         this.mobile = mobile;
     }
 
+    public String getMt() {
+        return mt;
+    }
+
+    public void setMt(String mt) {
+        this.mt = mt;
+    }
 }
