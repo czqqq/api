@@ -14,6 +14,7 @@ import com.api.service.UserService;
 import com.api.util.JwtUtil;
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.util.StringUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
@@ -42,6 +43,12 @@ public class ProductController {
         BaseResult result = checkLegal(product);
         if(result!=null){
             return result;
+        }
+        if(StringUtils.isBlank(product.getSize())){
+            product.setSize(null);
+        }
+        if(StringUtils.isBlank(product.getColor())){
+            product.setColor(null);
         }
         productService.addProduct(product);
         return new BaseResult(ResultCode.SUCCESS,"添加成功",null);
@@ -91,6 +98,12 @@ public class ProductController {
         BaseResult result = checkLegal(product);
         if(result!=null){
             return result;
+        }
+        if(StringUtils.isBlank(product.getSize())){
+            product.setSize(null);
+        }
+        if(StringUtils.isBlank(product.getColor())){
+            product.setColor(null);
         }
         pro.setName(product.getName());
         pro.setPrice(product.getPrice());
