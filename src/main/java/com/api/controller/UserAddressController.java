@@ -47,6 +47,12 @@ public class UserAddressController {
         if(addresses!=null&&addresses.size()>0){
             return new BaseResult(ResultCode.FAILURE,"该地址已经存在",null);
         }
+        UserAddress condition = new UserAddress();
+        condition.setUserId(user.getId());
+        List<UserAddress> addresss = userAddressService.inquireUserAddresss(condition);
+        if(addresss == null || addresss.size() ==0){
+            userAddress.setIsDefault(Byte.valueOf("1"));
+        }
         userAddressService.addUserAddress(userAddress);
         return result;
     }
