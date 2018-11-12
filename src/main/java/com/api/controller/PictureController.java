@@ -65,6 +65,25 @@ public class PictureController {
 
 
 
+    @PostMapping("/uploadProduct")
+    @ResponseBody
+    public String uploadProduct(@RequestParam("file") MultipartFile file) {
+        if (file.isEmpty()) {
+            return "上传失败，请选择文件";
+        }
+
+        String fileName = file.getOriginalFilename();
+        String filePath = getProductPicPath();
+        File dest = new File(filePath + fileName);
+        try {
+            file.transferTo(dest);
+            logger.info("上传成功");
+            return "上传成功";
+        } catch (IOException e) {
+            logger.error(e.toString(), e);
+        }
+        return "上传失败！";
+    }
 
 
 
