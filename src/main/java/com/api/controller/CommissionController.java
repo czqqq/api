@@ -110,6 +110,9 @@ public class CommissionController {
         if (!subject.isAuthenticated()) {
             return new BaseResult(ResultCode.UNAUTHORIZED, "验证不通过", null);
         }
+        if (withdrawReq.getMoney() < 100) {
+            return new BaseResult(ResultCode.FAILURE, "提现金额不能小于100", null);
+        }
         String mobile = JwtUtil.getMobileBySubject(subject);
         User user = userService.getUserByLoginName(mobile);
         Commission commission = commissionService.fetchCommission(user.getId());
