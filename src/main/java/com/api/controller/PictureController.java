@@ -13,10 +13,8 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @RestController
 public class PictureController {
@@ -113,20 +111,37 @@ public class PictureController {
         List<MultipartFile> files = ((MultipartHttpServletRequest) request).getFiles("file");
         String filePath = getBannerPicPath();
 
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSS");
         File uploadFile = new File(filePath);
         File[] uploadFiles = uploadFile.listFiles();
         int imgs = uploadFiles.length;
+
+        if (imgs + files.size() > 6) {
+            for (int i = 0; i < (imgs + files.size() - 6); i++) {
+                File f = uploadFiles[i];
+                f.delete();
+            }
+        }
+
+
 
         for (int i = 0; i < files.size(); i++) {
             MultipartFile file = files.get(i);
             if (file.isEmpty()) {
                 return "上传第" + (i++) + "个文件失败";
             }
-            imgs += 1;
+        /*    imgs += 1;
             if((imgs > 6)){
                 imgs = 1;
             }
-            String fileName = "banner" + imgs + "." +(file.getOriginalFilename().substring(file.getOriginalFilename().indexOf(".")+1));
+
+            for (File f : uploadFiles) {
+                if (f.getName().contains("banner" + imgs)) {
+                    f.delete();
+                }
+            }*/
+
+            String fileName = "banner_" +sdf.format(new Date()) + "." +(file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")+1));
 
             File dest = new File(filePath + fileName);
             try {

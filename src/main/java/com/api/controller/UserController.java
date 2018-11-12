@@ -4,8 +4,6 @@ import com.api.controller.dto.BaseResult;
 import com.api.controller.dto.DatatablesReq;
 import com.api.controller.dto.DatatablesRes;
 import com.api.controller.dto.ResultCode;
-import com.api.exception.UnauthorizedException;
-import com.api.model.Token;
 import com.api.model.User;
 import com.api.model.vo.UserVo;
 import com.api.service.UserService;
@@ -149,7 +147,7 @@ public class UserController {
 
 
     @RequestMapping(path = "/401")
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ResponseStatus(HttpStatus.OK)
     public BaseResult unauthorized() {
         return new BaseResult(ResultCode.UNAUTHORIZED, "未授权，请重新登录", null);
     }

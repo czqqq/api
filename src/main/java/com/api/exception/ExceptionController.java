@@ -13,14 +13,14 @@ import javax.servlet.http.HttpServletRequest;
 public class ExceptionController {
 
     // 捕捉shiro的异常
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler(ShiroException.class)
     public BaseResult handle401(ShiroException e) {
         return new BaseResult(401, e.getMessage(), null);
     }
 
     // 捕捉UnauthorizedException
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler(UnauthorizedException.class)
     public BaseResult handle401() {
         return new BaseResult(401, "Unauthorized", null);
@@ -28,7 +28,7 @@ public class ExceptionController {
 
     // 捕捉其他所有异常
     @ExceptionHandler(Exception.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.OK)
     public BaseResult globalException(HttpServletRequest request, Throwable ex) {
         return new BaseResult(getStatus(request).value(), ex.getMessage(), null);
     }
