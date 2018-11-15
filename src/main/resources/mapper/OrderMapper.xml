@@ -14,6 +14,7 @@
     <result column="rec_mobile" property="recMobile" jdbcType="VARCHAR" />
     <result column="code" property="code" jdbcType="VARCHAR" />
     <result column="trade_number" property="tradeNumber" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
   </resultMap>
 
   <resultMap id="BaseResultVoMap" type="com.api.model.vo.OrderVo" >
@@ -30,26 +31,27 @@
     <result column="trade_number" property="tradeNumber" jdbcType="VARCHAR" />
     <result column="name" property="userName" jdbcType="VARCHAR" />
     <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
   </resultMap>
   
   <sql id="BaseColumnList" >
     id, user_id, total_price, status, ct, mt, rec_name, rec_address, rec_mobile, code, 
-    trade_number
+    trade_number,remark
   </sql>
 
   <sql id="BaseJoinColumnList" >
     a.id, a.user_id, a.total_price, a.status, a.ct, a.mt, a.rec_name, a.rec_address, a.rec_mobile, a.code,
-    a.trade_number,b.name,b.mobile
+    a.trade_number,b.name,b.mobile,a.remark
   </sql>
   
   <insert id="insert" parameterType="com.api.model.Order"  keyProperty="id" useGeneratedKeys="true">
     INSERT INTO `order` (id, user_id, total_price,
       status, ct, mt, rec_name, rec_address, rec_mobile,
-      code, trade_number)
+      code, trade_number,remark)
     VALUES (#{id,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{totalPrice,jdbcType=DOUBLE}, 
       #{status,jdbcType=TINYINT}, #{ct,jdbcType=TIMESTAMP}, #{mt,jdbcType=TIMESTAMP}, 
       #{recName,jdbcType=VARCHAR}, #{recAddress,jdbcType=VARCHAR}, #{recMobile,jdbcType=VARCHAR}, 
-      gennerate_no(12,'O'), #{tradeNumber,jdbcType=VARCHAR})
+      gennerate_no(12,'O'), #{tradeNumber,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR})
   </insert>
   
   <insert id="insertBatch" parameterType="java.util.List" >
@@ -57,12 +59,12 @@
       user_id, total_price, status, 
       ct, mt, rec_name, 
       rec_address, rec_mobile, code, 
-      trade_number)
+      trade_number,remark)
     VALUES <foreach collection="list" item="item" index="index" separator=","> (#{item.id,jdbcType=BIGINT}, 
       #{item.userId,jdbcType=BIGINT}, #{item.totalPrice,jdbcType=DOUBLE}, #{item.status,jdbcType=TINYINT}, 
       #{item.ct,jdbcType=TIMESTAMP}, #{item.mt,jdbcType=TIMESTAMP}, #{item.recName,jdbcType=VARCHAR}, 
       #{item.recAddress,jdbcType=VARCHAR}, #{item.recMobile,jdbcType=VARCHAR}, #{item.code,jdbcType=VARCHAR}, 
-      #{item.tradeNumber,jdbcType=VARCHAR}) </foreach>
+      #{item.tradeNumber,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}) </foreach>
   </insert>
   
   <insert id="insertSelective" parameterType="com.api.model.Order" keyProperty="id" useGeneratedKeys="true">
@@ -99,6 +101,9 @@
       <if test="tradeNumber != null" >
         trade_number,
       </if>
+      <if test="remark != null" >
+        remark,
+      </if>
     </trim>
     <trim prefix="VALUES (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -132,6 +137,9 @@
       <if test="tradeNumber != null" >
         #{tradeNumber,jdbcType=VARCHAR},
       </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
     </trim>
   </insert>
   
@@ -151,7 +159,8 @@
       rec_address = #{recAddress,jdbcType=VARCHAR},
       rec_mobile = #{recMobile,jdbcType=VARCHAR},
       code = #{code,jdbcType=VARCHAR},
-      trade_number = #{tradeNumber,jdbcType=VARCHAR}
+      trade_number = #{tradeNumber,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR}
     WHERE id = #{id,jdbcType=BIGINT}
   </update>
   
@@ -187,6 +196,9 @@
       </if>
       <if test="tradeNumber != null" >
         trade_number = #{tradeNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
       </if>
     </set>
     WHERE id = #{id,jdbcType=BIGINT}

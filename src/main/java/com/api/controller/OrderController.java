@@ -5,6 +5,7 @@ import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.domain.AlipayTradeAppPayModel;
 import com.alipay.api.internal.util.AlipaySignature;
+import com.alipay.api.internal.util.StringUtils;
 import com.alipay.api.request.AlipayTradeAppPayRequest;
 import com.alipay.api.response.AlipayTradeAppPayResponse;
 import com.api.controller.dto.BaseResult;
@@ -55,7 +56,7 @@ public class OrderController {
     private UserAddressService userAddressService;
 
     @RequestMapping("addOrder")
-    public BaseResult addOrder( Double totalPrice,OrderDetailVo detailVo) {
+    public BaseResult addOrder( Double totalPrice,OrderDetailVo detailVo,String remark) {
         BaseResult result = new BaseResult();
         //获取userId
         Subject subject = SecurityUtils.getSubject();
@@ -70,6 +71,9 @@ public class OrderController {
             order.setRecAddress(userAddress.getRecAddress());
             order.setRecMobile(userAddress.getRecMobile());
             order.setRecName(userAddress.getRecMobile());
+        }
+        if(!StringUtils.isEmpty(remark)){
+            order.setRemark(remark);
         }
         order.setStatus(Byte.valueOf("0"));
         order.setUserName(user.getName());

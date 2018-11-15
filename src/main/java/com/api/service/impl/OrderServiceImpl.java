@@ -83,6 +83,7 @@ public class OrderServiceImpl implements OrderService {
         orderPo.setRecMobile(order.getRecMobile());
         orderPo.setRecName(order.getRecName());
         orderPo.setStatus(order.getStatus());
+        orderPo.setRemark(order.getRemark());
         orderPo.setTotalPrice(order.getTotalPrice());
         orderPo.setCode(order.getOrderCode());
         orderPo.setTradeNumber(order.getTradeNumber());
@@ -148,9 +149,10 @@ public class OrderServiceImpl implements OrderService {
         vo.setId(po.getId());
         vo.setRecAddress(po.getRecAddress());
         vo.setRecMobile(po.getRecMobile());
+        vo.setRemark(po.getRemark());
         vo.setRecName(po.getRecName());
         vo.setStatus(po.getStatus());
-        switch (vo.getStatus()){
+        switch (po.getStatus()){
             case 0:{
                 vo.setStatusDesc("待支付");
                 break;

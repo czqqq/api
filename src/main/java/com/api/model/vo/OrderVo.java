@@ -32,6 +32,8 @@ public class OrderVo {
 
     private String recMobile;
 
+    private String remark;
+
     private String recAddress;
 
     private List<OrderDetailVo> orderDetails;
@@ -154,5 +156,13 @@ public class OrderVo {
 
     public void setMt(String mt) {
         this.mt = mt;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }

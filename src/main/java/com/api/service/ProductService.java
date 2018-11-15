@@ -1,6 +1,7 @@
 package com.api.service;
 
 import com.api.model.Product;
+import com.api.model.vo.ProductVo;
 import com.github.pagehelper.PageInfo;
 
 import java.util.List;
@@ -37,7 +38,7 @@ public interface ProductService {
      * @param pageSize
      * @return
      */
-    public PageInfo<Product> inquireProducts(Product product, Integer pageIndex, Integer pageSize);
+    public PageInfo<ProductVo> inquireProducts(Product product, Integer pageIndex, Integer pageSize);
 
     /**
      * 校验该产品是否存在

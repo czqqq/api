@@ -7,6 +7,7 @@ import com.api.model.Product;
 import com.api.model.Product;
 import com.api.model.ProductType;
 import com.api.model.User;
+import com.api.model.vo.ProductVo;
 import com.api.service.ProductService;
 import com.api.service.ProductService;
 import com.api.service.ProductTypeService;
@@ -111,6 +112,7 @@ public class ProductController {
         pro.setColor(product.getColor());
         pro.setSize(product.getSize());
         pro.setType(product.getType());
+        pro.setRemark(product.getRemark());
         productService.modifyProduct(pro);
         return new BaseResult(ResultCode.SUCCESS,"修改成功",null);
     }
@@ -118,9 +120,9 @@ public class ProductController {
     @RequestMapping("fetchProduct")
     public BaseResult fetchProduct( ProductDto product) {
         BaseResult result = new BaseResult();
-        PageInfo<Product> datas =  productService.inquireProducts(product,product.getPageIndex(),product.getPageSize());
+        PageInfo<ProductVo> datas =  productService.inquireProducts(product,product.getPageIndex(),product.getPageSize());
         String os = System.getProperty("os.name");
-        for(Product pro : datas.getList()){
+        for(ProductVo pro : datas.getList()){
             if (os.toLowerCase().startsWith("win")) {
                 pro.setPic("http://localhost/pic/product/"+pro.getPic());
             }else {

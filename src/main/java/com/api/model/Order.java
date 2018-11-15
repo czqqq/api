@@ -18,6 +18,8 @@ public class Order implements Serializable {
 
     private String recName;
 
+    private String remark;
+
     private String recAddress;
 
     private String recMobile;
@@ -112,5 +114,13 @@ public class Order implements Serializable {
 
     public void setTradeNumber(String tradeNumber) {
         this.tradeNumber = tradeNumber;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }

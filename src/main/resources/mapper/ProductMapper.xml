@@ -12,11 +12,11 @@
     <result column="pic" property="pic" jdbcType="VARCHAR" />
     <result column="ct" property="ct" jdbcType="TIMESTAMP" />
     <result column="mt" property="mt" jdbcType="TIMESTAMP" />
-    <result column="remark" property="remark" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
   </resultMap>
   
   <sql id="BaseColumnList" >
-    id, name, type, color, size, price, pic, ct, mt
+    id, name, type, color, size, price, pic, ct, mt,remark
   </sql>
   
   <insert id="insert" parameterType="com.api.model.Product" >
