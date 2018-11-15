@@ -5,7 +5,8 @@ import com.api.model.User;
 import java.io.Serializable;
 
 public class UserVo extends User implements Serializable {
-    String pName;
+    private String pName;
+    private Double profit;
 
     public String getpName() {
         return pName;
@@ -13,5 +14,13 @@ public class UserVo extends User implements Serializable {
 
     public void setpName(String pName) {
         this.pName = pName;
+    }
+
+    public Double getProfit() {
+        return profit;
+    }
+
+    public void setProfit(Double profit) {
+        this.profit = profit;
     }
 }

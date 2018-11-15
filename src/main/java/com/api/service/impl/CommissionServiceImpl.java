@@ -88,6 +88,13 @@ public class CommissionServiceImpl implements CommissionService {
     }
 
     @Override
+    public double fetchProfit(Long userId) {
+
+        return withdrawDao.fetchProfit(userId);
+    }
+
+
+    @Override
     public int applyWithdraw(Withdraw withdraw) {
         return withdrawDao.insertSelective(withdraw);
     }

@@ -239,5 +239,13 @@
     where w.status = 0
     and user_id = #{userId,jdbcType=BIGINT}
   </select>
-  
+
+  <select id="fetchProfit" parameterType="long" resultType="double">
+    select count(*) from withdraw
+    where  status = 1
+    and user_id = #{userId,jdbcType=BIGINT}
+
+  </select>
+
+
 </mapper>

@@ -6,6 +6,7 @@ import com.api.controller.dto.DatatablesRes;
 import com.api.controller.dto.ResultCode;
 import com.api.model.User;
 import com.api.model.vo.UserVo;
+import com.api.service.CommissionService;
 import com.api.service.UserService;
 import com.api.util.JwtUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -29,6 +30,8 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private CommissionService commissionService;
 
     @PostMapping("/login")
     public BaseResult login(@RequestParam("mobile") String mobile,
@@ -122,6 +125,8 @@ public class UserController {
         String mobile = JwtUtil.getMobileBySubject(subject);
         User user = userService.getUserByLoginName(mobile);
         User pUser = userService.getUserById(user.getPid());
+        //计算历史盈利
+        Double profit = commissionService.fetchProfit(user.getId());
 
         UserVo userVo = new UserVo();
         BeanUtils.copyProperties(user, userVo);
@@ -129,6 +134,9 @@ public class UserController {
         if (pUser != null) {
             userVo.setpName(pUser.getName());
         }
+
+        userVo.setProfit(profit);
+
 
         return new BaseResult(ResultCode.SUCCESS, "成功", userVo);
     }

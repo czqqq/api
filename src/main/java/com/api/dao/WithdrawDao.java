@@ -17,4 +17,6 @@ public interface WithdrawDao {
     int insertSelective(Withdraw withdraw);
 
     Withdraw selectById(Long id);
+
+    double fetchProfit(Long userId);
 }
