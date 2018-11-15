@@ -67,7 +67,7 @@ public class ProductServiceImpl implements ProductService {
             vo.setRemark(product.getRemark());
             vo.setSize(product.getSize());
             vo.setType(product.getType());
-            if(vo.getType().equals(4)){
+            if(vo.getType() == 4){
                 vo.setCanBuy(Boolean.TRUE);
             }else{
                 vo.setCanBuy(Boolean.FALSE);
