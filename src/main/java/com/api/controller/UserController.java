@@ -153,6 +153,29 @@ public class UserController {
         return res;
     }
 
+    @PostMapping("/fetchAllUser2")
+    public BaseResult fetchAllUser2() {
+        BaseResult res = new BaseResult();
+        List<User> users = userService.getAll();
+        res.setData(users);
+        return res;
+    }
+
+
+    @PostMapping("/deleteUserById")
+    public BaseResult deleteUserById(Long userId) {
+        BaseResult result = new BaseResult();
+        int res = userService.deleteUserById(userId);
+        if (res > 0) {
+            result.setCode(ResultCode.SUCCESS);
+            result.setMessage("删除成功");
+        }else{
+            result.setCode(ResultCode.FAILURE);
+            result.setMessage("删除失败");
+        }
+        return result;
+    }
+
 
     @RequestMapping(path = "/401")
     @ResponseStatus(HttpStatus.OK)
