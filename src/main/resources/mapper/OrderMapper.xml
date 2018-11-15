@@ -298,7 +298,7 @@
       <if test="tradeNumber != null" >
         AND a.trade_number = #{tradeNumber,jdbcType=VARCHAR}
       </if>
-
+      and status != 0
     </where>
     order by a.ct desc
   </select>
