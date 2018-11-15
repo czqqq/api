@@ -118,9 +118,9 @@
       <if test="mt != null" >
          AND mt = #{mt,jdbcType=TIMESTAMP}
       </if>
-      order by order_code asc
-    </where>
 
+    </where>
+    order by order_code asc
   </select>
   
   <select id="countByEntity" parameterType="com.api.model.ProductType" resultType="java.lang.Integer" >
