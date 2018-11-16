@@ -13,4 +13,6 @@ public interface UserDao {
     List<User> selectByEntity(User user);
     int updateSelective(User user);
     List<UserVo> fetchAllUser();
+
+    int deleteById(Long id);
 }

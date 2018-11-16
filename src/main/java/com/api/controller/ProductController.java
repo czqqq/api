@@ -117,6 +117,11 @@ public class ProductController {
         PageInfo<ProductVo> datas =  productService.inquireProducts(product,product.getPageIndex(),product.getPageSize());
         String os = System.getProperty("os.name");
         for(ProductVo pro : datas.getList()){
+            if(pro.getType() == 4){
+                pro.setCanBuy(Boolean.TRUE);
+            }else{
+                pro.setCanBuy(Boolean.FALSE);
+            }
             if(StringUtils.isBlank(pro.getColor())){
                 pro.setColor(null);
             }

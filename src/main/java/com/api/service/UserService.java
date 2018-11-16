@@ -14,6 +14,8 @@ public interface UserService {
 
     int addUser(Long introducerId, String mobile, String name, String pwd);
 
+    int deleteUserById(Long userId);
+
     List<User> getUsersByPid(Long pid);
 
     List<User> getAll();

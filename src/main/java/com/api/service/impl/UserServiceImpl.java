@@ -59,6 +59,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public int deleteUserById(Long userId) {
+        return userDao.deleteById(userId);
+    }
+
+    @Override
     public List<User> getUsersByPid(Long pid) {
         User user = new User();
         user.setPid(pid);
