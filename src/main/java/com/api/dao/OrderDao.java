@@ -20,4 +20,5 @@ public interface OrderDao {
     List<Order> selectByEntity(Order order);
     public Integer countByEntity(Order order);
     List<OrderVo>  selectJoinByEntity(Order order);
+    List<OrderVo>  getEntityByCode(Order order);
 }

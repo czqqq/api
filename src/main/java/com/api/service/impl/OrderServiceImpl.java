@@ -186,7 +186,7 @@ public class OrderServiceImpl implements OrderService {
         Order condition = new Order();
         OrderVo order = null;
         condition.setCode(orderNo);
-        List<OrderVo> orders = orderDao.selectJoinByEntity(condition);
+        List<OrderVo> orders = orderDao.getEntityByCode(condition);
         if(orders!=null && orders.size()>0){
             order =  orders.get(0);
         }

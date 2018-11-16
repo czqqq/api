@@ -14,6 +14,18 @@
     <result column="mt" property="mt" jdbcType="TIMESTAMP" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
   </resultMap>
+  <resultMap id="BaseResultVoMap" type="com.api.model.vo.ProductVo" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="BIGINT" />
+    <result column="color" property="color" jdbcType="VARCHAR" />
+    <result column="size" property="size" jdbcType="VARCHAR" />
+    <result column="price" property="price" jdbcType="DOUBLE" />
+    <result column="pic" property="pic" jdbcType="VARCHAR" />
+    <result column="ct" property="ct" jdbcType="TIMESTAMP" />
+    <result column="mt" property="mt" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
   
   <sql id="BaseColumnList" >
     id, name, type, color, size, price, pic, ct, mt,remark
@@ -174,7 +186,7 @@
     WHERE id IN <foreach collection="list" item="item" open="(" separator="," close=")"> #{item}  </foreach> 
   </select>
   
-  <select id="selectByEntity" parameterType="com.api.model.Product" resultMap="BaseResultMap" >
+  <select id="selectByEntity" parameterType="com.api.model.Product" resultMap="BaseResultVoMap" >
     SELECT 
     <include refid="BaseColumnList" />
     FROM product

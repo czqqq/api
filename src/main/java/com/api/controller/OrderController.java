@@ -190,6 +190,7 @@ public class OrderController {
         try {
             //3.1调用SDK验证签名
             signVerified = AlipaySignature.rsaCheckV1(params, AliPayUtil.ALIPAY_PUBLIC_KEY, AliPayUtil.CHARSET, "RSA2");
+            logger.info("验证结果:"+signVerified+"，参数："+params.toString());
         } catch (AlipayApiException e) {
             e.printStackTrace();
         }
@@ -199,8 +200,9 @@ public class OrderController {
                 String orderNo = params.get("out_trade_no");
                 //支付宝交易号
                 String tradeNumber = params.get("trade_no");
+                logger.info("订单号:"+orderNo);
                 OrderVo order = orderService.getOrderByOrderNo(orderNo);
-
+                logger.info("订单号:"+order.toString());
                 if(order == null){
                     return "fail";
                 }

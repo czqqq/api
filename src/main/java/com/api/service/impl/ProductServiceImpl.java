@@ -49,32 +49,9 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public PageInfo<ProductVo> inquireProducts(Product product, Integer pageIndex, Integer pageSize) {
         PageHelper.startPage(pageIndex,pageSize);
-        List<Product> products = productDao.selectByEntity(product);
-        List<ProductVo> vos = convertPoToVo(products);
-        PageInfo<ProductVo> pages = new PageInfo<ProductVo>(vos);
+        List<ProductVo> products = productDao.selectByEntity(product);
+        PageInfo<ProductVo> pages = new PageInfo<ProductVo>(products);
         return pages;
-    }
-
-    private List<ProductVo> convertPoToVo(List<Product> products) {
-        List<ProductVo> results = new ArrayList<ProductVo>();
-        for(Product product : products){
-            ProductVo vo = new ProductVo();
-            vo.setColor(product.getColor());
-            vo.setId(product.getId());
-            vo.setName(product.getName());
-            vo.setPic(product.getPic());
-            vo.setPrice(product.getPrice());
-            vo.setRemark(product.getRemark());
-            vo.setSize(product.getSize());
-            vo.setType(product.getType());
-            if(vo.getType() == 4){
-                vo.setCanBuy(Boolean.TRUE);
-            }else{
-                vo.setCanBuy(Boolean.FALSE);
-            }
-            results.add(vo);
-        }
-        return results;
     }
 
     @Override
