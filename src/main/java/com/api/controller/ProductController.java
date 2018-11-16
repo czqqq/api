@@ -100,12 +100,6 @@ public class ProductController {
         if(result!=null){
             return result;
         }
-        if(StringUtils.isBlank(product.getSize())){
-            product.setSize(null);
-        }
-        if(StringUtils.isBlank(product.getColor())){
-            product.setColor(null);
-        }
         pro.setName(product.getName());
         pro.setPrice(product.getPrice());
         pro.setPic(product.getPic());
@@ -123,6 +117,12 @@ public class ProductController {
         PageInfo<ProductVo> datas =  productService.inquireProducts(product,product.getPageIndex(),product.getPageSize());
         String os = System.getProperty("os.name");
         for(ProductVo pro : datas.getList()){
+            if(StringUtils.isBlank(pro.getColor())){
+                pro.setColor(null);
+            }
+            if(StringUtils.isBlank(pro.getSize())){
+                pro.setSize(null);
+            }
             if (os.toLowerCase().startsWith("win")) {
                 pro.setPic("http://localhost/pic/product/"+pro.getPic());
             }else {
@@ -143,6 +143,12 @@ public class ProductController {
             product.setPic("http://localhost/pic/product/"+product.getPic());
         }else {
             product.setPic("http://47.107.79.61/pic/product/"+product.getPic());
+        }
+        if(StringUtils.isBlank(product.getColor())){
+            product.setColor(null);
+        }
+        if(StringUtils.isBlank(product.getSize())){
+            product.setSize(null);
         }
         if (product == null) {
             result.setCode(ResultCode.FAILURE);
