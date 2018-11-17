@@ -2,6 +2,7 @@ package com.api.service.impl;
 
 import com.api.dao.CommissionDao;
 import com.api.dao.CommissionDetailDao;
+import com.api.dao.OrderDao;
 import com.api.dao.WithdrawDao;
 import com.api.model.Commission;
 import com.api.model.CommissionDetail;
@@ -9,11 +10,15 @@ import com.api.model.Withdraw;
 import com.api.model.vo.WithdrawVo;
 import com.api.service.CommissionService;
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -26,6 +31,8 @@ public class CommissionServiceImpl implements CommissionService {
     private CommissionDetailDao commissionDetailDao;
     @Autowired
     private WithdrawDao withdrawDao;
+    @Autowired
+    private OrderDao orderDao;
 
     @Override
     public Commission fetchCommission(Long uid) {
@@ -40,6 +47,16 @@ public class CommissionServiceImpl implements CommissionService {
         }
         List<WithdrawVo> withdrawVos = withdrawDao.fetchWithdrawList();
         return withdrawVos;
+    }
+
+    @Override
+    public PageInfo<WithdrawVo> fetchWithdrawListByUser(Integer start, Integer length,Long userId) {
+        if(start != null && length != null){
+            PageHelper.startPage(start, length);
+        }
+        List<WithdrawVo> withdrawVos = withdrawDao.fetchWithdrawListByUser(userId);
+        PageInfo<WithdrawVo> pages = new PageInfo<WithdrawVo>(withdrawVos);
+        return pages;
     }
 
     @Override
@@ -61,6 +78,7 @@ public class CommissionServiceImpl implements CommissionService {
         Withdraw withdraw = new Withdraw();
         withdraw.setId(id);
         withdraw.setStatus((byte)1);
+        withdraw.setMt(new Date());
         int result = withdrawDao.updateSelective(withdraw);
 
         if (result > 0) {
@@ -96,6 +114,38 @@ public class CommissionServiceImpl implements CommissionService {
 
     @Override
     public int applyWithdraw(Withdraw withdraw) {
+        withdraw.setCt(new Date());
         return withdrawDao.insertSelective(withdraw);
+    }
+
+    @Override
+    public double fetchTodayOutput() {
+        Date today = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            today =  sdf.parse(sdf.format(today));
+        } catch (ParseException e) {
+            return 0;
+        }
+        Double t = withdrawDao.fetchTodayOutput(today);
+        return t == null ? 0: t ;
+    }
+
+    @Override
+    public double fetchAllOutput() {
+        Double d = withdrawDao.fetchAllOutput();
+        if (d == null) {
+            d = 0.0;
+        }
+        return d;
+    }
+
+    @Override
+    public double fetchAllInput() {
+        Double d = orderDao.fetchAllInput();
+        if (d == null) {
+            d = 0.0;
+        }
+        return d;
     }
 }

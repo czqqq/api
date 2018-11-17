@@ -12,6 +12,7 @@ import com.api.model.vo.WithdrawVo;
 import com.api.service.CommissionService;
 import com.api.service.UserService;
 import com.api.util.JwtUtil;
+import com.github.pagehelper.PageInfo;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
@@ -21,9 +22,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @RestController
 public class CommissionController {
@@ -34,14 +34,56 @@ public class CommissionController {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/fetchWithdrawList")
-    public DatatablesRes fetchWithdrawList(DatatablesReq req) {
+
+
+    @PostMapping("/fetchOutPut")
+    public BaseResult fetchOutPut() {
+        BaseResult res = new BaseResult();
+        double d = commissionService.fetchTodayOutput();
+        res.setData(d);
+        return res;
+    }
+
+    @PostMapping("/fetcinoutPut")
+    public BaseResult fetcinoutPut() {
+        BaseResult res = new BaseResult();
+        double input = commissionService.fetchAllInput();
+        double output = commissionService.fetchAllOutput();
+        Map<String,Double> data = new HashMap<>(2);
+        data.put("inPut", input);
+        data.put("outPut", output);
+        res.setData(data);
+        return res;
+    }
+
+
+
+
+    @PostMapping("/fetchWithdrawListWeb")
+    public DatatablesRes fetchWithdrawListWeb(DatatablesReq req) {
         List<WithdrawVo> withdrawVoList = commissionService.fetchWithout(req.getStart(),req.getLength());
         List<WithdrawVo> withdrawVoListAll = commissionService.fetchWithout(null,null);
         DatatablesRes res = new DatatablesRes();
         res.setDraw(req.getDraw());
         res.setRecordsTotal(withdrawVoListAll.size());
         res.setRecordsFiltered(withdrawVoListAll.size());
+        res.setData(withdrawVoList);
+        return res;
+    }
+
+
+    @PostMapping("/fetchWithdrawList")
+    public BaseResult fetchWithdrawList(Integer pageSize, Integer pageIndex) {
+        //获取userId
+        Subject subject = SecurityUtils.getSubject();
+        if (!subject.isAuthenticated()) {
+            return new BaseResult(ResultCode.UNAUTHORIZED, "验证不通过", null);
+        }
+        String mobile = JwtUtil.getMobileBySubject(subject);
+        User user = userService.getUserByLoginName(mobile);
+
+        PageInfo<WithdrawVo> withdrawVoList = commissionService.fetchWithdrawListByUser(pageIndex,pageSize,user.getId());
+        BaseResult res = new BaseResult();
         res.setData(withdrawVoList);
         return res;
     }

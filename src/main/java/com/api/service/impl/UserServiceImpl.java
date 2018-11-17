@@ -121,14 +121,15 @@ public class UserServiceImpl implements UserService {
                 default: buyLevel=0; break;
             }
 
-            switch (Math.min(pLevel, buyLevel)) {
+
+           /* switch (Math.min(pLevel, buyLevel)) {
                 case 1: buyCommission = 4; break;
                 case 2: buyCommission = 32; break;
                 case 3: buyCommission = 64; break;
                 case 4: buyCommission = 124; break;
                 case 5: buyCommission = 284; break;
                 default: break;
-            }
+            }*/
 
 
             if (level == 0) {

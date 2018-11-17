@@ -31,7 +31,8 @@ public class CommissionTasks {
                 continue;
             }
             double commission = 0; //每天增加的佣金
-            double reappearance = 0; //每天返现
+            double reappearance = 0; //每天自己的返现
+            double downComm = 0; //推荐下级增加的返现
 
             //步骤1 按照级别计算每天返现
             switch (level){
@@ -39,11 +40,24 @@ public class CommissionTasks {
                 case 2: reappearance = 100;  break;
                 case 3: reappearance = 300;  break;
                 case 4: reappearance = 700; break;
-                case 5: reappearance = 1600; break;
+                case 5: reappearance = 1800; break;
                 default: break;
             }
 
-            commission += reappearance;
+            List<User> downUsers = userService.getUsersByPid(user.getId());
+            for (User u : downUsers) {
+                int dLevel = u.getLevel();
+                switch (Math.min(level, dLevel)) {
+                    case 1: downComm += 4; break;
+                    case 2: downComm += 32; break;
+                    case 3: downComm += 64; break;
+                    case 4: downComm += 124; break;
+                    case 5: downComm += 284; break;
+                    default: break;
+                }
+            }
+
+            commission += reappearance + downComm;
             logger.info(user.getName()+"的返现金额为：" + commission);
             int result = userService.saveUserDailyCommission(user, commission);
             if (result < 0) {

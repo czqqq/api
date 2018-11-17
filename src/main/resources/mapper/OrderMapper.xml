@@ -423,4 +423,10 @@
     </where>
     order by ct desc
   </select>
+
+  <select id="fetchAllInput" resultType="double">
+    select sum(total_price)
+    from `order`
+    where status = 1
+  </select>
 </mapper>

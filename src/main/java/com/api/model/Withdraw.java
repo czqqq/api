@@ -1,6 +1,7 @@
 package com.api.model;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class Withdraw implements Serializable {
     private Long id;
@@ -18,6 +19,10 @@ public class Withdraw implements Serializable {
     private Byte status;
 
     private String name;
+
+    private Date mt;
+
+    private Date ct;
 
     public Long getId() {
         return id;
@@ -81,5 +86,21 @@ public class Withdraw implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Date getMt() {
+        return mt;
+    }
+
+    public void setMt(Date mt) {
+        this.mt = mt;
+    }
+
+    public Date getCt() {
+        return ct;
+    }
+
+    public void setCt(Date ct) {
+        this.ct = ct;
     }
 }

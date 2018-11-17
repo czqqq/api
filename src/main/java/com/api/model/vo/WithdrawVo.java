@@ -1,6 +1,7 @@
 package com.api.model.vo;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class WithdrawVo implements Serializable {
     private Long id;
@@ -17,7 +18,15 @@ public class WithdrawVo implements Serializable {
 
     private Byte status;
 
+    private String name;
+
     private String userName;
+
+    private String remark;
+
+    private Date mt;
+
+    private Date ct;
 
     public Long getId() {
         return id;
@@ -73,6 +82,11 @@ public class WithdrawVo implements Serializable {
 
     public void setStatus(Byte status) {
         this.status = status;
+        if (status == 0) {
+            setRemark("处理中");
+        }else {
+            setRemark("已提现");
+        }
     }
 
     public String getUserName() {
@@ -81,5 +95,37 @@ public class WithdrawVo implements Serializable {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Date getMt() {
+        return mt;
+    }
+
+    public void setMt(Date mt) {
+        this.mt = mt;
+    }
+
+    public Date getCt() {
+        return ct;
+    }
+
+    public void setCt(Date ct) {
+        this.ct = ct;
     }
 }
