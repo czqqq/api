@@ -116,8 +116,8 @@ public class UserServiceImpl implements UserService {
                 case 800 : buyLevel = 1; break;
                 case 6400 : buyLevel = 2; break;
                 case 12800 : buyLevel = 3; break;
-                case 24800 : buyLevel = 4; break;
-                case 56800 : buyLevel = 5; break;
+                case 25600 : buyLevel = 4; break;
+                case 57600 : buyLevel = 5; break;
                 default: buyLevel=0; break;
             }
 
@@ -217,8 +217,8 @@ public class UserServiceImpl implements UserService {
                     case 800 : buyLevel = 1; break;
                     case 6400 : buyLevel = 2; break;
                     case 12800 : buyLevel = 3; break;
-                    case 24800 : buyLevel = 4; break;
-                    case 56800 : buyLevel = 5; break;
+                    case 25600 : buyLevel = 4; break;
+                    case 57600 : buyLevel = 5; break;
                     default: break;
                 }
 
@@ -228,9 +228,9 @@ public class UserServiceImpl implements UserService {
                     addupLevel = 1;
                 }else if(consumption <12800){
                     addupLevel = 2;
-                }else if(consumption <24800){
+                }else if(consumption <25600){
                     addupLevel = 3;
-                }else if(consumption < 56800){
+                }else if(consumption < 57800){
                     addupLevel = 4;
                 }else{
                     addupLevel = 5;

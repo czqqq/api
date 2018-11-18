@@ -51,8 +51,8 @@ public class CommissionTasks {
                     case 1: downComm += 4; break;
                     case 2: downComm += 32; break;
                     case 3: downComm += 64; break;
-                    case 4: downComm += 124; break;
-                    case 5: downComm += 284; break;
+                    case 4: downComm += 128; break;
+                    case 5: downComm += 288; break;
                     default: break;
                 }
             }
