@@ -138,7 +138,11 @@ public class CommissionController {
         Map<String, Object> resultMap = new HashMap<>(3);
         resultMap.put("commission", commi);
         resultMap.put("withdraw", withdraw);
-        resultMap.put("available", commi - withdraw);
+        double available = commi - withdraw;
+        if (available < 0) {
+            available = 0;
+        }
+        resultMap.put("available", available);
 
         result.setData(resultMap);
         return result;

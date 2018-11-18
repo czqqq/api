@@ -107,8 +107,11 @@ public class CommissionServiceImpl implements CommissionService {
 
     @Override
     public double fetchProfit(Long userId) {
-
-        return withdrawDao.fetchProfit(userId);
+        Double r = withdrawDao.fetchProfit(userId);
+        if (r == null) {
+            r = 0.0;
+        }
+        return r;
     }
 
 

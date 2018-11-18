@@ -20,7 +20,7 @@ public interface WithdrawDao {
 
     Withdraw selectById(Long id);
 
-    double fetchProfit(Long userId);
+    Double fetchProfit(Long userId);
 
     Double fetchTodayOutput(Date mt);
 
