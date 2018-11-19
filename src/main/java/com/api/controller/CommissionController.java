@@ -173,7 +173,7 @@ public class CommissionController {
             withd += w.getMoney();
         }
 
-        if (withdrawReq.getMoney() > commi + withd) {
+        if (withdrawReq.getMoney() > (commi - withd)) {
             return new BaseResult(ResultCode.FAILURE, "提现金额超出佣金", null);
         }
 
