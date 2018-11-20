@@ -106,6 +106,12 @@ public class CommissionServiceImpl implements CommissionService {
     }
 
     @Override
+    public List<WithdrawVo> fetchWithdrawhistory(Long userId) {
+        List<WithdrawVo> withdrawVos = withdrawDao.fetchWithdrawListByUser(userId);
+        return withdrawVos;
+    }
+
+    @Override
     public double fetchProfit(Long userId) {
         Double r = withdrawDao.fetchProfit(userId);
         if (r == null) {

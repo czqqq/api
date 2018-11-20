@@ -6,9 +6,11 @@ import com.api.controller.dto.DatatablesRes;
 import com.api.controller.dto.ResultCode;
 import com.api.model.User;
 import com.api.model.vo.UserVo;
+import com.api.model.vo.WithdrawVo;
 import com.api.service.CommissionService;
 import com.api.service.UserService;
 import com.api.util.JwtUtil;
+import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
@@ -19,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -137,6 +140,27 @@ public class UserController {
 
         userVo.setProfit(profit);
 
+        //是否有提现申请记录
+        List<Map<String,String>> lists = new ArrayList<>();
+        int sort = 0;
+        List<WithdrawVo> withdrawVoList = commissionService.fetchWithdrawhistory(user.getId());
+        String types = "";
+        for (WithdrawVo vo : withdrawVoList) {
+            if (!types.contains(vo.getType())) {
+                types = types + vo.getType();
+
+                Map<String, String> m = new HashMap<>();
+                m.put("sort", String.valueOf(++sort));
+                m.put("type", vo.getType());
+                m.put("account", vo.getAccount());
+                m.put("name", vo.getName());
+                m.put("mobile", vo.getMobile());
+                lists.add(m);
+            }
+        }
+        if (lists.size() > 0) {
+            userVo.setWithDraw(lists);
+        }
 
         return new BaseResult(ResultCode.SUCCESS, "成功", userVo);
     }

@@ -48,6 +48,10 @@ public interface CommissionService {
      */
     List<WithdrawVo> fetchWithdrawByUid(Long uid);
 
+
+
+    List<WithdrawVo> fetchWithdrawhistory(Long userId);
+
     /**
      * 获取盈利 - 已经完成的提现
      * @param userId

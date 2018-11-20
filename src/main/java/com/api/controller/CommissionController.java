@@ -159,6 +159,10 @@ public class CommissionController {
         if (withdrawReq.getMoney() == null || withdrawReq.getMoney() < 100) {
             return new BaseResult(ResultCode.FAILURE, "提现金额不能小于100", null);
         }
+        if (withdrawReq.getMoney() % 100 != 0) {
+            return new BaseResult(ResultCode.FAILURE, "最小提现单位为100", null);
+        }
+
         String mobile = JwtUtil.getMobileBySubject(subject);
         User user = userService.getUserByLoginName(mobile);
         Commission commission = commissionService.fetchCommission(user.getId());
