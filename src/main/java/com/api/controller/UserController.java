@@ -5,6 +5,7 @@ import com.api.controller.dto.DatatablesReq;
 import com.api.controller.dto.DatatablesRes;
 import com.api.controller.dto.ResultCode;
 import com.api.model.User;
+import com.api.model.Withdraw;
 import com.api.model.vo.UserVo;
 import com.api.model.vo.WithdrawVo;
 import com.api.service.CommissionService;
@@ -140,28 +141,6 @@ public class UserController {
 
         userVo.setProfit(profit);
 
-        //是否有提现申请记录
-        List<Map<String,String>> lists = new ArrayList<>();
-        int sort = 0;
-        List<WithdrawVo> withdrawVoList = commissionService.fetchWithdrawhistory(user.getId());
-        String types = "";
-        for (WithdrawVo vo : withdrawVoList) {
-            if (!types.contains(vo.getType())) {
-                types = types + vo.getType();
-
-                Map<String, String> m = new HashMap<>();
-                m.put("sort", String.valueOf(++sort));
-                m.put("type", vo.getType());
-                m.put("account", vo.getAccount());
-                m.put("name", vo.getName());
-                m.put("mobile", vo.getMobile());
-                lists.add(m);
-            }
-        }
-        if (lists.size() > 0) {
-            userVo.setWithDraw(lists);
-        }
-
         return new BaseResult(ResultCode.SUCCESS, "成功", userVo);
     }
 
@@ -196,6 +175,36 @@ public class UserController {
         }else{
             result.setCode(ResultCode.FAILURE);
             result.setMessage("删除失败");
+        }
+        return result;
+    }
+
+    @PostMapping("/fetchWithdrawHistory")
+    public BaseResult fetchWithdrawHistory(String type) {
+
+        //获取userId
+        Subject subject = SecurityUtils.getSubject();
+        if (!subject.isAuthenticated()) {
+            return new BaseResult(ResultCode.UNAUTHORIZED, "验证不通过", null);
+        }
+
+        if (type == null) {
+            return new BaseResult(ResultCode.FAILURE, "请选择提现类型", null);
+        }
+
+        String mobile = JwtUtil.getMobileBySubject(subject);
+        User user = userService.getUserByLoginName(mobile);
+
+        BaseResult result = new BaseResult();
+        Map<String, String> data = new HashMap<>();
+        Withdraw withdraw = userService.fetchWithdrawHistory(type,user.getId());
+        if (withdraw != null) {
+            data.put("type", withdraw.getType());
+            data.put("account", withdraw.getAccount());
+            data.put("name", withdraw.getName());
+            data.put("mobile", withdraw.getMobile());
+
+            result.setData(data);
         }
         return result;
     }

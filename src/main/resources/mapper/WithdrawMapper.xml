@@ -291,4 +291,17 @@
   WHERE status = 1
 </select>
 
+<select id="fetchWithdrawByType" parameterType="com.api.model.Withdraw" resultMap="BaseResultMap">
+    select * from withdraw
+    <where>
+        <if test="userId != null">
+            AND user_id = #{userId,jdbcType=BIGINT}
+        </if>
+        <if test="type != null">
+            AND type = #{type,jdbcType=VARCHAR}
+        </if>
+    </where>
+    ORDER BY ct DESC LIMIT 1
+</select>
+
 </mapper>

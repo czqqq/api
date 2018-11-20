@@ -25,4 +25,6 @@ public interface WithdrawDao {
     Double fetchTodayOutput(Date mt);
 
     Double fetchAllOutput();
+
+    Withdraw fetchWithdrawByType(Withdraw withdraw);
 }

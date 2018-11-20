@@ -29,6 +29,8 @@ public class UserServiceImpl implements UserService {
     private OrderDao orderDao;
     @Autowired
     private TokenDao tokenDao;
+    @Autowired
+    private WithdrawDao withdrawDao;
 
     @Override
     public User getUserById(Long id) {
@@ -323,6 +325,14 @@ public class UserServiceImpl implements UserService {
         }
 
         return resule;
+    }
+
+    @Override
+    public Withdraw fetchWithdrawHistory(String type, Long userId) {
+        Withdraw withdraw = new Withdraw();
+        withdraw.setUserId(userId);
+        withdraw.setType(type);
+        return  withdrawDao.fetchWithdrawByType(withdraw);
     }
 
 

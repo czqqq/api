@@ -2,6 +2,7 @@ package com.api.service;
 
 import com.api.model.Token;
 import com.api.model.User;
+import com.api.model.Withdraw;
 import com.api.model.vo.UserVo;
 
 import java.util.List;
@@ -44,4 +45,6 @@ public interface UserService {
     Token getTokenbyId(String token);
 
     int saveUserDailyCommission(User user, Double commission);
+
+    Withdraw fetchWithdrawHistory(String type, Long userId);
 }
