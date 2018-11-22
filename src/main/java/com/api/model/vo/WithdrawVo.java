@@ -24,6 +24,10 @@ public class WithdrawVo implements Serializable {
 
     private String remark;
 
+    private String bank;
+
+    private String openingbank;
+
     private Date mt;
 
     private Date ct;
@@ -127,5 +131,21 @@ public class WithdrawVo implements Serializable {
 
     public void setCt(Date ct) {
         this.ct = ct;
+    }
+
+    public String getBank() {
+        return bank;
+    }
+
+    public void setBank(String bank) {
+        this.bank = bank;
+    }
+
+    public String getOpeningbank() {
+        return openingbank;
+    }
+
+    public void setOpeningbank(String openingbank) {
+        this.openingbank = openingbank;
     }
 }

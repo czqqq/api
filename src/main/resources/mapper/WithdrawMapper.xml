@@ -11,33 +11,121 @@
     <result column="money" jdbcType="DOUBLE" property="money" />
     <result column="status" jdbcType="TINYINT" property="status" />
     <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="bank" jdbcType="VARCHAR" property="bank" />
+    <result column="openingBank" jdbcType="VARCHAR" property="openingbank" />
+    <result column="mt" jdbcType="TIMESTAMP" property="mt" />
+    <result column="ct" jdbcType="TIMESTAMP" property="ct" />
   </resultMap>
   
   <sql id="BaseColumnList">
-    id, user_id, type, mobile, account, money, status, name
+    id, user_id, type, mobile, account, money, status, name, bank, openingBank, mt, ct
   </sql>
   
   <insert id="insert" parameterType="com.api.model.Withdraw">
     INSERT INTO withdraw (id, user_id, type, 
       mobile, account, money, 
-      status, name)
+      status, name, bank, 
+      openingBank, mt, ct
+      )
     VALUES (#{id,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{type,jdbcType=VARCHAR}, 
       #{mobile,jdbcType=VARCHAR}, #{account,jdbcType=VARCHAR}, #{money,jdbcType=DOUBLE}, 
-      #{status,jdbcType=TINYINT}, #{name,jdbcType=VARCHAR})
+      #{status,jdbcType=TINYINT}, #{name,jdbcType=VARCHAR}, #{bank,jdbcType=VARCHAR}, 
+      #{openingbank,jdbcType=VARCHAR}, #{mt,jdbcType=TIMESTAMP}, #{ct,jdbcType=TIMESTAMP}
+      )
   </insert>
   
   <insert id="insertBatch" parameterType="java.util.List">
     INSERT INTO withdraw (id, 
       user_id, type, mobile, 
       account, money, status, 
-      name)
+      name, bank, openingBank, 
+      mt, ct)
     VALUES <foreach collection="list" index="index" item="item" separator=","> (#{item.id,jdbcType=BIGINT}, 
       #{item.userId,jdbcType=BIGINT}, #{item.type,jdbcType=VARCHAR}, #{item.mobile,jdbcType=VARCHAR}, 
       #{item.account,jdbcType=VARCHAR}, #{item.money,jdbcType=DOUBLE}, #{item.status,jdbcType=TINYINT}, 
-      #{item.name,jdbcType=VARCHAR}) </foreach>
+      #{item.name,jdbcType=VARCHAR}, #{item.bank,jdbcType=VARCHAR}, #{item.openingbank,jdbcType=VARCHAR}, 
+      #{item.mt,jdbcType=TIMESTAMP}, #{item.ct,jdbcType=TIMESTAMP}) </foreach>
   </insert>
   
-
+  <insert id="insertSelective" parameterType="com.api.model.Withdraw">
+    INSERT INTO withdraw
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="mobile != null">
+        mobile,
+      </if>
+      <if test="account != null">
+        account,
+      </if>
+      <if test="money != null">
+        money,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="bank != null">
+        bank,
+      </if>
+      <if test="openingbank != null">
+        openingBank,
+      </if>
+      <if test="mt != null">
+        mt,
+      </if>
+      <if test="ct != null">
+        ct,
+      </if>
+    </trim>
+    <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null">
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="account != null">
+        #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="money != null">
+        #{money,jdbcType=DOUBLE},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="bank != null">
+        #{bank,jdbcType=VARCHAR},
+      </if>
+      <if test="openingbank != null">
+        #{openingbank,jdbcType=VARCHAR},
+      </if>
+      <if test="mt != null">
+        #{mt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ct != null">
+        #{ct,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
   
   <delete id="deleteById" parameterType="java.lang.Long">
     DELETE FROM withdraw
@@ -52,18 +140,54 @@
       account = #{account,jdbcType=VARCHAR},
       money = #{money,jdbcType=DOUBLE},
       status = #{status,jdbcType=TINYINT},
-      name = #{name,jdbcType=VARCHAR}
+      name = #{name,jdbcType=VARCHAR},
+      bank = #{bank,jdbcType=VARCHAR},
+      openingBank = #{openingbank,jdbcType=VARCHAR},
+      mt = #{mt,jdbcType=TIMESTAMP},
+      ct = #{ct,jdbcType=TIMESTAMP}
     WHERE id = #{id,jdbcType=BIGINT}
   </update>
   
-
-  
-  <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    SELECT 
-    <include refid="BaseColumnList" />
-    FROM withdraw
+  <update id="updateSelective" parameterType="com.api.model.Withdraw">
+    UPDATE withdraw
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null">
+        mobile = #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="account != null">
+        account = #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="money != null">
+        money = #{money,jdbcType=DOUBLE},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="bank != null">
+        bank = #{bank,jdbcType=VARCHAR},
+      </if>
+      <if test="openingbank != null">
+        openingBank = #{openingbank,jdbcType=VARCHAR},
+      </if>
+      <if test="mt != null">
+        mt = #{mt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ct != null">
+        ct = #{ct,jdbcType=TIMESTAMP},
+      </if>
+    </set>
     WHERE id = #{id,jdbcType=BIGINT}
-  </select>
+  </update>
+
   
   <select id="selectByIds" resultMap="BaseResultMap">
     SELECT 
@@ -98,6 +222,18 @@
       <if test="name != null">
          AND name = #{name,jdbcType=VARCHAR}
       </if>
+      <if test="bank != null">
+         AND bank = #{bank,jdbcType=VARCHAR}
+      </if>
+      <if test="openingbank != null">
+         AND openingBank = #{openingbank,jdbcType=VARCHAR}
+      </if>
+      <if test="mt != null">
+         AND mt = #{mt,jdbcType=TIMESTAMP}
+      </if>
+      <if test="ct != null">
+         AND ct = #{ct,jdbcType=TIMESTAMP}
+      </if>
     </where>
     <if test="orderBy != null">
       ORDER BY ${orderBy}
@@ -128,113 +264,29 @@
       <if test="name != null">
          AND name = #{name,jdbcType=VARCHAR}
       </if>
+      <if test="bank != null">
+         AND bank = #{bank,jdbcType=VARCHAR}
+      </if>
+      <if test="openingbank != null">
+         AND openingBank = #{openingbank,jdbcType=VARCHAR}
+      </if>
+      <if test="mt != null">
+         AND mt = #{mt,jdbcType=TIMESTAMP}
+      </if>
+      <if test="ct != null">
+         AND ct = #{ct,jdbcType=TIMESTAMP}
+      </if>
     </where>
   </select>
-  
+
   <!-- 以下部分人工添加或修改 -->
 
-  <update id="updateSelective" parameterType="com.api.model.Withdraw">
-    UPDATE withdraw
-    <set>
-      <if test="userId != null">
-        user_id = #{userId,jdbcType=BIGINT},
-      </if>
-      <if test="type != null">
-        type = #{type,jdbcType=VARCHAR},
-      </if>
-      <if test="mobile != null">
-        mobile = #{mobile,jdbcType=VARCHAR},
-      </if>
-      <if test="account != null">
-        account = #{account,jdbcType=VARCHAR},
-      </if>
-      <if test="money != null">
-        money = #{money,jdbcType=DOUBLE},
-      </if>
-      <if test="status != null">
-        status = #{status,jdbcType=TINYINT},
-      </if>
-      <if test="name != null">
-        name = #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="ct != null">
-        ct = #{ct,jdbcType=TIMESTAMP},
-      </if>
-      <if test="mt != null">
-        mt = #{mt,jdbcType=TIMESTAMP},
-      </if>
-    </set>
+  <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    SELECT
+    <include refid="BaseColumnList" />
+    FROM withdraw
     WHERE id = #{id,jdbcType=BIGINT}
-  </update>
-
-  <insert id="insertSelective" parameterType="com.api.model.Withdraw">
-    INSERT INTO withdraw
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
-      <if test="userId != null">
-        user_id,
-      </if>
-      <if test="type != null">
-        type,
-      </if>
-      <if test="mobile != null">
-        mobile,
-      </if>
-      <if test="account != null">
-        account,
-      </if>
-      <if test="money != null">
-        money,
-      </if>
-      <if test="status != null">
-        status,
-      </if>
-      <if test="name != null">
-        name,
-      </if>
-      <if test="ct != null">
-        ct,
-      </if>
-      <if test="mt != null">
-        mt,
-      </if>
-    </trim>
-    <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=BIGINT},
-      </if>
-      <if test="userId != null">
-        #{userId,jdbcType=BIGINT},
-      </if>
-      <if test="type != null">
-        #{type,jdbcType=VARCHAR},
-      </if>
-      <if test="mobile != null">
-        #{mobile,jdbcType=VARCHAR},
-      </if>
-      <if test="account != null">
-        #{account,jdbcType=VARCHAR},
-      </if>
-      <if test="money != null">
-        #{money,jdbcType=DOUBLE},
-      </if>
-      <if test="status != null">
-        #{status,jdbcType=TINYINT},
-      </if>
-      <if test="name != null">
-        #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="ct != null">
-        #{ct,jdbcType=TIMESTAMP},
-      </if>
-      <if test="mt != null">
-        #{mt,jdbcType=TIMESTAMP},
-      </if>
-    </trim>
-  </insert>
-
+  </select>
 
   <resultMap id="ExtResultMap" type="com.api.model.vo.WithdrawVo">
     <id column="id" jdbcType="BIGINT" property="id" />
@@ -245,6 +297,10 @@
     <result column="money" jdbcType="DOUBLE" property="money" />
     <result column="status" jdbcType="TINYINT" property="status" />
     <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="bank" jdbcType="VARCHAR" property="bank" />
+    <result column="openingBank" jdbcType="VARCHAR" property="openingbank" />
+    <result column="mt" jdbcType="TIMESTAMP" property="mt" />
+    <result column="ct" jdbcType="TIMESTAMP" property="ct" />
   </resultMap>
 
 
@@ -270,7 +326,7 @@
 
   </select>
 
-  <select id="fetchWithdrawListByUser" resultMap="ExtResultMap" parameterType="long">
+  <select id="fetchWithdrawListByUser" parameterType="long" resultMap="ExtResultMap">
     SELECT
     w.* , u.name user_name
     FROM withdraw w left join `user` u on w.user_id = u.id
@@ -281,11 +337,11 @@
 <select id="fetchTodayOutput" parameterType="date" resultType="double">
   SELECT sum(money)
   FROM `withdraw`
-  WHERE mt > #{mt,jdbcType=TIMESTAMP}
+  WHERE mt &gt; #{mt,jdbcType=TIMESTAMP}
   and status = 1
 </select>
 
-<select id="fetchAllOutput"  resultType="double">
+<select id="fetchAllOutput" resultType="double">
   SELECT sum(money)
   FROM `withdraw`
   WHERE status = 1

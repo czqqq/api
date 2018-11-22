@@ -205,6 +205,8 @@ public class UserController {
             data.put("account", withdraw.getAccount());
             data.put("name", withdraw.getName());
             data.put("mobile", withdraw.getMobile());
+            data.put("bank", withdraw.getBank());
+            data.put("openingbank", withdraw.getOpeningbank());
 
             result.setData(data);
         }

@@ -1,9 +1,8 @@
 package com.api.model;
 
-import java.io.Serializable;
 import java.util.Date;
 
-public class Withdraw implements Serializable {
+public class Withdraw {
     private Long id;
 
     private Long userId;
@@ -19,6 +18,10 @@ public class Withdraw implements Serializable {
     private Byte status;
 
     private String name;
+
+    private String bank;
+
+    private String openingbank;
 
     private Date mt;
 
@@ -86,6 +89,22 @@ public class Withdraw implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getBank() {
+        return bank;
+    }
+
+    public void setBank(String bank) {
+        this.bank = bank;
+    }
+
+    public String getOpeningbank() {
+        return openingbank;
+    }
+
+    public void setOpeningbank(String openingbank) {
+        this.openingbank = openingbank;
     }
 
     public Date getMt() {
