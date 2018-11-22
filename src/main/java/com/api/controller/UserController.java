@@ -1,9 +1,6 @@
 package com.api.controller;
 
-import com.api.controller.dto.BaseResult;
-import com.api.controller.dto.DatatablesReq;
-import com.api.controller.dto.DatatablesRes;
-import com.api.controller.dto.ResultCode;
+import com.api.controller.dto.*;
 import com.api.model.User;
 import com.api.model.Withdraw;
 import com.api.model.vo.UserVo;
@@ -19,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,6 +34,10 @@ public class UserController {
     private UserService userService;
     @Autowired
     private CommissionService commissionService;
+    @Autowired
+    private AndroidVersionDto androidVersion;
+    @Autowired
+    private IosVersionDto iosVersion;
 
     @PostMapping("/login")
     public BaseResult login(@RequestParam("mobile") String mobile,
@@ -209,6 +211,15 @@ public class UserController {
         return result;
     }
 
+    @PostMapping(path = "/fetchVersionDownload")
+    public BaseResult fetchVersionDownload() {
+        BaseResult result = new BaseResult();
+        Map<String,Object> value = new HashMap<String,Object>();
+        value.put("android",androidVersion);
+        value.put("ios",iosVersion);
+        result.setData(value);
+        return result;
+    }
 
     @RequestMapping(path = "/401")
     @ResponseStatus(HttpStatus.OK)
