@@ -51,6 +51,7 @@ public class ProductController {
         if(StringUtils.isBlank(product.getColor())){
             product.setColor(null);
         }
+        product.setStatus(Byte.valueOf("1"));
         productService.addProduct(product);
         return new BaseResult(ResultCode.SUCCESS,"添加成功",null);
     }
@@ -62,7 +63,8 @@ public class ProductController {
         if(product == null){
             return new BaseResult(ResultCode.FAILURE,"当前产品不存在",null);
         }else{
-            productService.deleteProduct(product);
+            product.setStatus(Byte.valueOf("0"));
+            productService.modifyProduct(product);
             return new BaseResult(ResultCode.SUCCESS,"删除成功",null);
         }
 

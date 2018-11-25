@@ -141,7 +141,9 @@ public class OrderServiceImpl implements OrderService {
             detailVo.setProductId(detailPo.getProductId());
             detailVo.setCount(detailPo.getCount());
             detailVo.setColor(detailPo.getColor());
-            detailVo.setProductName(product.getName());
+            if(product != null ){
+                detailVo.setProductName(product.getName());
+            }
             details.add(detailVo);
         }
         vo.setOrderDetails(details);

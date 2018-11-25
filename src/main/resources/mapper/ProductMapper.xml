@@ -134,8 +134,12 @@
       pic = #{pic,jdbcType=VARCHAR},
       ct = #{ct,jdbcType=TIMESTAMP},
       mt = #{mt,jdbcType=TIMESTAMP},
-      remark = #{remark,jdbcType=VARCHAR}
+      remark = #{remark,jdbcType=VARCHAR},
+    <if test="status != null" >
+      status = #{status,jdbcType=VARCHAR}
+    </if>
     WHERE id = #{id,jdbcType=BIGINT}
+    and status = '1'
   </update>
   
   <update id="updateSelective" parameterType="com.api.model.Product" >
@@ -168,22 +172,27 @@
       <if test="remark != null" >
         remark = #{remark,jdbcType=VARCHAR},
       </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR}
+      </if>
     </set>
     WHERE id = #{id,jdbcType=BIGINT}
+    and status = '1'
   </update>
   
   <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     SELECT 
     <include refid="BaseColumnList" />
     FROM product
-    WHERE id = #{id,jdbcType=BIGINT}
+    WHERE id = #{id,jdbcType=BIGINT} and status = '1'
   </select>
   
   <select id="selectByIds" resultMap="BaseResultMap" >
     SELECT 
     <include refid="BaseColumnList" />
     FROM product
-    WHERE id IN <foreach collection="list" item="item" open="(" separator="," close=")"> #{item}  </foreach> 
+    WHERE id IN <foreach collection="list" item="item" open="(" separator="," close=")"> #{item}  </foreach>
+    and status = '1'
   </select>
   
   <select id="selectByEntity" parameterType="com.api.model.Product" resultMap="BaseResultVoMap" >
@@ -206,6 +215,7 @@
       <if test="price != null " >
          AND price = #{price,jdbcType=DOUBLE}
       </if>
+      and status = '1'
     </where>
 
   </select>
@@ -237,6 +247,7 @@
       <if test="mt != null" >
          AND mt = #{mt,jdbcType=TIMESTAMP}
       </if>
+      and status = '1'
     </where>
   </select>
   <select id="checkIsExists" parameterType="com.api.model.Product" resultMap="BaseResultMap" >

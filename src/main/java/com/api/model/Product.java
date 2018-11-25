@@ -20,6 +20,8 @@ public class Product implements Serializable {
 
     private String remark;
 
+    private Byte status;
+
     private Date ct;
 
     private Date mt;
@@ -102,5 +104,13 @@ public class Product implements Serializable {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public Byte getStatus() {
+        return status;
+    }
+
+    public void setStatus(Byte status) {
+        this.status = status;
     }
 }
